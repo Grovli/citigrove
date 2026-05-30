@@ -57,6 +57,7 @@ export const metadata: Metadata = {
     images: ["/hero-bg.jpg"],
   },
   robots: { index: true, follow: true },
+  verification: { google: "u34uo9G9I3zCh9Ai7d8lVhPdXc04zqPSJFN6tjznvOs" },
 };
 
 /** Site-wide structured data — Organization + WebSite, plus the Grovli app as
