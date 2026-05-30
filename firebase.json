@@ -1,7 +1,7 @@
 {
   "hosting": {
     "target": "site",
-    "public": "public",
+    "public": "out",
     "cleanUrls": true,
     "trailingSlash": false,
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
@@ -29,6 +29,11 @@
       {
         "source": "/api/media",
         "function": "citigroveMedia",
+        "region": "us-east1"
+      },
+      {
+        "source": "/api/subscribe",
+        "function": "citigroveSubscribe",
         "region": "us-east1"
       }
     ]
