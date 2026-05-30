@@ -46,3 +46,87 @@ body {
 .blob-2 {
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Editorial prose — used by /blog/[slug] to render the Markdown body returned
+   by document-api. Serif (Playfair) headings + sage links so the long-form
+   journal reads like the rest of CitiGrove, not a default Markdown dump.
+   ─────────────────────────────────────────────────────────────────────────── */
+.prose-citigrove {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: rgba(26, 25, 22, 0.9);
+  font-size: 17px;
+  line-height: 1.75;
+}
+.prose-citigrove > :first-child { margin-top: 0; }
+.prose-citigrove p { margin: 1.15em 0; }
+.prose-citigrove h2 {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(1.55rem, 3vw, 2.05rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 2.4em 0 0.7em;
+}
+.prose-citigrove h3 {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+  margin: 1.9em 0 0.6em;
+}
+.prose-citigrove h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin: 1.6em 0 0.5em;
+}
+.prose-citigrove a {
+  color: var(--sage);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  transition: color 0.2s;
+}
+.prose-citigrove a:hover { color: var(--sage-deep); }
+.prose-citigrove strong { font-weight: 650; color: var(--ink); }
+.prose-citigrove em { font-style: italic; }
+.prose-citigrove ul,
+.prose-citigrove ol { margin: 1.15em 0; padding-left: 1.4em; }
+.prose-citigrove li { margin: 0.5em 0; padding-left: 0.2em; }
+.prose-citigrove ul li::marker { color: var(--sage); }
+.prose-citigrove ol li::marker { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.prose-citigrove blockquote {
+  margin: 1.8em 0;
+  padding: 0.4em 0 0.4em 1.3em;
+  border-left: 3px solid var(--sage);
+  font-family: var(--font-playfair), serif;
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.prose-citigrove blockquote p { margin: 0.4em 0; }
+.prose-citigrove hr {
+  border: 0;
+  border-top: 1px solid var(--stone);
+  margin: 2.6em 0;
+}
+.prose-citigrove img {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  margin: 1.8em 0;
+}
+.prose-citigrove code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  background: var(--cream-deep);
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+}
+.prose-citigrove h2 code,
+.prose-citigrove h3 code { background: transparent; padding: 0; }

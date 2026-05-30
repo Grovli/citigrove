@@ -27,15 +27,15 @@ jobs:
         run: npm ci
         working-directory: functions
 
-      - name: Build Next.js
-        run: |
-          rm -rf public/_next public/index.html public/404.html
-          npm run build
+      - name: Build Next.js (static export → ./out)
+        run: npm run build
         env:
           NEXT_PUBLIC_GCS_BUCKET_URL: https://storage.googleapis.com/citigrove-images
-
-      - name: Copy build artifacts
-        run: node scripts/copy-build.js
+          NEXT_PUBLIC_SITE_URL: https://citigrove.com
+          # Public document-api (headless CMS) the blog is statically generated
+          # from at build. grovli-document-api-public — NOT api.grovli.citigrove.com
+          # (that's grovli-backend and 404s on /public/*). Override via repo secret.
+          DOCUMENT_API_URL: ${{ secrets.DOCUMENT_API_URL || 'https://grovli-document-api-public-uyply7jkca-uc.a.run.app' }}
 
       - name: Deploy to Firebase
         run: |

@@ -61,3 +61,6 @@ infra/.terraform/
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
 infra/*.tfvars
+
+# static export output (deployed to Firebase Hosting)
+/out

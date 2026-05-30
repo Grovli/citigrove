@@ -48,8 +48,9 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: trimmed,
-          source: "citigrove_blog_inline",
-          campaign: `blog_post_${slug}`,
+          // source=blog_<slug> routes the subscriber to this post's email mirror
+          // + workflow in email-api (marketing_subscribe._family_for_source).
+          source: `blog_${slug.replace(/-/g, "_")}`,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as {

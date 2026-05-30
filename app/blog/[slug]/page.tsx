@@ -1,54 +1,40 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { StickyTryGrovli } from "@/components/StickyTryGrovli";
 import { InlineSubscribe } from "@/components/InlineSubscribe";
+import { GrovliCTA } from "@/components/GrovliCTA";
+import { renderPostBody } from "@/lib/markdown";
+import {
+  SITE_URL,
+  fetchPost,
+  fetchAllSlugs,
+  formatDate,
+  readingMinutes,
+  ldJson,
+} from "@/lib/site";
 
 /**
- * /blog/[slug] — individual CitiGrove essay.
+ * /blog/[slug] — an individual CitiGrove Journal essay.
  *
- * Server component, fetches from document-api by slug. The InlineSubscribe
- * block sits mid-article (after the first ~third of the body) and the
- * StickyTryGrovli pill sits bottom-right on every post. Both routes share
- * Branch-tagged UTMs back into the funnel attribution stream.
- *
- * Body rendering: document-api returns the parsed body as either
- * markdown or text. We render markdown-ish prose with a minimal
- * paragraph splitter — full Markdown rendering belongs to a
- * dedicated component if/when essays start carrying images, lists,
- * code blocks. The current shape (single-column essay) is the most
- * common.
+ * Statically generated at build (output: "export") from document-api, so each
+ * post ships as crawlable HTML. The body is real Markdown — headings, lists,
+ * and links render semantically — with two in-content CTA markers:
+ *   {{SUBSCRIBE}}   → the email-capture form (kicks off the blog's email
+ *                     mirror in email-api)
+ *   {{TRY_GROVLI}}  → the Grovli food-planning CTA (funnel to the app)
+ * Both carry UTM/source tags so blog → app/email conversion is attributable.
  */
 
-const DOCUMENT_API_URL =
-  process.env.DOCUMENT_API_URL ||
-  process.env.NEXT_PUBLIC_DOCUMENT_API_URL ||
-  "https://api.grovli.citigrove.com";
+export const dynamic = "force-static";
+export const dynamicParams = false;
 
-interface BlogPost {
-  title: string;
-  summary: string;
-  slug: string;
-  category: string;
-  published_at: string;
-  body?: string;
-  body_format?: "markdown" | "text" | string;
-  tags?: string[];
-}
-
-export const revalidate = 300;
-
-async function fetchPost(slug: string): Promise<BlogPost | null> {
-  try {
-    const res = await fetch(`${DOCUMENT_API_URL}/public/documents/${slug}`, {
-      next: { revalidate: 300 },
-    });
-    if (res.status === 404) return null;
-    if (!res.ok) return null;
-    return (await res.json()) as BlogPost;
-  } catch {
-    return null;
-  }
+export async function generateStaticParams() {
+  const slugs = await fetchAllSlugs();
+  // output: export requires a non-empty param set. Before the KB is seeded the
+  // list is empty — emit a single placeholder so the build still succeeds.
+  // Once posts exist, only real slugs are generated (placeholder never built).
+  if (slugs.length === 0) return [{ slug: "coming-soon" }];
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -58,50 +44,28 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await fetchPost(slug);
-  if (!post) {
-    return { title: "Not found — CitiGrove" };
-  }
+  if (!post)
+    return { title: "The Journal — CitiGrove", robots: { index: false } };
+  const url = `${SITE_URL}/blog/${post.slug}`;
   return {
-    title: `${post.title} — CitiGrove`,
+    title: `${post.title} — CitiGrove Journal`,
     description: post.summary,
+    keywords: post.tags,
+    alternates: { canonical: url },
     openGraph: {
       title: post.title,
       description: post.summary,
+      url,
       type: "article",
+      siteName: "CitiGrove",
       publishedTime: post.published_at,
+      tags: post.tags,
     },
-  };
-}
-
-function formatDate(iso: string): string {
-  try {
-    return new Date(iso).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  } catch {
-    return "";
-  }
-}
-
-/**
- * Split body into paragraphs and inject the inline subscribe block
- * roughly one-third of the way in. For short posts (<3 paragraphs)
- * the block lands at the end so it isn't the first thing after a
- * one-paragraph intro.
- */
-function splitForInjection(paragraphs: string[]): {
-  before: string[];
-  after: string[];
-} {
-  if (paragraphs.length < 3) {
-    return { before: paragraphs, after: [] };
-  }
-  const cut = Math.max(1, Math.floor(paragraphs.length / 3));
-  return {
-    before: paragraphs.slice(0, cut),
-    after: paragraphs.slice(cut),
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+    },
   };
 }
 
@@ -112,22 +76,69 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
   const post = await fetchPost(slug);
+
+  // Graceful state for an unseeded/flaky KB — never hard-crash the export.
   if (!post) {
-    notFound();
+    return (
+      <main className="min-h-screen bg-[#FAFAF6] text-[#1A1916]">
+        <header className="border-b border-[#1A1916]/[0.08]">
+          <div className="max-w-[1100px] mx-auto px-8 py-8 flex items-center justify-between">
+            <Link href="/" className="text-[20px] tracking-[-0.01em]" style={{ fontFamily: "var(--font-playfair), serif" }}>
+              Citi<span style={{ color: "#5C7A5E" }}>Grove</span>
+            </Link>
+            <Link href="/blog" className="text-[12px] tracking-[0.18em] uppercase text-[#5C7A5E] font-semibold">
+              ← All essays
+            </Link>
+          </div>
+        </header>
+        <article className="max-w-[760px] mx-auto px-8 pt-28 pb-32 text-center">
+          <h1 className="text-[clamp(2rem,4vw,3rem)] leading-[1.1]" style={{ fontFamily: "var(--font-playfair), serif" }}>
+            This essay is publishing soon.
+          </h1>
+          <p className="text-[17px] text-[#1A1916]/70 leading-[1.65] mt-5">
+            The Journal is being seeded. In the meantime, start food planning with Grovli.
+          </p>
+          <div className="mt-8">
+            <GrovliCTA campaign="blog_coming_soon" />
+          </div>
+        </article>
+        <StickyTryGrovli campaign="blog_coming_soon" />
+      </main>
+    );
   }
 
-  // Defensive: posts that slip through with the wrong category should
-  // 404 rather than render. The classifier should keep this from
-  // happening, but the safety check is cheap.
-  if (post.category && post.category !== "blog") {
-    notFound();
-  }
+  const { segments, hasSubscribe } = renderPostBody(post.body ?? "");
+  const url = `${SITE_URL}/blog/${post.slug}`;
+  const minutes = readingMinutes(post.body);
 
-  const paragraphs = (post.body ?? "").split(/\n{2,}/).filter(Boolean);
-  const { before, after } = splitForInjection(paragraphs);
+  // BlogPosting structured data — lets Google + AI engines parse the essay as
+  // an article (author, dates, keywords, publisher).
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.summary,
+    datePublished: post.published_at,
+    dateModified: post.published_at,
+    keywords: (post.tags || []).join(", "),
+    articleSection: "Food planning",
+    inLanguage: "en-US",
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: { "@type": "Organization", name: "The CitiGrove Journal", url: SITE_URL },
+    publisher: {
+      "@type": "Organization",
+      name: "CitiGrove",
+      url: SITE_URL,
+    },
+  };
 
   return (
     <main className="min-h-screen bg-[#FAFAF6] text-[#1A1916]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }}
+      />
+
       {/* ── Header ─────────────────────────────────────────────────── */}
       <header className="border-b border-[#1A1916]/[0.08]">
         <div className="max-w-[1100px] mx-auto px-8 py-8 flex items-center justify-between">
@@ -136,7 +147,7 @@ export default async function BlogPostPage({
             className="text-[20px] tracking-[-0.01em]"
             style={{ fontFamily: "var(--font-playfair), serif" }}
           >
-            CitiGrove
+            Citi<span style={{ color: "#5C7A5E" }}>Grove</span>
           </Link>
           <Link
             href="/blog"
@@ -151,11 +162,9 @@ export default async function BlogPostPage({
       <article className="max-w-[760px] mx-auto px-8 pt-20 pb-32">
         <div className="text-[11px] tracking-[0.22em] uppercase text-[#5C7A5E] font-semibold mb-5">
           {formatDate(post.published_at)}
+          <span className="text-[#1A1916]/30"> · {minutes} min read</span>
           {post.tags && post.tags.length > 0 && (
-            <>
-              {" · "}
-              {post.tags.slice(0, 4).join(" · ")}
-            </>
+            <> {" · "}{post.tags.slice(0, 4).join(" · ")}</>
           )}
         </div>
         <h1
@@ -169,32 +178,53 @@ export default async function BlogPostPage({
             {post.summary}
           </p>
         )}
-
-        <div className="mt-12 space-y-6 text-[17px] leading-[1.75] text-[#1A1916]/90">
-          {before.map((p, i) => (
-            <p key={`b-${i}`}>{p}</p>
-          ))}
+        <div className="text-[13px] text-[#1A1916]/45 mt-6 pb-2">
+          By <span className="text-[#1A1916]/70">The CitiGrove Journal</span>
         </div>
 
-        {after.length > 0 && (
-          <div className="my-16">
-            <InlineSubscribe slug={post.slug} />
-          </div>
-        )}
+        {/* Body — Markdown chunks interleaved with live CTA components. */}
+        <div className="mt-10">
+          {segments.map((seg, i) => {
+            if (seg.kind === "subscribe") {
+              return (
+                <div className="my-14" key={`seg-${i}`}>
+                  <InlineSubscribe slug={post.slug} />
+                </div>
+              );
+            }
+            if (seg.kind === "cta") {
+              return <GrovliCTA key={`seg-${i}`} campaign={post.slug} />;
+            }
+            return (
+              <div
+                key={`seg-${i}`}
+                className="prose-citigrove"
+                dangerouslySetInnerHTML={{ __html: seg.html }}
+              />
+            );
+          })}
 
-        <div className="space-y-6 text-[17px] leading-[1.75] text-[#1A1916]/90">
-          {after.map((p, i) => (
-            <p key={`a-${i}`}>{p}</p>
-          ))}
+          {/* Fallback: posts without an inline {{SUBSCRIBE}} marker still get
+              one capture block before the closing CTA. */}
+          {!hasSubscribe && (
+            <div className="my-14">
+              <InlineSubscribe slug={post.slug} />
+            </div>
+          )}
         </div>
 
-        {/* When the inline block lands at the end (short post), still
-            render it once after the prose. */}
-        {after.length === 0 && (
-          <div className="mt-16">
-            <InlineSubscribe slug={post.slug} />
-          </div>
-        )}
+        {/* Closing funnel CTA on every essay. */}
+        <GrovliCTA campaign={post.slug} />
+
+        {/* Quiet cross-link back to the journal. */}
+        <div className="mt-12 pt-8 border-t border-[#1A1916]/[0.08]">
+          <Link
+            href="/blog"
+            className="text-[12px] tracking-[0.18em] uppercase text-[#5C7A5E] font-semibold"
+          >
+            ← Read more from the Journal
+          </Link>
+        </div>
       </article>
 
       <StickyTryGrovli campaign={`blog_post_${post.slug}`} />
