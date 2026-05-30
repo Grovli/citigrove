@@ -84,6 +84,13 @@ export default function Home() {
   // Safari plays the .mov inline; Chrome/Firefox can't decode QuickTime, so we
   // swap to a poster + "watch" link after a canPlayType check on mount.
   const [canEmbedVideo, setCanEmbedVideo] = useState(true);
+  // Recent Journal posts for the homepage teaser, fetched client-side from the
+  // public document-api (which CORS-allows citigrove.com). The section header +
+  // "Read the Journal" button always render statically, so the blog is visible
+  // even before/without this fetch.
+  const [journalPosts, setJournalPosts] = useState<
+    { title: string; summary: string; slug: string; published_at: string }[]
+  >([]);
 
   // Homepage newsletter capture → /api/subscribe (Firebase Function proxy to
   // grovli-email-api). source="citigrove_homepage" fires the welcome email.
@@ -104,6 +111,16 @@ export default function Home() {
     } catch {
       setCanEmbedVideo(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const base =
+      process.env.NEXT_PUBLIC_DOCUMENT_API_URL ||
+      "https://grovli-document-api-public-uyply7jkca-uc.a.run.app";
+    fetch(`${base}/public/categories/blog?limit=3`)
+      .then((r) => (r.ok ? r.json() : { items: [] }))
+      .then((d) => setJournalPosts((d.items || []).slice(0, 3)))
+      .catch(() => {});
   }, []);
 
   async function handleSubscribe(e: React.FormEvent) {
@@ -465,6 +482,48 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ══ FROM THE JOURNAL ══════════════════════════════════════════════════ */}
+      <section id="journal" style={{ background: "#FAFAF6", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(40px,6vw,64px)" }}>
+            <div>
+              <p style={{ ...S.label, marginBottom: 16 }}>The Journal</p>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#1A1916" }}>
+                Stories from<br />the table.
+              </h2>
+            </div>
+            <a href="/blog"
+              style={{ fontSize: "0.875rem", padding: "14px 30px", borderRadius: 100, background: "#1E3328", color: "#FAFAF6", textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap" }}>
+              Read the Journal →
+            </a>
+          </div>
+
+          {journalPosts.length > 0 ? (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 14 }}>
+              {journalPosts.map((post) => (
+                <a key={post.slug} href={`/blog/${post.slug}`}
+                  style={{ display: "flex", flexDirection: "column", gap: 12, background: "#F0EBE1", borderRadius: 20, padding: "clamp(28px,3.5vw,36px) clamp(24px,3vw,32px)", textDecoration: "none", border: "1px solid #E2DDD5", transition: "transform 0.25s, box-shadow 0.25s" }}
+                  onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 12px 48px rgba(26,25,22,0.09)"; }}
+                  onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; }}>
+                  <span style={{ fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5C7A5E", fontWeight: 600 }}>
+                    {new Date(post.published_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                  </span>
+                  <h3 style={{ ...S.serif, fontSize: "clamp(1.25rem,2vw,1.5rem)", fontWeight: 600, lineHeight: 1.2, color: "#1A1916" }}>{post.title}</h3>
+                  <p style={{ fontSize: "0.875rem", color: "#6B6660", lineHeight: 1.65, flex: 1 }}>{post.summary}</p>
+                  <span style={{ fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5C7A5E", fontWeight: 600 }}>Read essay →</span>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6B6660", lineHeight: 1.75, maxWidth: 560 }}>
+              Essays on food planning, gardening, hydroponics, grocery costs, and eating
+              well in 2026 — the thinking behind everything we make.{" "}
+              <a href="/blog" style={{ color: "#5C7A5E", textDecoration: "underline" }}>Read the Journal →</a>
+            </p>
+          )}
         </div>
       </section>
 
