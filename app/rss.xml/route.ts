@@ -1,4 +1,4 @@
-import { SITE_URL, fetchBlogIndex } from "@/lib/site";
+import { SITE_URL, fetchBlogIndex, toUTCDate } from "@/lib/site";
 
 /**
  * /rss.xml — a real syndication feed for the CitiGrove Journal so the blog can
@@ -19,14 +19,14 @@ function xmlEscape(s: string): string {
 export async function GET() {
   const items = await fetchBlogIndex();
   const updated = items[0]?.published_at
-    ? new Date(items[0].published_at).toUTCString()
+    ? toUTCDate(items[0].published_at).toUTCString()
     : new Date().toUTCString();
 
   const entries = items
     .map((p) => {
       const url = `${SITE_URL}/blog/${p.slug}`;
       const pub = p.published_at
-        ? new Date(p.published_at).toUTCString()
+        ? toUTCDate(p.published_at).toUTCString()
         : updated;
       const cats = (p.tags || [])
         .map((t) => `<category>${xmlEscape(t)}</category>`)

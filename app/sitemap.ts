@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL, fetchBlogIndex } from "@/lib/site";
+import { SITE_URL, fetchBlogIndex, toUTCDate } from "@/lib/site";
 
 /**
  * /sitemap.xml — emitted as a static file by the export. Lists the homepage,
@@ -10,7 +10,7 @@ export const dynamic = "force-static";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const items = await fetchBlogIndex();
-  const now = new Date().toISOString();
+  const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
@@ -19,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const posts: MetadataRoute.Sitemap = items.map((p) => ({
     url: `${SITE_URL}/blog/${p.slug}`,
-    lastModified: p.published_at || now,
+    lastModified: toUTCDate(p.published_at),
     changeFrequency: "monthly",
     priority: 0.8,
   }));

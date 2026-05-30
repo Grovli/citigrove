@@ -109,3 +109,16 @@ export function readingMinutes(body: string | undefined): number {
 export function ldJson(obj: unknown): string {
   return JSON.stringify(obj).replace(/</g, "\\u003c");
 }
+
+/**
+ * Normalize a document-api timestamp to a valid UTC Date. The public API
+ * returns naive microsecond strings like "2026-05-30T03:37:50.418000" (6-digit
+ * fractional seconds, no timezone), which are invalid in a sitemap <lastmod>.
+ * Truncate to milliseconds and pin to UTC.
+ */
+export function toUTCDate(s: string | undefined): Date {
+  let v = (s || "").trim().replace(/(\.\d{3})\d+/, "$1"); // µs → ms
+  if (v && !/[zZ]|[+-]\d{2}:?\d{2}$/.test(v)) v += "Z"; // naive → UTC
+  const d = v ? new Date(v) : new Date();
+  return isNaN(d.getTime()) ? new Date() : d;
+}
