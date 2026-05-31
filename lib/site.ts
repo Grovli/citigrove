@@ -48,6 +48,13 @@ export interface BlogPost {
   body?: string;
   body_format?: "markdown" | "text" | "html" | string;
   tags?: string[];
+  /**
+   * Optional public GCS image URL (reused from Grovli's meal images). When
+   * present, the post page renders it as a rounded hero above the title and
+   * uses it for OG/Twitter; when absent the page is unchanged (site-wide
+   * /hero-bg.jpg OG fallback).
+   */
+  hero_image_url?: string;
 }
 
 /** All published blog posts (index projection), newest first. Empty on error. */

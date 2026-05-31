@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { StickyTryGrovli } from "@/components/StickyTryGrovli";
 import { InlineSubscribe } from "@/components/InlineSubscribe";
@@ -47,6 +48,14 @@ export async function generateMetadata({
   if (!post)
     return { title: "The Journal — CitiGrove", robots: { index: false } };
   const url = `${SITE_URL}/blog/${post.slug}`;
+  // Per-post social image: when the doc carries a hero, use it for OG/Twitter,
+  // overriding the site-wide /hero-bg.jpg fallback (set in app/layout.tsx).
+  // When absent, we omit `images` entirely so the layout fallback is inherited
+  // unchanged — existing posts keep their current OG card.
+  const hero = post.hero_image_url?.trim();
+  const ogImages = hero
+    ? [{ url: hero, alt: post.title }]
+    : undefined;
   return {
     title: `${post.title} — CitiGrove Journal`,
     description: post.summary,
@@ -60,11 +69,13 @@ export async function generateMetadata({
       siteName: "CitiGrove",
       publishedTime: post.published_at,
       tags: post.tags,
+      ...(ogImages ? { images: ogImages } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.summary,
+      ...(hero ? { images: [hero] } : {}),
     },
   };
 }
@@ -110,6 +121,8 @@ export default async function BlogPostPage({
   const { segments, hasSubscribe } = renderPostBody(post.body ?? "");
   const url = `${SITE_URL}/blog/${post.slug}`;
   const minutes = readingMinutes(post.body);
+  // Optional per-post hero (public GCS image, reused from Grovli meal images).
+  const hero = post.hero_image_url?.trim();
 
   // BlogPosting structured data — lets Google + AI engines parse the essay as
   // an article (author, dates, keywords, publisher).
@@ -160,6 +173,22 @@ export default async function BlogPostPage({
 
       {/* ── Article ────────────────────────────────────────────────── */}
       <article className="max-w-[760px] mx-auto px-8 pt-20 pb-32">
+        {/* Optional hero — only renders when the doc carries hero_image_url.
+            Full-width within the prose column, rounded to match the site's
+            soft visual language, lazy-loaded (images.unoptimized → plain
+            <img>, served pre-optimised from GCS). */}
+        {hero && (
+          <Image
+            src={hero}
+            alt={post.title}
+            width={1200}
+            height={675}
+            sizes="(max-width: 760px) 100vw, 760px"
+            loading="lazy"
+            className="w-full h-auto rounded-2xl mb-10 object-cover"
+            style={{ aspectRatio: "16 / 9" }}
+          />
+        )}
         <div className="text-[11px] tracking-[0.22em] uppercase text-[#5C7A5E] font-semibold mb-5">
           {formatDate(post.published_at)}
           <span className="text-[#1A1916]/30"> · {minutes} min read</span>
