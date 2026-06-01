@@ -8,10 +8,13 @@
  * grovli.citigrove.com; from citigrove.com we use a lighter email
  * form because there's no chat infrastructure on this domain yet.
  *
- * POST goes to /api/subscribe (Next.js server route in this repo)
- * which proxies to grovli-email-api with source="citigrove_blog_inline"
- * so the welcome series fires + lead_event attribution carries the
- * blog touchpoint into the funnel.
+ * POST goes to /api/subscribe (the citigroveSubscribe Firebase Function,
+ * since the site is a static export with no Next server runtime), which
+ * proxies to grovli-email-api /marketing/subscribe with
+ * source="blog_<slug>". That per-post source routes the subscriber to the
+ * essay's email mirror + matching marketing workflow
+ * (marketing_subscribe._family_for_source) and carries the blog touchpoint
+ * into lead_event attribution.
  */
 
 import { useState } from "react";
@@ -116,8 +119,8 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
         className="text-[15px] leading-[1.6] mb-6"
         style={{ color: "rgba(250,250,246,0.7)" }}
       >
-        One short read, every few weeks. No noise, no spam — just the food
-        thinking we&apos;d send to a friend.
+        One short, useful read every few weeks — the food thinking we&apos;d
+        send a friend. No noise, no spam.
       </p>
 
       <div className="flex flex-col sm:flex-row gap-3">

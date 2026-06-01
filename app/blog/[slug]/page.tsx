@@ -4,11 +4,13 @@ import Link from "next/link";
 import { StickyTryGrovli } from "@/components/StickyTryGrovli";
 import { InlineSubscribe } from "@/components/InlineSubscribe";
 import { GrovliCTA } from "@/components/GrovliCTA";
+import { RelatedPosts } from "@/components/RelatedPosts";
 import { renderPostBody } from "@/lib/markdown";
 import {
   SITE_URL,
   fetchPost,
   fetchAllSlugs,
+  fetchRelatedPosts,
   formatDate,
   readingMinutes,
   ldJson,
@@ -123,6 +125,9 @@ export default async function BlogPostPage({
   const minutes = readingMinutes(post.body);
   // Optional per-post hero (public GCS image, reused from Grovli meal images).
   const hero = post.hero_image_url?.trim();
+  // Up to 3 sibling essays for the "You may also like" block — tag-matched,
+  // then newest-first. Resolved at build (output: "export"); [] on KB outage.
+  const related = await fetchRelatedPosts(post.slug, post.tags, 3);
 
   // BlogPosting structured data — lets Google + AI engines parse the essay as
   // an article (author, dates, keywords, publisher).
@@ -172,18 +177,22 @@ export default async function BlogPostPage({
       </header>
 
       {/* ── Article ────────────────────────────────────────────────── */}
-      <article className="max-w-[760px] mx-auto px-8 pt-20 pb-32">
-        {/* Optional hero — only renders when the doc carries hero_image_url.
-            Full-width within the prose column, rounded to match the site's
-            soft visual language, lazy-loaded (images.unoptimized → plain
-            <img>, served pre-optimised from GCS). */}
+      {/* ~680px column: hero, title, and CTA bands sit a touch wider than the
+          ~34em (≈66ch) prose measure (capped in .prose-citigrove), giving a
+          tasteful editorial inset rather than one flush full-width slab. */}
+      <article className="max-w-[680px] mx-auto px-8 pt-20 pb-32">
+        {/* Optional hero — only renders when the doc carries hero_image_url, so
+            posts without one degrade cleanly (title leads instead). Full-width
+            within the article column, locked to 16:9, rounded to match the
+            site's soft visual language, and lazy-loaded (images.unoptimized →
+            plain <img>, served pre-optimised from GCS). */}
         {hero && (
           <Image
             src={hero}
             alt={post.title}
             width={1200}
             height={675}
-            sizes="(max-width: 760px) 100vw, 760px"
+            sizes="(max-width: 680px) 100vw, 680px"
             loading="lazy"
             className="w-full h-auto rounded-2xl mb-10 object-cover"
             style={{ aspectRatio: "16 / 9" }}
@@ -222,7 +231,12 @@ export default async function BlogPostPage({
               );
             }
             if (seg.kind === "cta") {
-              return <GrovliCTA key={`seg-${i}`} campaign={post.slug} />;
+              // In-content {{TRY_GROVLI}} markers are intentionally NOT rendered.
+              // Every essay gets exactly ONE Grovli CTA — the closing funnel CTA
+              // below (after related posts). Rendering the marker here too caused
+              // the block to appear 2-3x per post (body embeds it 1-2x + the
+              // closing one). {{SUBSCRIBE}} is unaffected (separate segment).
+              return null;
             }
             return (
               <div
@@ -241,6 +255,11 @@ export default async function BlogPostPage({
             </div>
           )}
         </div>
+
+        {/* "You may also like" — sibling essays before the funnel hand-off,
+            so a finished reader has a next read inside the journal. Renders
+            nothing when there are no siblings. */}
+        <RelatedPosts posts={related} />
 
         {/* Closing funnel CTA on every essay. */}
         <GrovliCTA campaign={post.slug} />
