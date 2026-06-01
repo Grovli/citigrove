@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  # Manual trigger — republish the static export after a document-api content
+  # change (re-seed) without needing a code change. `gh workflow run deploy.yml`.
+  workflow_dispatch:
 
 jobs:
   deploy:
