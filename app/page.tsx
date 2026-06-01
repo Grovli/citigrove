@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { useState, useEffect, useRef } from "react";
 
 /* ─────────────────────────────── data ────────────────────────────────────── */
 const NAV_LINKS = [
@@ -16,9 +15,12 @@ const NAV_LINKS = [
 const GROVLI_HOME =
   "https://grovli.citigrove.com/?utm_source=citigrove&utm_medium=web&utm_campaign=homepage";
 const APP_STORE_URL = "https://apps.apple.com/us/app/grovli/id6760633541";
-/* The onboarding "how to use" explainer, embedded by the food-planning section. */
-const GROVLI_VIDEO_URL =
-  "https://storage.googleapis.com/organic-spirit-488116-e2-app-assets/onboarding/how-to-use-explainer.mov";
+/* The onboarding "how to use" explainer — a portrait phone recording (443:960,
+   ~26s), transcoded from the master .mov in GCS to Mux (public playback). The
+   hero plays it as an ambient, blurred-fill background. */
+const MUX_PLAYBACK_ID = "3Vt3C02UTX6sUC7Mlt9wsEZ4vRdZ6oYmmHsg01WAoGey8";
+const HERO_VIDEO_MP4 = `https://stream.mux.com/${MUX_PLAYBACK_ID}/highest.mp4`;
+const HERO_VIDEO_POSTER = `https://image.mux.com/${MUX_PLAYBACK_ID}/thumbnail.jpg`;
 
 const DIET_TYPES = [
   { label: "Balanced", desc: "Complete nutrition across all food groups." },
@@ -81,9 +83,10 @@ const HERO_IMG = GCS_BUCKET ? `${GCS_BUCKET}/hero/hero-bg.jpg` : "/hero-bg.jpg";
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Safari plays the .mov inline; Chrome/Firefox can't decode QuickTime, so we
-  // swap to a poster + "watch" link after a canPlayType check on mount.
-  const [canEmbedVideo, setCanEmbedVideo] = useState(true);
+  // Hero ambient video: muted autoplay (browser policy) by default; the sound
+  // toggle unmutes the sharp center copy on a user gesture.
+  const [soundOn, setSoundOn] = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
   // Recent Journal posts for the homepage teaser, fetched client-side from the
   // public document-api (which CORS-allows citigrove.com). The section header +
   // "Read the Journal" button always render statically, so the blog is visible
@@ -102,15 +105,6 @@ export default function Home() {
     const fn = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  useEffect(() => {
-    try {
-      const v = document.createElement("video");
-      setCanEmbedVideo(!!v.canPlayType && v.canPlayType("video/quicktime") !== "");
-    } catch {
-      setCanEmbedVideo(false);
-    }
   }, []);
 
   useEffect(() => {
@@ -222,27 +216,32 @@ export default function Home() {
       </header>
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
-      <section style={{ minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: `0 clamp(20px,5vw,40px) clamp(60px,8vw,100px)`, position: "relative", overflow: "hidden" }}>
+      <section style={{ minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: `0 clamp(20px,5vw,40px) clamp(60px,8vw,100px)`, position: "relative", overflow: "hidden", backgroundColor: "#F5F0E8", backgroundImage: `url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center" }}>
 
-        <Image
-          src={HERO_IMG}
-          alt="CitiGrove food planning and wellness"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "center", zIndex: 0 }}
-        />
+        {/* Ambient app-demo background. The explainer is a portrait phone
+            recording (443:960), so a plain cover crop would butcher it — instead
+            a blurred, scaled copy of itself fills the wide hero while a sharp,
+            uncropped copy sits centered. Muted autoplay + loop satisfies browser
+            policy; the poster + the section's HERO_IMG bg are the fallbacks. */}
+        <video aria-hidden autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.18)", filter: "blur(36px) saturate(1.12)", zIndex: 0 }}>
+          <source src={HERO_VIDEO_MP4} type="video/mp4" />
+        </video>
+        <video ref={heroVideoRef} autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", zIndex: 1 }}>
+          <source src={HERO_VIDEO_MP4} type="video/mp4" />
+        </video>
 
         <div style={{
-          position: "absolute", inset: 0, zIndex: 1,
-          background: "linear-gradient(160deg, rgba(245,240,232,0.45) 0%, rgba(245,240,232,0.7) 30%, rgba(245,240,232,0.92) 65%, #F5F0E8 100%)",
+          position: "absolute", inset: 0, zIndex: 2,
+          background: "linear-gradient(160deg, rgba(245,240,232,0.30) 0%, rgba(245,240,232,0.54) 26%, rgba(245,240,232,0.88) 62%, #F5F0E8 100%)",
         }} />
 
-        <div style={{ position: "absolute", top: "clamp(84px,12vh,108px)", left: "clamp(20px,5vw,40px)", zIndex: 2 }}>
-          <span style={{ ...S.label }}>Food Planning · Wellness · Community</span>
+        <div style={{ position: "absolute", top: "clamp(84px,12vh,108px)", left: "clamp(20px,5vw,40px)", zIndex: 3 }}>
+          <span style={{ ...S.label, textShadow: "0 1px 12px rgba(245,240,232,0.6)" }}>Food Planning · Wellness · Community</span>
         </div>
 
-        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 2 }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 3 }}>
           <div style={{ marginBottom: "clamp(20px,3vw,28px)" }}>
             <span style={{ display: "inline-block", fontSize: "0.75rem", letterSpacing: "0.14em", border: "1px solid #C8C2BA", borderRadius: 100, padding: "7px 16px", color: "#6B6660" }}>
               Est. 2026 · Food Planning · AI‑Powered
@@ -273,6 +272,16 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Sound toggle — unmutes the sharp center video on a user gesture
+            (autoplay must start muted). Top-right, mirroring the eyebrow label. */}
+        <button type="button"
+          onClick={() => { const v = heroVideoRef.current; if (!v) return; const next = !soundOn; v.muted = !next; if (next) v.play?.().catch(() => {}); setSoundOn(next); }}
+          aria-pressed={soundOn}
+          aria-label={soundOn ? "Mute the hero video" : "Play the hero video with sound"}
+          style={{ position: "absolute", top: "clamp(84px,12vh,108px)", right: "clamp(20px,5vw,40px)", zIndex: 3, display: "inline-flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 100, cursor: "pointer", background: "rgba(26,25,22,0.5)", color: "#FAFAF6", border: "1px solid rgba(250,250,246,0.25)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", fontSize: "0.6875rem", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
+          {soundOn ? "🔊 Sound on" : "🔈 Watch with sound"}
+        </button>
       </section>
 
       {/* ══ TICKER ════════════════════════════════════════════════════════════ */}
@@ -405,42 +414,18 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Onboarding walkthrough video — the same explainer from the app. */}
-            <div style={{ paddingTop: 4 }}>
-              <div style={{ borderRadius: 20, overflow: "hidden", border: "1px solid #E2DDD5", background: "#1A1916", boxShadow: "0 18px 60px rgba(26,25,22,0.12)" }}>
-                {canEmbedVideo ? (
-                  <video
-                    controls
-                    playsInline
-                    preload="metadata"
-                    poster={HERO_IMG}
-                    style={{ width: "100%", display: "block", aspectRatio: "16 / 10", objectFit: "cover", background: "#1A1916" }}
-                  >
-                    <source src={GROVLI_VIDEO_URL} type="video/quicktime" />
-                    Your browser can&apos;t play this video.{" "}
-                    <a href={GROVLI_VIDEO_URL} style={{ color: "#90B896" }}>Watch the walkthrough →</a>
-                  </video>
-                ) : (
-                  <a
-                    href={GROVLI_VIDEO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Watch the Grovli walkthrough"
-                    style={{
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      aspectRatio: "16 / 10", textDecoration: "none",
-                      backgroundImage: `linear-gradient(rgba(26,25,22,0.45), rgba(26,25,22,0.55)), url(${HERO_IMG})`,
-                      backgroundSize: "cover", backgroundPosition: "center",
-                    }}
-                  >
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "13px 26px", borderRadius: 100, background: "#FAFAF6", color: "#1A1916", fontSize: "0.875rem", fontWeight: 600 }}>
-                      ▶ Watch the walkthrough
-                    </span>
-                  </a>
-                )}
-              </div>
-              <p style={{ fontSize: "0.8125rem", color: "#6B6660", lineHeight: 1.6, marginTop: 14, textAlign: "center" }}>
-                See Grovli in action — the same walkthrough that greets you inside the app.
+            {/* App preview — a still from the walkthrough that now headlines the
+                hero, so the section keeps its two-column balance without
+                re-embedding the video. */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 4 }}>
+              <img
+                src={HERO_VIDEO_POSTER}
+                alt="The Grovli app — a personalized food plan in seconds"
+                loading="lazy"
+                style={{ width: "min(280px, 80%)", height: "auto", display: "block", borderRadius: 30, border: "1px solid #E2DDD5", boxShadow: "0 26px 70px rgba(26,25,22,0.18)", background: "#1A1916" }}
+              />
+              <p style={{ fontSize: "0.8125rem", color: "#6B6660", lineHeight: 1.6, marginTop: 16, textAlign: "center", maxWidth: 300 }}>
+                Food planning in your pocket — the full walkthrough plays up top.
               </p>
             </div>
           </div>
