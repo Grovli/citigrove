@@ -39,6 +39,22 @@ body {
 }
 .animate-fade-up { animation: fadeUp 0.7s ease both; }
 
+/* Respect a reduced-motion preference: suppress the hero's autoplay videos (the
+   section's HERO_IMG background then shows as the static fallback), freeze the
+   marquee + fade-ups, and disable smooth scrolling. WCAG 2.3.3 / vestibular. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .animate-marquee,
+  .animate-fade-up { animation: none; }
+  .hero-ambient-video { display: none; }
+}
+
+/* On phones the contained portrait hero video already nearly fills the viewport,
+   so the blurred full-bleed copy is redundant — spare its second decoder. */
+@media (max-width: 640px) {
+  .hero-ambient-blur { display: none; }
+}
+
 /* Organic blob shapes */
 .blob-1 {
   border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
