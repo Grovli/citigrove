@@ -218,22 +218,17 @@ export default function Home() {
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section style={{ minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: `0 clamp(20px,5vw,40px) clamp(60px,8vw,100px)`, position: "relative", overflow: "hidden", backgroundColor: "#F5F0E8", backgroundImage: `url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center" }}>
 
-        {/* Ambient app-demo background. The explainer is a portrait phone
-            recording (443:960), so a plain cover crop would butcher it — instead
-            a blurred, scaled copy of itself fills the wide hero while a sharp,
-            uncropped copy sits centered. Muted autoplay + loop satisfies browser
-            policy; the poster + the section's HERO_IMG bg are the fallbacks. */}
-        <video aria-hidden className="hero-ambient-video hero-ambient-blur" autoPlay muted loop playsInline preload="metadata" poster={HERO_VIDEO_POSTER}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.18)", filter: "blur(36px) saturate(1.12)", zIndex: 0 }}>
-          <source src={HERO_VIDEO_MP4} type="video/mp4" />
-        </video>
-        <video ref={heroVideoRef} className="hero-ambient-video" autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", zIndex: 1 }}>
+        {/* Ambient backdrop: a heavily blurred, scaled copy of the app demo
+            fills the whole hero behind the headline. The sharp, fully-visible
+            copy lives in the right column below. Muted autoplay + loop; on
+            reduced-motion this hides (CSS) and the section's HERO_IMG bg shows. */}
+        <video aria-hidden className="hero-ambient-video" autoPlay muted loop playsInline preload="metadata" poster={HERO_VIDEO_POSTER}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.18)", filter: "blur(40px) saturate(1.15)", zIndex: 0 }}>
           <source src={HERO_VIDEO_MP4} type="video/mp4" />
         </video>
 
         <div style={{
-          position: "absolute", inset: 0, zIndex: 2,
+          position: "absolute", inset: 0, zIndex: 1,
           background: "linear-gradient(160deg, rgba(245,240,232,0.30) 0%, rgba(245,240,232,0.54) 26%, rgba(245,240,232,0.88) 62%, #F5F0E8 100%)",
         }} />
 
@@ -241,7 +236,9 @@ export default function Home() {
           <span style={{ ...S.label, textShadow: "0 1px 12px rgba(245,240,232,0.6)" }}>Food Planning · Wellness · Community</span>
         </div>
 
-        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 3 }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 3, display: "flex", alignItems: "flex-end", gap: "clamp(28px,4vw,72px)", flexWrap: "wrap" }}>
+          {/* Left column — headline, copy, CTAs */}
+          <div style={{ flex: "1 1 440px", minWidth: 0 }}>
           <div style={{ marginBottom: "clamp(20px,3vw,28px)" }}>
             <span style={{ display: "inline-block", fontSize: "0.75rem", letterSpacing: "0.14em", border: "1px solid #C8C2BA", borderRadius: 100, padding: "7px 16px", color: "#6B6660" }}>
               Est. 2026 · Food Planning · AI‑Powered
@@ -269,6 +266,18 @@ export default function Home() {
                 style={{ fontSize: "0.875rem", padding: "13px 28px", borderRadius: 100, background: "#1E3328", color: "#FAFAF6", textDecoration: "none", transition: "background 0.2s", whiteSpace: "nowrap" }}>
                 Start food planning
               </a>
+            </div>
+          </div>
+          </div>
+          {/* Right column — the app screen: neat + fully visible, above the
+              gradient so it isn't dimmed. On reduced-motion the video hides
+              (CSS) and the frame's poster background shows. */}
+          <div style={{ flex: "0 0 auto", display: "flex", alignItems: "flex-end" }}>
+            <div style={{ aspectRatio: "443 / 960", height: "clamp(360px, 62vh, 600px)", borderRadius: 32, overflow: "hidden", boxShadow: "0 30px 80px rgba(26,25,22,0.24)", border: "1px solid rgba(255,255,255,0.5)", background: `#1A1916 url(${HERO_VIDEO_POSTER}) center / cover` }}>
+              <video ref={heroVideoRef} className="hero-ambient-video" autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}>
+                <source src={HERO_VIDEO_MP4} type="video/mp4" />
+              </video>
             </div>
           </div>
         </div>
