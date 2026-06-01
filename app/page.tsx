@@ -223,11 +223,11 @@ export default function Home() {
             a blurred, scaled copy of itself fills the wide hero while a sharp,
             uncropped copy sits centered. Muted autoplay + loop satisfies browser
             policy; the poster + the section's HERO_IMG bg are the fallbacks. */}
-        <video aria-hidden autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
+        <video aria-hidden className="hero-ambient-video hero-ambient-blur" autoPlay muted loop playsInline preload="metadata" poster={HERO_VIDEO_POSTER}
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.18)", filter: "blur(36px) saturate(1.12)", zIndex: 0 }}>
           <source src={HERO_VIDEO_MP4} type="video/mp4" />
         </video>
-        <video ref={heroVideoRef} autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
+        <video ref={heroVideoRef} className="hero-ambient-video" autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", zIndex: 1 }}>
           <source src={HERO_VIDEO_MP4} type="video/mp4" />
         </video>
@@ -279,7 +279,7 @@ export default function Home() {
           onClick={() => { const v = heroVideoRef.current; if (!v) return; const next = !soundOn; v.muted = !next; if (next) v.play?.().catch(() => {}); setSoundOn(next); }}
           aria-pressed={soundOn}
           aria-label={soundOn ? "Mute the hero video" : "Play the hero video with sound"}
-          style={{ position: "absolute", top: "clamp(84px,12vh,108px)", right: "clamp(20px,5vw,40px)", zIndex: 3, display: "inline-flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 100, cursor: "pointer", background: "rgba(26,25,22,0.5)", color: "#FAFAF6", border: "1px solid rgba(250,250,246,0.25)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", fontSize: "0.6875rem", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
+          style={{ position: "absolute", top: "clamp(92px,12vh,108px)", right: "clamp(20px,5vw,40px)", zIndex: 3, display: "inline-flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 100, cursor: "pointer", background: "rgba(26,25,22,0.5)", color: "#FAFAF6", border: "1px solid rgba(250,250,246,0.25)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", fontSize: "0.6875rem", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
           {soundOn ? "🔊 Sound on" : "🔈 Watch with sound"}
         </button>
       </section>
@@ -419,7 +419,7 @@ export default function Home() {
                 re-embedding the video. */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 4 }}>
               <img
-                src={HERO_VIDEO_POSTER}
+                src={`${HERO_VIDEO_POSTER}?width=560`}
                 alt="The Grovli app — a personalized food plan in seconds"
                 loading="lazy"
                 style={{ width: "min(280px, 80%)", height: "auto", display: "block", borderRadius: 30, border: "1px solid #E2DDD5", boxShadow: "0 26px 70px rgba(26,25,22,0.18)", background: "#1A1916" }}
