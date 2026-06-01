@@ -55,8 +55,14 @@ body {
 .prose-citigrove {
   font-family: var(--font-inter), system-ui, sans-serif;
   color: rgba(26, 25, 22, 0.9);
-  font-size: 17px;
-  line-height: 1.75;
+  /* >=18px body with a generous measure for comfortable long-form reading.
+     ~34em (≈61–66 chars) caps line length so the eye tracks easily; centered
+     because the body renders as several sibling .prose-citigrove blocks inside
+     the wider article column. */
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 34em;
+  margin-inline: auto;
 }
 .prose-citigrove > :first-child { margin-top: 0; }
 .prose-citigrove p { margin: 1.15em 0; }

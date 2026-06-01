@@ -92,6 +92,37 @@ export async function fetchAllSlugs(): Promise<string[]> {
   return items.map((i) => i.slug).filter(Boolean);
 }
 
+/**
+ * Sibling posts for the "You may also like" block on a post page.
+ *
+ * Ranks the rest of the journal by tag overlap with the current post (most
+ * shared tags first), breaking ties — and filling any shortfall — with the
+ * newest remaining posts. Returns at most `limit` items, never the current
+ * post. Reuses the build-time index fetch; degrades to [] on a KB outage so
+ * the static export never fails.
+ */
+export async function fetchRelatedPosts(
+  currentSlug: string,
+  tags: string[] | undefined,
+  limit = 3
+): Promise<BlogIndexItem[]> {
+  const items = await fetchBlogIndex(); // newest-first
+  const candidates = items.filter((p) => p.slug && p.slug !== currentSlug);
+  const wanted = new Set((tags || []).map((t) => t.toLowerCase()));
+
+  const overlap = (p: BlogIndexItem) =>
+    (p.tags || []).reduce((n, t) => n + (wanted.has(t.toLowerCase()) ? 1 : 0), 0);
+
+  // Stable sort: tag-overlap desc, then preserve index order (newest-first)
+  // for ties and zero-overlap posts — so absent tags ⇒ pure newest-first.
+  const ranked = candidates
+    .map((p, i) => ({ p, i, score: overlap(p) }))
+    .sort((a, b) => b.score - a.score || a.i - b.i)
+    .map((x) => x.p);
+
+  return ranked.slice(0, limit);
+}
+
 /** Human date, e.g. "May 29, 2026". */
 export function formatDate(iso: string): string {
   try {
