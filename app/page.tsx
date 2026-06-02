@@ -272,8 +272,8 @@ export default function Home() {
           {/* Right column — the app screen: neat + fully visible, above the
               gradient so it isn't dimmed. On reduced-motion the video hides
               (CSS) and the frame's poster background shows. */}
-          <div style={{ flex: "0 0 auto", display: "flex", alignItems: "flex-end" }}>
-            <div style={{ aspectRatio: "443 / 960", height: "clamp(360px, 62vh, 600px)", borderRadius: 32, overflow: "hidden", boxShadow: "0 30px 80px rgba(26,25,22,0.24)", border: "1px solid rgba(255,255,255,0.5)", background: `#1A1916 url(${HERO_VIDEO_POSTER}) center / cover` }}>
+          <div style={{ flex: "1 1 300px", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+            <div style={{ aspectRatio: "443 / 960", height: "clamp(320px, 52vh, 520px)", width: "auto", maxWidth: "100%", borderRadius: 32, overflow: "hidden", boxShadow: "0 30px 80px rgba(26,25,22,0.24)", border: "1px solid rgba(255,255,255,0.5)", background: `#1A1916 url(${HERO_VIDEO_POSTER}) center / cover` }}>
               <video ref={heroVideoRef} className="hero-ambient-video" autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}>
                 <source src={HERO_VIDEO_MP4} type="video/mp4" />
