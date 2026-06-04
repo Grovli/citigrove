@@ -7,6 +7,11 @@ on:
   # Manual trigger — republish the static export after a document-api content
   # change (re-seed) without needing a code change. `gh workflow run deploy.yml`.
   workflow_dispatch:
+  # Automated trigger — document-api's deploy fires this after seeding +
+  # publishing new CitiGrove Journal posts, so the static blog goes live
+  # without a manual rebuild. (See document-api deploy.yml `publish` job.)
+  repository_dispatch:
+    types: [journal-published]
 
 jobs:
   deploy:
