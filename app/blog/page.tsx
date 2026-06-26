@@ -62,7 +62,7 @@ export default async function BlogIndexPage() {
           <Link
             href="/"
             className="text-[20px] tracking-[-0.01em]"
-            style={{ fontFamily: "var(--font-playfair), serif" }}
+            style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
           >
             Citi<span style={{ color: "#8A4A28" }}>Grove</span>
           </Link>
@@ -82,7 +82,7 @@ export default async function BlogIndexPage() {
         </div>
         <h1
           className="text-[clamp(2.5rem,5vw,4.5rem)] leading-[1.05] tracking-[-0.02em]"
-          style={{ fontFamily: "var(--font-playfair), serif" }}
+          style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
         >
           Notes on the food we choose,
           <br />
@@ -126,7 +126,7 @@ export default async function BlogIndexPage() {
                   </div>
                   <h2
                     className="text-[clamp(1.5rem,2.5vw,2.25rem)] leading-[1.15] tracking-[-0.015em] group-hover:text-[#8A4A28] transition-colors"
-                    style={{ fontFamily: "var(--font-playfair), serif" }}
+                    style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
                   >
                     {post.title}
                   </h2>

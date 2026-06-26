@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
 import {
   SITE_URL,
@@ -18,10 +18,14 @@ const inter = Inter({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+// Newsreader — a warm Scotch/transitional editorial serif (à la Ffern's
+// Tiempos-like type). Optical sizing + an italic for pull-quotes. This is the
+// wordmark + headline face across the whole site (and mirrored in the app).
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -152,7 +156,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} antialiased`}>
+      <body className={`${inter.variable} ${newsreader.variable} antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: ldJson(structuredData) }}

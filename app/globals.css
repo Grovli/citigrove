@@ -22,7 +22,7 @@
 
 @theme inline {
   --font-sans:  var(--font-inter);
-  --font-serif: var(--font-playfair);
+  --font-serif: var(--font-newsreader);
 }
 
 html { scroll-behavior: smooth; }
@@ -67,7 +67,7 @@ body {
 
 /* ───────────────────────────────────────────────────────────────────────────
    Editorial prose — used by /blog/[slug] to render the Markdown body returned
-   by document-api. Serif (Playfair) headings + sage links so the long-form
+   by document-api. Serif (Newsreader) headings + sage links so the long-form
    journal reads like the rest of CitiGrove, not a default Markdown dump.
    ─────────────────────────────────────────────────────────────────────────── */
 .prose-citigrove {
@@ -85,7 +85,7 @@ body {
 .prose-citigrove > :first-child { margin-top: 0; }
 .prose-citigrove p { margin: 1.15em 0; }
 .prose-citigrove h2 {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-newsreader), Georgia, serif;
   font-size: clamp(1.55rem, 3vw, 2.05rem);
   font-weight: 700;
   line-height: 1.18;
@@ -94,7 +94,7 @@ body {
   margin: 2.4em 0 0.7em;
 }
 .prose-citigrove h3 {
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-newsreader), Georgia, serif;
   font-size: clamp(1.25rem, 2.2vw, 1.5rem);
   font-weight: 600;
   line-height: 1.25;
@@ -127,7 +127,7 @@ body {
   margin: 1.8em 0;
   padding: 0.4em 0 0.4em 1.3em;
   border-left: 3px solid var(--sage);
-  font-family: var(--font-playfair), serif;
+  font-family: var(--font-newsreader), Georgia, serif;
   font-style: italic;
   font-size: 1.25rem;
   line-height: 1.5;

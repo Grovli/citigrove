@@ -44,7 +44,7 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
               )}
               <h3
                 className="text-[clamp(1.15rem,1.6vw,1.3rem)] leading-[1.25] tracking-[-0.01em] text-[#3B362D] group-hover:text-[#8A4A28] transition-colors"
-                style={{ fontFamily: "var(--font-playfair), serif" }}
+                style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
               >
                 {post.title}
               </h3>
