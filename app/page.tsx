@@ -198,7 +198,7 @@ export default function Home() {
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(20px,5vw,40px)", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
-          <span style={{ ...S.serif, fontSize: "1.25rem", fontWeight: 700, letterSpacing: "0.02em", color: "#16140F" }}>
+          <span style={{ ...S.serif, fontSize: "1.25rem", fontWeight: 500, letterSpacing: "0.02em", color: "#16140F" }}>
             Citi<span style={{ color: "#9A4A26" }}>Grove</span>
           </span>
 
@@ -275,10 +275,10 @@ export default function Home() {
             </span>
           </div>
 
-          <h1 style={{ ...S.serif, fontSize: "clamp(3rem,10.5vw,10rem)", fontWeight: 800, lineHeight: 0.9, letterSpacing: "-0.02em", color: "#16140F", marginBottom: "clamp(32px,5vw,56px)" }}>
+          <h1 style={{ ...S.serif, fontSize: "clamp(2.75rem,8vw,7.5rem)", fontWeight: 400, lineHeight: 0.98, letterSpacing: "-0.015em", color: "#16140F", marginBottom: "clamp(32px,5vw,56px)" }}>
             <span style={{ display: "block" }}>Eat Good.</span>
             <span style={{ display: "block", color: "#9A4A26" }}>Look Good.</span>
-            <span style={{ display: "block", WebkitTextStroke: "1.5px #CBC6BB", color: "transparent" }}>Feel Good.</span>
+            <span style={{ display: "block", WebkitTextStroke: "1px #CBC6BB", color: "transparent" }}>Feel Good.</span>
           </h1>
 
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "clamp(20px,4vw,32px)" }}>
@@ -374,7 +374,7 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(48px,7vw,72px)" }}>
             <div>
               <p style={{ ...S.label, marginBottom: 16 }}>The Ecosystem</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5.5vw,4.25rem)", fontWeight: 700, lineHeight: 1.05, color: "#16140F" }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5.5vw,4.25rem)", fontWeight: 400, lineHeight: 1.05, color: "#16140F" }}>
                 Everything you need,<br />
                 <span style={{ color: "#9A4A26" }}>in one place.</span>
               </h2>
@@ -401,7 +401,7 @@ export default function Home() {
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
                 <span style={{ fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", color: card.textColor, opacity: 0.45, fontWeight: 600 }}>{card.tag}</span>
                 <div>
-                  <h3 style={{ ...S.serif, fontSize: "clamp(1.5rem,2.5vw,1.75rem)", fontWeight: 700, lineHeight: 1.15, color: card.textColor, marginBottom: 14, whiteSpace: "pre-line" }}>{card.title}</h3>
+                  <h3 style={{ ...S.serif, fontSize: "clamp(1.5rem,2.5vw,1.75rem)", fontWeight: 400, lineHeight: 1.15, color: card.textColor, marginBottom: 14, whiteSpace: "pre-line" }}>{card.title}</h3>
                   <p style={{ fontSize: "0.875rem", color: card.textColor, opacity: 0.65, lineHeight: 1.7 }}>{card.body}</p>
                 </div>
                 <span style={{ fontSize: "1.25rem", color: card.textColor, opacity: 0.4, alignSelf: "flex-end" }}>→</span>
@@ -418,7 +418,7 @@ export default function Home() {
 
             <div>
               <p style={{ ...S.label, marginBottom: 24 }}>Meet Grovli · Food Planning</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#16140F", marginBottom: 24 }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 400, lineHeight: 1.08, color: "#16140F", marginBottom: 24 }}>
                 Food planning,<br />not just meal planning.
               </h2>
               <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6F6A60", lineHeight: 1.75, marginBottom: 16 }}>
@@ -488,7 +488,7 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: "clamp(40px,6vw,64px)" }}>
             <div>
               <p style={{ ...S.labelDark, marginBottom: 16 }}>Inside the App</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,3.75rem)", fontWeight: 700, lineHeight: 1.08, color: "#F7F5EF" }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,3.75rem)", fontWeight: 400, lineHeight: 1.08, color: "#F7F5EF" }}>
                 One app for the<br /><span style={{ color: "#16140F" }}>whole food journey.</span>
               </h2>
             </div>
@@ -515,7 +515,7 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(40px,6vw,64px)" }}>
             <div>
               <p style={{ ...S.label, marginBottom: 16 }}>The Journal</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#16140F" }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 400, lineHeight: 1.08, color: "#16140F" }}>
                 Stories from<br />the table.
               </h2>
             </div>
@@ -557,7 +557,7 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(48px,7vw,72px)" }}>
             <div>
               <p style={{ ...S.label, marginBottom: 16 }}>Sparkling Beverages</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#16140F" }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 400, lineHeight: 1.08, color: "#16140F" }}>
                 Two ingredients.<br />Nothing to hide.
               </h2>
             </div>
@@ -601,7 +601,7 @@ export default function Home() {
       <section style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <p style={{ ...S.label, marginBottom: 24 }}>Join the Community</p>
-          <h2 style={{ ...S.serif, fontSize: "clamp(2rem,6vw,4.5rem)", fontWeight: 700, lineHeight: 1.1, color: "#16140F", marginBottom: 16 }}>
+          <h2 style={{ ...S.serif, fontSize: "clamp(2rem,6vw,4.5rem)", fontWeight: 400, lineHeight: 1.1, color: "#16140F", marginBottom: 16 }}>
             10% off your<br />first order.
           </h2>
           <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1rem)", color: "#6F6A60", lineHeight: 1.75, marginBottom: 40 }}>
@@ -634,7 +634,7 @@ export default function Home() {
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "clamp(36px,5vw,48px)", marginBottom: "clamp(48px,7vw,80px)" }}>
             <div style={{ gridColumn: "span 1" }}>
-              <div style={{ ...S.serif, fontSize: "1.5rem", fontWeight: 700, color: "#F7F5EF", marginBottom: 20, letterSpacing: "0.02em" }}>
+              <div style={{ ...S.serif, fontSize: "1.5rem", fontWeight: 500, color: "#F7F5EF", marginBottom: 20, letterSpacing: "0.02em" }}>
                 Citi<span style={{ color: "#9A4A26" }}>Grove</span>
               </div>
               <p style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.38)", lineHeight: 1.75, maxWidth: 280, marginBottom: 20 }}>
