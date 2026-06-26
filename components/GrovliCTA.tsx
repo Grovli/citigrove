@@ -57,7 +57,7 @@ export function GrovliCTA({ campaign, variant = "band" }: GrovliCTAProps) {
       </div>
       <h3
         className="text-[clamp(1.6rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.015em] mb-4"
-        style={{ fontFamily: "var(--font-playfair), serif" }}
+        style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
       >
         Let Grovli plan your food, not just your meals.
       </h3>

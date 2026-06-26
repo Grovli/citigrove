@@ -96,7 +96,7 @@ export default async function BlogPostPage({
       <main className="min-h-screen bg-[#F1ECE1] text-[#3B362D]">
         <header className="border-b border-[#3B362D]/[0.08]">
           <div className="max-w-[1100px] mx-auto px-8 py-8 flex items-center justify-between">
-            <Link href="/" className="text-[20px] tracking-[-0.01em]" style={{ fontFamily: "var(--font-playfair), serif" }}>
+            <Link href="/" className="text-[20px] tracking-[-0.01em]" style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}>
               Citi<span style={{ color: "#8A4A28" }}>Grove</span>
             </Link>
             <Link href="/blog" className="text-[12px] tracking-[0.18em] uppercase text-[#8A4A28] font-semibold">
@@ -105,7 +105,7 @@ export default async function BlogPostPage({
           </div>
         </header>
         <article className="max-w-[760px] mx-auto px-8 pt-28 pb-32 text-center">
-          <h1 className="text-[clamp(2rem,4vw,3rem)] leading-[1.1]" style={{ fontFamily: "var(--font-playfair), serif" }}>
+          <h1 className="text-[clamp(2rem,4vw,3rem)] leading-[1.1]" style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}>
             This essay is publishing soon.
           </h1>
           <p className="text-[17px] text-[#3B362D]/70 leading-[1.65] mt-5">
@@ -163,7 +163,7 @@ export default async function BlogPostPage({
           <Link
             href="/"
             className="text-[20px] tracking-[-0.01em]"
-            style={{ fontFamily: "var(--font-playfair), serif" }}
+            style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
           >
             Citi<span style={{ color: "#8A4A28" }}>Grove</span>
           </Link>
@@ -207,7 +207,7 @@ export default async function BlogPostPage({
         </div>
         <h1
           className="text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.1] tracking-[-0.02em]"
-          style={{ fontFamily: "var(--font-playfair), serif" }}
+          style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
         >
           {post.title}
         </h1>

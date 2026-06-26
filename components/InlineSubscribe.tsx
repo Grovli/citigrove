@@ -111,7 +111,7 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
       </div>
       <h3
         className="text-[clamp(1.4rem,2vw,1.875rem)] leading-[1.2] tracking-[-0.015em] mb-3"
-        style={{ fontFamily: "var(--font-playfair), serif" }}
+        style={{ fontFamily: "var(--font-newsreader), Georgia, serif" }}
       >
         Get the next essay in your inbox.
       </h3>
