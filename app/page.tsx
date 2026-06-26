@@ -93,10 +93,10 @@ const BELIEFS = [
 ];
 
 const SERVICES = [
-  { tag: "01 · Food Planning", title: "The Grovli\nApp", body: "AI food planning — personalized plans in seconds, a smart grocery list, a pantry, and The Grove for garden-to-plate. Food planning, not just meal planning.", accent: "#28332C", textColor: "#F4F2EA", link: GROVLI_HOME, external: true },
-  { tag: "02 · Beverages", title: "Sparkling\nBeverages", body: "Two ingredients. Sparkling water + natural extracts. No sugar. No additives. Seven flavors crafted to taste clean and feel good.", accent: "#F4F2EA", textColor: "#211F1A", link: "#beverages", external: false },
-  { tag: "03 · Skincare", title: "Natural\nSkincare", body: "Thoughtfully formulated with quality ingredients for your natural radiance. Holistic wellness, inside and out.", accent: "#F4F2EA", textColor: "#211F1A", link: "#skincare", external: false },
-  { tag: "04 · The Journal", title: "Stories &\nFood Planning", body: "Essays on gardening, hydroponics, grocery costs, and eating well in 2026 — the thinking behind everything we make.", accent: "#F4F2EA", textColor: "#211F1A", link: "/blog", external: false },
+  { tag: "01 · Food Planning", title: "The Grovli\nApp", body: "AI food planning — personalized plans in seconds, a smart grocery list, a pantry, and The Grove for garden-to-plate. Food planning, not just meal planning.", accent: "#16140F", textColor: "#F7F5EF", link: GROVLI_HOME, external: true },
+  { tag: "02 · Beverages", title: "Sparkling\nBeverages", body: "Two ingredients. Sparkling water + natural extracts. No sugar. No additives. Seven flavors crafted to taste clean and feel good.", accent: "#F7F5EF", textColor: "#16140F", link: "#beverages", external: false },
+  { tag: "03 · Skincare", title: "Natural\nSkincare", body: "Thoughtfully formulated with quality ingredients for your natural radiance. Holistic wellness, inside and out.", accent: "#F7F5EF", textColor: "#16140F", link: "#skincare", external: false },
+  { tag: "04 · The Journal", title: "Stories &\nFood Planning", body: "Essays on gardening, hydroponics, grocery costs, and eating well in 2026 — the thinking behind everything we make.", accent: "#F7F5EF", textColor: "#16140F", link: "/blog", external: false },
 ];
 
 const GCS_BUCKET = process.env.NEXT_PUBLIC_GCS_BUCKET_URL ?? "";
@@ -174,13 +174,13 @@ export default function Home() {
   }
 
   const S = {
-    label: { fontSize: "0.6875rem", letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "#577260", fontWeight: 600 },
-    labelDark: { fontSize: "0.6875rem", letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(244,242,234,0.4)", fontWeight: 600 },
+    label: { fontSize: "0.6875rem", letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "#9A4A26", fontWeight: 600 },
+    labelDark: { fontSize: "0.6875rem", letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(247,245,239,0.4)", fontWeight: 600 },
     serif: { fontFamily: "var(--font-playfair), serif" },
   };
 
   return (
-    <div style={{ background: "#F4F2EA", color: "#211F1A", fontFamily: "var(--font-inter), system-ui, sans-serif" }}>
+    <div style={{ background: "#F7F5EF", color: "#16140F", fontFamily: "var(--font-inter), system-ui, sans-serif" }}>
 
       <script
         type="application/ld+json"
@@ -191,23 +191,23 @@ export default function Home() {
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
         transition: "all 0.4s ease",
-        background: scrolled ? "rgba(244,242,234,0.93)" : "transparent",
+        background: scrolled ? "rgba(247,245,239,0.93)" : "transparent",
         backdropFilter: scrolled ? "blur(16px)" : "none",
         WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: scrolled ? "1px solid #E6E2D7" : "1px solid transparent",
+        borderBottom: scrolled ? "1px solid #E4E1D6" : "1px solid transparent",
       }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(20px,5vw,40px)", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
-          <span style={{ ...S.serif, fontSize: "1.25rem", fontWeight: 700, letterSpacing: "0.02em", color: "#211F1A" }}>
-            Citi<span style={{ color: "#577260" }}>Grove</span>
+          <span style={{ ...S.serif, fontSize: "1.25rem", fontWeight: 700, letterSpacing: "0.02em", color: "#16140F" }}>
+            Citi<span style={{ color: "#9A4A26" }}>Grove</span>
           </span>
 
           <nav className="hidden md:flex" style={{ gap: 36 }}>
             {NAV_LINKS.map((l) => (
               <a key={l.label} href={l.href}
-                style={{ fontSize: "0.8125rem", color: "#6E675A", letterSpacing: "0.01em", textDecoration: "none", transition: "color 0.2s" }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#211F1A")}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "#6E675A")}>
+                style={{ fontSize: "0.8125rem", color: "#6F6A60", letterSpacing: "0.01em", textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#16140F")}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "#6F6A60")}>
                 {l.label}
               </a>
             ))}
@@ -215,9 +215,9 @@ export default function Home() {
 
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: "0.8125rem", padding: "10px 22px", borderRadius: 100, background: "#28332C", color: "#F4F2EA", textDecoration: "none", letterSpacing: "0.02em", transition: "background 0.2s", whiteSpace: "nowrap" }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#34433A")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#28332C")}>
+              style={{ fontSize: "0.8125rem", padding: "10px 22px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", letterSpacing: "0.02em", transition: "background 0.2s", whiteSpace: "nowrap" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#2E2B22")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#16140F")}>
               Start food planning
             </a>
 
@@ -225,19 +225,19 @@ export default function Home() {
               className="md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", display: "flex", flexDirection: "column", gap: 5 }}>
-              <span style={{ display: "block", width: 22, height: 1.5, background: "#211F1A", transition: "all 0.3s", transform: mobileMenuOpen ? "rotate(45deg) translate(5px, 5px)" : "none" }} />
-              <span style={{ display: "block", width: 22, height: 1.5, background: "#211F1A", transition: "all 0.3s", opacity: mobileMenuOpen ? 0 : 1 }} />
-              <span style={{ display: "block", width: 22, height: 1.5, background: "#211F1A", transition: "all 0.3s", transform: mobileMenuOpen ? "rotate(-45deg) translate(5px, -5px)" : "none" }} />
+              <span style={{ display: "block", width: 22, height: 1.5, background: "#16140F", transition: "all 0.3s", transform: mobileMenuOpen ? "rotate(45deg) translate(5px, 5px)" : "none" }} />
+              <span style={{ display: "block", width: 22, height: 1.5, background: "#16140F", transition: "all 0.3s", opacity: mobileMenuOpen ? 0 : 1 }} />
+              <span style={{ display: "block", width: 22, height: 1.5, background: "#16140F", transition: "all 0.3s", transform: mobileMenuOpen ? "rotate(-45deg) translate(5px, -5px)" : "none" }} />
             </button>
           </div>
         </div>
 
         {mobileMenuOpen && (
-          <div style={{ background: "rgba(244,242,234,0.97)", backdropFilter: "blur(16px)", borderTop: "1px solid #E6E2D7", padding: "24px clamp(20px,5vw,40px)" }}>
+          <div style={{ background: "rgba(247,245,239,0.97)", backdropFilter: "blur(16px)", borderTop: "1px solid #E4E1D6", padding: "24px clamp(20px,5vw,40px)" }}>
             {NAV_LINKS.map((l) => (
               <a key={l.label} href={l.href}
                 onClick={() => setMobileMenuOpen(false)}
-                style={{ display: "block", padding: "12px 0", fontSize: "1rem", color: "#211F1A", textDecoration: "none", borderBottom: "1px solid #E6E2D7" }}>
+                style={{ display: "block", padding: "12px 0", fontSize: "1rem", color: "#16140F", textDecoration: "none", borderBottom: "1px solid #E4E1D6" }}>
                 {l.label}
               </a>
             ))}
@@ -246,7 +246,7 @@ export default function Home() {
       </header>
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
-      <section style={{ minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: `0 clamp(20px,5vw,40px) clamp(60px,8vw,100px)`, position: "relative", overflow: "hidden", backgroundColor: "#F4F2EA", backgroundImage: `url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center" }}>
+      <section style={{ minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: `0 clamp(20px,5vw,40px) clamp(60px,8vw,100px)`, position: "relative", overflow: "hidden", backgroundColor: "#F7F5EF", backgroundImage: `url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center" }}>
 
         {/* Ambient backdrop: a heavily blurred, scaled copy of the app demo
             fills the whole hero behind the headline. The sharp, fully-visible
@@ -259,41 +259,41 @@ export default function Home() {
 
         <div style={{
           position: "absolute", inset: 0, zIndex: 1,
-          background: "linear-gradient(160deg, rgba(244,242,234,0.30) 0%, rgba(244,242,234,0.54) 26%, rgba(244,242,234,0.88) 62%, #F4F2EA 100%)",
+          background: "linear-gradient(160deg, rgba(247,245,239,0.30) 0%, rgba(247,245,239,0.54) 26%, rgba(247,245,239,0.88) 62%, #F7F5EF 100%)",
         }} />
 
         <div style={{ position: "absolute", top: "clamp(84px,12vh,108px)", left: "clamp(20px,5vw,40px)", zIndex: 3 }}>
-          <span style={{ ...S.label, textShadow: "0 1px 12px rgba(244,242,234,0.6)" }}>Food Planning · Wellness · Community</span>
+          <span style={{ ...S.label, textShadow: "0 1px 12px rgba(247,245,239,0.6)" }}>Food Planning · Wellness · Community</span>
         </div>
 
         <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 3, display: "flex", alignItems: "flex-end", gap: "clamp(28px,4vw,72px)", flexWrap: "wrap" }}>
           {/* Left column — headline, copy, CTAs */}
           <div style={{ flex: "1 1 440px", minWidth: 0 }}>
           <div style={{ marginBottom: "clamp(20px,3vw,28px)" }}>
-            <span style={{ display: "inline-block", fontSize: "0.75rem", letterSpacing: "0.14em", border: "1px solid #C5C0B2", borderRadius: 100, padding: "7px 16px", color: "#6E675A" }}>
+            <span style={{ display: "inline-block", fontSize: "0.75rem", letterSpacing: "0.14em", border: "1px solid #CBC6BB", borderRadius: 100, padding: "7px 16px", color: "#6F6A60" }}>
               Est. 2026 · Food Planning · AI‑Powered
             </span>
           </div>
 
-          <h1 style={{ ...S.serif, fontSize: "clamp(3rem,10.5vw,10rem)", fontWeight: 800, lineHeight: 0.9, letterSpacing: "-0.02em", color: "#211F1A", marginBottom: "clamp(32px,5vw,56px)" }}>
+          <h1 style={{ ...S.serif, fontSize: "clamp(3rem,10.5vw,10rem)", fontWeight: 800, lineHeight: 0.9, letterSpacing: "-0.02em", color: "#16140F", marginBottom: "clamp(32px,5vw,56px)" }}>
             <span style={{ display: "block" }}>Eat Good.</span>
-            <span style={{ display: "block", color: "#577260" }}>Look Good.</span>
-            <span style={{ display: "block", WebkitTextStroke: "1.5px #C5C0B2", color: "transparent" }}>Feel Good.</span>
+            <span style={{ display: "block", color: "#9A4A26" }}>Look Good.</span>
+            <span style={{ display: "block", WebkitTextStroke: "1.5px #CBC6BB", color: "transparent" }}>Feel Good.</span>
           </h1>
 
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "clamp(20px,4vw,32px)" }}>
-            <p style={{ maxWidth: 440, fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6E675A", lineHeight: 1.75, flex: "1 1 280px" }}>
+            <p style={{ maxWidth: 440, fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6F6A60", lineHeight: 1.75, flex: "1 1 280px" }}>
               A food-first wellness ecosystem built by humans, for humans. It starts with{" "}
-              <strong style={{ color: "#211F1A", fontWeight: 600 }}>Grovli</strong>, our AI food planning
+              <strong style={{ color: "#16140F", fontWeight: 600 }}>Grovli</strong>, our AI food planning
               app — then clean sparkling beverages and skincare. All connected, all yours.
             </p>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", flexShrink: 0 }}>
               <a href="#about"
-                style={{ fontSize: "0.875rem", padding: "13px 28px", borderRadius: 100, border: "1px solid #C5C0B2", color: "#211F1A", textDecoration: "none", transition: "all 0.2s", whiteSpace: "nowrap" }}>
+                style={{ fontSize: "0.875rem", padding: "13px 28px", borderRadius: 100, border: "1px solid #CBC6BB", color: "#16140F", textDecoration: "none", transition: "all 0.2s", whiteSpace: "nowrap" }}>
                 Explore the ecosystem
               </a>
               <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-                style={{ fontSize: "0.875rem", padding: "13px 28px", borderRadius: 100, background: "#28332C", color: "#F4F2EA", textDecoration: "none", transition: "background 0.2s", whiteSpace: "nowrap" }}>
+                style={{ fontSize: "0.875rem", padding: "13px 28px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", transition: "background 0.2s", whiteSpace: "nowrap" }}>
                 Start food planning
               </a>
             </div>
@@ -303,7 +303,7 @@ export default function Home() {
               gradient so it isn't dimmed. On reduced-motion the video hides
               (CSS) and the frame's poster background shows. */}
           <div style={{ flex: "1 1 300px", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-            <div style={{ aspectRatio: "443 / 960", height: "clamp(320px, 52vh, 520px)", width: "auto", maxWidth: "100%", borderRadius: 32, overflow: "hidden", boxShadow: "0 30px 80px rgba(33,31,26,0.24)", border: "1px solid rgba(255,255,255,0.5)", background: `#211F1A url(${HERO_VIDEO_POSTER}) center / cover` }}>
+            <div style={{ aspectRatio: "443 / 960", height: "clamp(320px, 52vh, 520px)", width: "auto", maxWidth: "100%", borderRadius: 32, overflow: "hidden", boxShadow: "0 30px 80px rgba(22,20,15,0.24)", border: "1px solid rgba(255,255,255,0.5)", background: `#16140F url(${HERO_VIDEO_POSTER}) center / cover` }}>
               <video ref={heroVideoRef} className="hero-ambient-video" autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}>
                 <source src={HERO_VIDEO_MP4} type="video/mp4" />
@@ -318,22 +318,22 @@ export default function Home() {
           onClick={() => { const v = heroVideoRef.current; if (!v) return; const next = !soundOn; v.muted = !next; if (next) v.play?.().catch(() => {}); setSoundOn(next); }}
           aria-pressed={soundOn}
           aria-label={soundOn ? "Mute the hero video" : "Play the hero video with sound"}
-          style={{ position: "absolute", top: "clamp(92px,12vh,108px)", right: "clamp(20px,5vw,40px)", zIndex: 3, display: "inline-flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 100, cursor: "pointer", background: "rgba(33,31,26,0.5)", color: "#F4F2EA", border: "1px solid rgba(244,242,234,0.25)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", fontSize: "0.6875rem", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
+          style={{ position: "absolute", top: "clamp(92px,12vh,108px)", right: "clamp(20px,5vw,40px)", zIndex: 3, display: "inline-flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 100, cursor: "pointer", background: "rgba(22,20,15,0.5)", color: "#F7F5EF", border: "1px solid rgba(247,245,239,0.25)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", fontSize: "0.6875rem", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
           {soundOn ? "🔊 Sound on" : "🔈 Watch with sound"}
         </button>
       </section>
 
       {/* ══ TICKER ════════════════════════════════════════════════════════════ */}
-      <div style={{ background: "#28332C", padding: "14px 0", overflow: "hidden" }}>
+      <div style={{ background: "#16140F", padding: "14px 0", overflow: "hidden" }}>
         <div className="animate-marquee" style={{ display: "flex", whiteSpace: "nowrap" }}>
           {Array.from({ length: 3 }, (_, bloc) =>
             ["FOOD PLANNING", "THE GROVE", "SPARKLING BEVERAGES", "SKINCARE", "AI POWERED",
              "GROCERY SYNC", "GROW YOUR OWN", "HOLISTIC WELLNESS"].map((t, i) => (
               <span key={`${bloc}-${i}`}
                 style={{ display: "inline-flex", alignItems: "center", gap: 24, padding: "0 24px",
-                  fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(244,242,234,0.5)", fontWeight: 600 }}>
+                  fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(247,245,239,0.5)", fontWeight: 600 }}>
                 {t}
-                <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(87,114,96,0.6)", flexShrink: 0 }} />
+                <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(22,20,15,0.6)", flexShrink: 0 }} />
               </span>
             ))
           )}
@@ -341,27 +341,27 @@ export default function Home() {
       </div>
 
       {/* ══ BELIEFS ═══════════════════════════════════════════════════════════ */}
-      <section id="about" style={{ background: "#F4F2EA", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
+      <section id="about" style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <p style={{ ...S.label, marginBottom: "clamp(36px,6vw,56px)" }}>Our Beliefs</p>
 
-          <p style={{ ...S.serif, fontSize: "clamp(1.6rem,4vw,3.25rem)", fontWeight: 500, lineHeight: 1.35, color: "#211F1A", maxWidth: 800, borderTop: "1px solid #E6E2D7", paddingTop: 40, marginBottom: "clamp(56px,8vw,100px)" }}>
+          <p style={{ ...S.serif, fontSize: "clamp(1.6rem,4vw,3.25rem)", fontWeight: 500, lineHeight: 1.35, color: "#16140F", maxWidth: 800, borderTop: "1px solid #E4E1D6", paddingTop: 40, marginBottom: "clamp(56px,8vw,100px)" }}>
             &quot;We believe eating well shouldn&apos;t be a project. It&apos;s a practice — one that
-            should be <em style={{ fontStyle: "italic", color: "#577260" }}>accessible, personal,</em> and
+            should be <em style={{ fontStyle: "italic", color: "#9A4A26" }}>accessible, personal,</em> and
             deeply human.&quot;
           </p>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 1, background: "#E6E2D7" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 1, background: "#E4E1D6" }}>
             {BELIEFS.map((b, i) => (
               <div key={i}
-                style={{ background: "#F4F2EA", padding: "clamp(32px,4vw,48px) clamp(24px,3vw,36px)", transition: "background 0.25s" }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#ECE9DE")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#F4F2EA")}>
-                <span style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", color: "#C28A66", fontWeight: 600, display: "block", marginBottom: 20 }}>
+                style={{ background: "#F7F5EF", padding: "clamp(32px,4vw,48px) clamp(24px,3vw,36px)", transition: "background 0.25s" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#EFEDE4")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#F7F5EF")}>
+                <span style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", color: "#B5582F", fontWeight: 600, display: "block", marginBottom: 20 }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <h3 style={{ ...S.serif, fontSize: "clamp(1.25rem,2vw,1.5rem)", fontWeight: 600, marginBottom: 14, color: "#211F1A" }}>{b.label}</h3>
-                <p style={{ fontSize: "0.9375rem", color: "#6E675A", lineHeight: 1.7 }}>{b.body}</p>
+                <h3 style={{ ...S.serif, fontSize: "clamp(1.25rem,2vw,1.5rem)", fontWeight: 600, marginBottom: 14, color: "#16140F" }}>{b.label}</h3>
+                <p style={{ fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.7 }}>{b.body}</p>
               </div>
             ))}
           </div>
@@ -369,17 +369,17 @@ export default function Home() {
       </section>
 
       {/* ══ ECOSYSTEM ═════════════════════════════════════════════════════════ */}
-      <section id="skincare" style={{ background: "#ECE9DE", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
+      <section id="skincare" style={{ background: "#EFEDE4", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(48px,7vw,72px)" }}>
             <div>
               <p style={{ ...S.label, marginBottom: 16 }}>The Ecosystem</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5.5vw,4.25rem)", fontWeight: 700, lineHeight: 1.05, color: "#211F1A" }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5.5vw,4.25rem)", fontWeight: 700, lineHeight: 1.05, color: "#16140F" }}>
                 Everything you need,<br />
-                <span style={{ color: "#577260" }}>in one place.</span>
+                <span style={{ color: "#9A4A26" }}>in one place.</span>
               </h2>
             </div>
-            <p style={{ maxWidth: 320, fontSize: "0.9375rem", color: "#6E675A", lineHeight: 1.7 }}>
+            <p style={{ maxWidth: 320, fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.7 }}>
               CitiGrove isn&apos;t a single product — it&apos;s a connected wellness system, anchored by the Grovli food planning app.
             </p>
           </div>
@@ -394,10 +394,10 @@ export default function Home() {
                   background: card.accent, borderRadius: 20,
                   padding: "clamp(28px,3.5vw,40px) clamp(24px,3vw,36px)",
                   minHeight: "clamp(260px,30vw,320px)", textDecoration: "none",
-                  border: card.accent === "#F4F2EA" ? "1px solid #E6E2D7" : "none",
+                  border: card.accent === "#F7F5EF" ? "1px solid #E4E1D6" : "none",
                   transition: "transform 0.25s, box-shadow 0.25s",
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 48px rgba(33,31,26,0.09)"; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 48px rgba(22,20,15,0.09)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
                 <span style={{ fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", color: card.textColor, opacity: 0.45, fontWeight: 600 }}>{card.tag}</span>
                 <div>
@@ -412,42 +412,42 @@ export default function Home() {
       </section>
 
       {/* ══ FOOD PLANNING (GROVLI) ════════════════════════════════════════════ */}
-      <section id="food-planning" style={{ background: "#F4F2EA", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
+      <section id="food-planning" style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: "clamp(48px,7vw,80px)", alignItems: "start" }}>
 
             <div>
               <p style={{ ...S.label, marginBottom: 24 }}>Meet Grovli · Food Planning</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#211F1A", marginBottom: 24 }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#16140F", marginBottom: 24 }}>
                 Food planning,<br />not just meal planning.
               </h2>
-              <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6E675A", lineHeight: 1.75, marginBottom: 16 }}>
-                <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer" style={{ color: "#211F1A", fontWeight: 600, textDecoration: "none", borderBottom: "1px solid #C5C0B2" }}>Grovli</a> is the
+              <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6F6A60", lineHeight: 1.75, marginBottom: 16 }}>
+                <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer" style={{ color: "#16140F", fontWeight: 600, textDecoration: "none", borderBottom: "1px solid #CBC6BB" }}>Grovli</a> is the
                 app at the center of CitiGrove. Meal planning picks recipes. Food planning is the
                 whole arc — what you grow, what you buy, what&apos;s in the pantry, and what
                 lands on the table tonight.
               </p>
-              <p style={{ fontSize: "0.9375rem", color: "#6E675A", lineHeight: 1.75, marginBottom: 40, opacity: 0.85 }}>
+              <p style={{ fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.75, marginBottom: 40, opacity: 0.85 }}>
                 A licensed approach to nutrition, an AI that builds your plan in seconds, and a
                 grocery list that&apos;s already done. The more you use it, the more it sounds like you.
               </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 40 }}>
                 {DIET_TYPES.map((d) => (
                   <button key={d.label} title={d.desc}
-                    style={{ padding: "9px 20px", borderRadius: 100, fontSize: "0.8125rem", border: "1px solid #C5C0B2", background: "transparent", color: "#6E675A", cursor: "pointer", transition: "all 0.2s" }}
-                    onMouseEnter={(e) => { const el = e.currentTarget; el.style.background = "#28332C"; el.style.color = "#F4F2EA"; el.style.borderColor = "#28332C"; }}
-                    onMouseLeave={(e) => { const el = e.currentTarget; el.style.background = "transparent"; el.style.color = "#6E675A"; el.style.borderColor = "#C5C0B2"; }}>
+                    style={{ padding: "9px 20px", borderRadius: 100, fontSize: "0.8125rem", border: "1px solid #CBC6BB", background: "transparent", color: "#6F6A60", cursor: "pointer", transition: "all 0.2s" }}
+                    onMouseEnter={(e) => { const el = e.currentTarget; el.style.background = "#16140F"; el.style.color = "#F7F5EF"; el.style.borderColor = "#16140F"; }}
+                    onMouseLeave={(e) => { const el = e.currentTarget; el.style.background = "transparent"; el.style.color = "#6F6A60"; el.style.borderColor = "#CBC6BB"; }}>
                     {d.label}
                   </button>
                 ))}
               </div>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 32px", borderRadius: 100, background: "#28332C", color: "#F4F2EA", textDecoration: "none", fontSize: "0.875rem", letterSpacing: "0.02em" }}>
+                  style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 32px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", fontSize: "0.875rem", letterSpacing: "0.02em" }}>
                   Start my plan →
                 </a>
                 <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 100, border: "1px solid #C5C0B2", color: "#211F1A", textDecoration: "none", fontSize: "0.875rem" }}>
+                  style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 100, border: "1px solid #CBC6BB", color: "#16140F", textDecoration: "none", fontSize: "0.875rem" }}>
                   Get the iPhone app
                 </a>
               </div>
@@ -461,21 +461,21 @@ export default function Home() {
                 src={`${HERO_VIDEO_POSTER}?width=560`}
                 alt="The Grovli app — a personalized food plan in seconds"
                 loading="lazy"
-                style={{ width: "min(280px, 80%)", height: "auto", display: "block", borderRadius: 30, border: "1px solid #E6E2D7", boxShadow: "0 26px 70px rgba(33,31,26,0.18)", background: "#211F1A" }}
+                style={{ width: "min(280px, 80%)", height: "auto", display: "block", borderRadius: 30, border: "1px solid #E4E1D6", boxShadow: "0 26px 70px rgba(22,20,15,0.18)", background: "#16140F" }}
               />
-              <p style={{ fontSize: "0.8125rem", color: "#6E675A", lineHeight: 1.6, marginTop: 16, textAlign: "center", maxWidth: 300 }}>
+              <p style={{ fontSize: "0.8125rem", color: "#6F6A60", lineHeight: 1.6, marginTop: 16, textAlign: "center", maxWidth: 300 }}>
                 Food planning in your pocket — the full walkthrough plays up top.
               </p>
             </div>
           </div>
 
           {/* Steps */}
-          <div style={{ marginTop: "clamp(56px,8vw,88px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: 1, background: "#E6E2D7" }}>
+          <div style={{ marginTop: "clamp(56px,8vw,88px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: 1, background: "#E4E1D6" }}>
             {PROCESS.map((step, i) => (
-              <div key={i} style={{ background: "#F4F2EA", padding: "clamp(28px,3vw,36px) clamp(22px,2.5vw,30px)" }}>
-                <span style={{ ...S.serif, fontSize: "1rem", fontWeight: 500, color: "#C5C0B2", display: "block", marginBottom: 14 }}>0{step.n}</span>
-                <h4 style={{ fontSize: "1rem", fontWeight: 600, color: "#211F1A", marginBottom: 8 }}>{step.title}</h4>
-                <p style={{ fontSize: "0.875rem", color: "#6E675A", lineHeight: 1.7 }}>{step.body}</p>
+              <div key={i} style={{ background: "#F7F5EF", padding: "clamp(28px,3vw,36px) clamp(22px,2.5vw,30px)" }}>
+                <span style={{ ...S.serif, fontSize: "1rem", fontWeight: 500, color: "#CBC6BB", display: "block", marginBottom: 14 }}>0{step.n}</span>
+                <h4 style={{ fontSize: "1rem", fontWeight: 600, color: "#16140F", marginBottom: 8 }}>{step.title}</h4>
+                <p style={{ fontSize: "0.875rem", color: "#6F6A60", lineHeight: 1.7 }}>{step.body}</p>
               </div>
             ))}
           </div>
@@ -483,26 +483,26 @@ export default function Home() {
       </section>
 
       {/* ══ GROVLI FEATURE GRID ═══════════════════════════════════════════════ */}
-      <section style={{ background: "#28332C", padding: "clamp(72px,10vw,110px) clamp(20px,5vw,40px)" }}>
+      <section style={{ background: "#16140F", padding: "clamp(72px,10vw,110px) clamp(20px,5vw,40px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: "clamp(40px,6vw,64px)" }}>
             <div>
               <p style={{ ...S.labelDark, marginBottom: 16 }}>Inside the App</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,3.75rem)", fontWeight: 700, lineHeight: 1.08, color: "#F4F2EA" }}>
-                One app for the<br /><span style={{ color: "#88A58E" }}>whole food journey.</span>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,3.75rem)", fontWeight: 700, lineHeight: 1.08, color: "#F7F5EF" }}>
+                One app for the<br /><span style={{ color: "#16140F" }}>whole food journey.</span>
               </h2>
             </div>
             <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: "0.875rem", padding: "14px 30px", borderRadius: 100, background: "#F4F2EA", color: "#28332C", textDecoration: "none", fontWeight: 600, whiteSpace: "nowrap" }}>
+              style={{ fontSize: "0.875rem", padding: "14px 30px", borderRadius: 100, background: "#F7F5EF", color: "#16140F", textDecoration: "none", fontWeight: 600, whiteSpace: "nowrap" }}>
               Open Grovli →
             </a>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 250px), 1fr))", gap: 1, background: "rgba(244,242,234,0.08)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 250px), 1fr))", gap: 1, background: "rgba(247,245,239,0.08)" }}>
             {FEATURES.map((f) => (
-              <div key={f.name} style={{ background: "#28332C", padding: "clamp(26px,3vw,34px) clamp(22px,2.5vw,28px)" }}>
-                <h3 style={{ fontSize: "1.0625rem", fontWeight: 600, color: "#F4F2EA", marginBottom: 10 }}>{f.name}</h3>
-                <p style={{ fontSize: "0.875rem", color: "rgba(244,242,234,0.6)", lineHeight: 1.65 }}>{f.body}</p>
+              <div key={f.name} style={{ background: "#16140F", padding: "clamp(26px,3vw,34px) clamp(22px,2.5vw,28px)" }}>
+                <h3 style={{ fontSize: "1.0625rem", fontWeight: 600, color: "#F7F5EF", marginBottom: 10 }}>{f.name}</h3>
+                <p style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.6)", lineHeight: 1.65 }}>{f.body}</p>
               </div>
             ))}
           </div>
@@ -510,17 +510,17 @@ export default function Home() {
       </section>
 
       {/* ══ FROM THE JOURNAL ══════════════════════════════════════════════════ */}
-      <section id="journal" style={{ background: "#F4F2EA", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
+      <section id="journal" style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(40px,6vw,64px)" }}>
             <div>
               <p style={{ ...S.label, marginBottom: 16 }}>The Journal</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#211F1A" }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#16140F" }}>
                 Stories from<br />the table.
               </h2>
             </div>
             <a href="/blog"
-              style={{ fontSize: "0.875rem", padding: "14px 30px", borderRadius: 100, background: "#28332C", color: "#F4F2EA", textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap" }}>
+              style={{ fontSize: "0.875rem", padding: "14px 30px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap" }}>
               Read the Journal →
             </a>
           </div>
@@ -529,39 +529,39 @@ export default function Home() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 14 }}>
               {journalPosts.map((post) => (
                 <a key={post.slug} href={`/blog/${post.slug}`}
-                  style={{ display: "flex", flexDirection: "column", gap: 12, background: "#ECE9DE", borderRadius: 20, padding: "clamp(28px,3.5vw,36px) clamp(24px,3vw,32px)", textDecoration: "none", border: "1px solid #E6E2D7", transition: "transform 0.25s, box-shadow 0.25s" }}
-                  onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 12px 48px rgba(33,31,26,0.09)"; }}
+                  style={{ display: "flex", flexDirection: "column", gap: 12, background: "#EFEDE4", borderRadius: 20, padding: "clamp(28px,3.5vw,36px) clamp(24px,3vw,32px)", textDecoration: "none", border: "1px solid #E4E1D6", transition: "transform 0.25s, box-shadow 0.25s" }}
+                  onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 12px 48px rgba(22,20,15,0.09)"; }}
                   onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; }}>
-                  <span style={{ fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#577260", fontWeight: 600 }}>
+                  <span style={{ fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#9A4A26", fontWeight: 600 }}>
                     {new Date(post.published_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                   </span>
-                  <h3 style={{ ...S.serif, fontSize: "clamp(1.25rem,2vw,1.5rem)", fontWeight: 600, lineHeight: 1.2, color: "#211F1A" }}>{post.title}</h3>
-                  <p style={{ fontSize: "0.875rem", color: "#6E675A", lineHeight: 1.65, flex: 1 }}>{post.summary}</p>
-                  <span style={{ fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#577260", fontWeight: 600 }}>Read essay →</span>
+                  <h3 style={{ ...S.serif, fontSize: "clamp(1.25rem,2vw,1.5rem)", fontWeight: 600, lineHeight: 1.2, color: "#16140F" }}>{post.title}</h3>
+                  <p style={{ fontSize: "0.875rem", color: "#6F6A60", lineHeight: 1.65, flex: 1 }}>{post.summary}</p>
+                  <span style={{ fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#9A4A26", fontWeight: 600 }}>Read essay →</span>
                 </a>
               ))}
             </div>
           ) : (
-            <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6E675A", lineHeight: 1.75, maxWidth: 560 }}>
+            <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6F6A60", lineHeight: 1.75, maxWidth: 560 }}>
               Essays on food planning, gardening, hydroponics, grocery costs, and eating
               well in 2026 — the thinking behind everything we make.{" "}
-              <a href="/blog" style={{ color: "#577260", textDecoration: "underline" }}>Read the Journal →</a>
+              <a href="/blog" style={{ color: "#9A4A26", textDecoration: "underline" }}>Read the Journal →</a>
             </p>
           )}
         </div>
       </section>
 
       {/* ══ BEVERAGES ═════════════════════════════════════════════════════════ */}
-      <section id="beverages" style={{ background: "#ECE9DE", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
+      <section id="beverages" style={{ background: "#EFEDE4", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(48px,7vw,72px)" }}>
             <div>
               <p style={{ ...S.label, marginBottom: 16 }}>Sparkling Beverages</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#211F1A" }}>
+              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, lineHeight: 1.08, color: "#16140F" }}>
                 Two ingredients.<br />Nothing to hide.
               </h2>
             </div>
-            <p style={{ maxWidth: 340, fontSize: "0.9375rem", color: "#6E675A", lineHeight: 1.7 }}>
+            <p style={{ maxWidth: 340, fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.7 }}>
               Sparkling water and natural flavor extracts. No sugar, no artificial additives —
               just clean, honest refreshment.
             </p>
@@ -570,54 +570,54 @@ export default function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 220px), 1fr))", gap: 12 }}>
             {DRINKS.map((d, i) => (
               <div key={i}
-                style={{ background: "#F4F2EA", borderRadius: 16, padding: "clamp(20px,2.5vw,28px) clamp(16px,2vw,24px)", border: "1px solid transparent", display: "flex", flexDirection: "column", gap: 12, transition: "all 0.2s", cursor: "pointer" }}
-                onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = "#C5C0B2"; el.style.boxShadow = "0 4px 24px rgba(33,31,26,0.05)"; }}
+                style={{ background: "#F7F5EF", borderRadius: 16, padding: "clamp(20px,2.5vw,28px) clamp(16px,2vw,24px)", border: "1px solid transparent", display: "flex", flexDirection: "column", gap: 12, transition: "all 0.2s", cursor: "pointer" }}
+                onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = "#CBC6BB"; el.style.boxShadow = "0 4px 24px rgba(22,20,15,0.05)"; }}
                 onMouseLeave={(e) => { const el = e.currentTarget; el.style.borderColor = "transparent"; el.style.boxShadow = "none"; }}>
                 <div style={{ height: 64, borderRadius: 10, background: `hsl(${(i * 37 + 100) % 360}, 28%, 88%)` }} />
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "#211F1A", lineHeight: 1.4 }}>{d.name}</span>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#577260", flexShrink: 0 }}>{d.price}</span>
+                  <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "#16140F", lineHeight: 1.4 }}>{d.name}</span>
+                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#9A4A26", flexShrink: 0 }}>{d.price}</span>
                 </div>
                 <button
-                  style={{ marginTop: 4, padding: "9px 0", borderRadius: 100, border: "1px solid #C5C0B2", background: "transparent", fontSize: "0.8rem", color: "#6E675A", cursor: "pointer", transition: "all 0.2s" }}
-                  onMouseEnter={(e) => { const el = e.currentTarget; el.style.background = "#28332C"; el.style.color = "#F4F2EA"; el.style.borderColor = "#28332C"; }}
-                  onMouseLeave={(e) => { const el = e.currentTarget; el.style.background = "transparent"; el.style.color = "#6E675A"; el.style.borderColor = "#C5C0B2"; }}>
+                  style={{ marginTop: 4, padding: "9px 0", borderRadius: 100, border: "1px solid #CBC6BB", background: "transparent", fontSize: "0.8rem", color: "#6F6A60", cursor: "pointer", transition: "all 0.2s" }}
+                  onMouseEnter={(e) => { const el = e.currentTarget; el.style.background = "#16140F"; el.style.color = "#F7F5EF"; el.style.borderColor = "#16140F"; }}
+                  onMouseLeave={(e) => { const el = e.currentTarget; el.style.background = "transparent"; el.style.color = "#6F6A60"; el.style.borderColor = "#CBC6BB"; }}>
                   Add to cart
                 </button>
               </div>
             ))}
             <div
-              style={{ borderRadius: 16, padding: "clamp(20px,2.5vw,28px)", border: "1px dashed #C5C0B2", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer", transition: "background 0.2s", minHeight: 160 }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#F4F2EA")}
+              style={{ borderRadius: 16, padding: "clamp(20px,2.5vw,28px)", border: "1px dashed #CBC6BB", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer", transition: "background 0.2s", minHeight: 160 }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#F7F5EF")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}>
-              <span style={{ fontSize: "1.5rem", color: "#C5C0B2" }}>+</span>
-              <span style={{ fontSize: "0.8125rem", color: "#6E675A", textAlign: "center" }}>View all<br />flavors</span>
+              <span style={{ fontSize: "1.5rem", color: "#CBC6BB" }}>+</span>
+              <span style={{ fontSize: "0.8125rem", color: "#6F6A60", textAlign: "center" }}>View all<br />flavors</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* ══ NEWSLETTER ════════════════════════════════════════════════════════ */}
-      <section style={{ background: "#F4F2EA", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)", textAlign: "center" }}>
+      <section style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)", textAlign: "center" }}>
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <p style={{ ...S.label, marginBottom: 24 }}>Join the Community</p>
-          <h2 style={{ ...S.serif, fontSize: "clamp(2rem,6vw,4.5rem)", fontWeight: 700, lineHeight: 1.1, color: "#211F1A", marginBottom: 16 }}>
+          <h2 style={{ ...S.serif, fontSize: "clamp(2rem,6vw,4.5rem)", fontWeight: 700, lineHeight: 1.1, color: "#16140F", marginBottom: 16 }}>
             10% off your<br />first order.
           </h2>
-          <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1rem)", color: "#6E675A", lineHeight: 1.75, marginBottom: 40 }}>
+          <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1rem)", color: "#6F6A60", lineHeight: 1.75, marginBottom: 40 }}>
             Join the CitiGrove community for new flavors, food planning tips, and
             early access to everything we&apos;re building.
           </p>
           {subState === "done" ? (
-            <p style={{ fontSize: "1.0625rem", color: "#28332C", fontWeight: 500 }}>{subMsg}</p>
+            <p style={{ fontSize: "1.0625rem", color: "#16140F", fontWeight: 500 }}>{subMsg}</p>
           ) : (
             <form onSubmit={handleSubscribe}
               style={{ display: "flex", gap: 10, maxWidth: 420, margin: "0 auto 16px", flexWrap: "wrap" }}>
               <input type="email" required placeholder="your@email.com"
                 value={email} onChange={(e) => setEmail(e.target.value)}
-                style={{ flex: "1 1 200px", padding: "14px 20px", borderRadius: 100, border: "1px solid #C5C0B2", background: "#F4F2EA", fontSize: "0.875rem", color: "#211F1A", outline: "none", minWidth: 0 }} />
+                style={{ flex: "1 1 200px", padding: "14px 20px", borderRadius: 100, border: "1px solid #CBC6BB", background: "#F7F5EF", fontSize: "0.875rem", color: "#16140F", outline: "none", minWidth: 0 }} />
               <button type="submit" disabled={subState === "loading"}
-                style={{ padding: "14px 24px", borderRadius: 100, background: "#28332C", color: "#F4F2EA", border: "none", fontSize: "0.875rem", fontWeight: 500, cursor: "pointer", flexShrink: 0, opacity: subState === "loading" ? 0.6 : 1 }}>
+                style={{ padding: "14px 24px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", border: "none", fontSize: "0.875rem", fontWeight: 500, cursor: "pointer", flexShrink: 0, opacity: subState === "loading" ? 0.6 : 1 }}>
                 {subState === "loading" ? "…" : "Subscribe"}
               </button>
             </form>
@@ -625,41 +625,41 @@ export default function Home() {
           {subState === "error" && (
             <p style={{ fontSize: "0.8125rem", color: "#B0563B", marginBottom: 8 }}>{subMsg}</p>
           )}
-          <p style={{ fontSize: "0.75rem", color: "#C5C0B2" }}>No spam. Unsubscribe any time.</p>
+          <p style={{ fontSize: "0.75rem", color: "#CBC6BB" }}>No spam. Unsubscribe any time.</p>
         </div>
       </section>
 
       {/* ══ FOOTER ════════════════════════════════════════════════════════════ */}
-      <footer id="contact" style={{ background: "#211F1A", padding: "clamp(56px,8vw,80px) clamp(20px,5vw,40px) 36px" }}>
+      <footer id="contact" style={{ background: "#16140F", padding: "clamp(56px,8vw,80px) clamp(20px,5vw,40px) 36px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "clamp(36px,5vw,48px)", marginBottom: "clamp(48px,7vw,80px)" }}>
             <div style={{ gridColumn: "span 1" }}>
-              <div style={{ ...S.serif, fontSize: "1.5rem", fontWeight: 700, color: "#F4F2EA", marginBottom: 20, letterSpacing: "0.02em" }}>
-                Citi<span style={{ color: "#577260" }}>Grove</span>
+              <div style={{ ...S.serif, fontSize: "1.5rem", fontWeight: 700, color: "#F7F5EF", marginBottom: 20, letterSpacing: "0.02em" }}>
+                Citi<span style={{ color: "#9A4A26" }}>Grove</span>
               </div>
-              <p style={{ fontSize: "0.875rem", color: "rgba(244,242,234,0.38)", lineHeight: 1.75, maxWidth: 280, marginBottom: 20 }}>
+              <p style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.38)", lineHeight: 1.75, maxWidth: 280, marginBottom: 20 }}>
                 A food-first wellness ecosystem built by humans, for humans. Every product and
                 service is designed to help you live vibrantly.
               </p>
-              <p style={{ fontSize: "0.8125rem", color: "rgba(244,242,234,0.3)", lineHeight: 1.8 }}>
+              <p style={{ fontSize: "0.8125rem", color: "rgba(247,245,239,0.3)", lineHeight: 1.8 }}>
                 123 Bang Street Leviko, CA 8034<br />
                 <a href="mailto:info@citigrove.com"
-                  style={{ color: "rgba(244,242,234,0.3)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#577260")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(244,242,234,0.3)")}>
+                  style={{ color: "rgba(247,245,239,0.3)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#9A4A26")}
+                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.3)")}>
                   info@citigrove.com
                 </a>
               </p>
             </div>
 
             <div>
-              <h4 style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(244,242,234,0.3)", fontWeight: 600, marginBottom: 24 }}>Pages</h4>
+              <h4 style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(247,245,239,0.3)", fontWeight: 600, marginBottom: 24 }}>Pages</h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
                 {[["Home", "/"], ["About", "#about"], ["Food Planning", "#food-planning"], ["The Journal", "/blog"], ["Beverages", "#beverages"], ["Contact", "#contact"]].map(([p, href]) => (
                   <li key={p}>
-                    <a href={href} style={{ fontSize: "0.875rem", color: "rgba(244,242,234,0.4)", textDecoration: "none", transition: "color 0.2s" }}
-                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#F4F2EA")}
-                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(244,242,234,0.4)")}>
+                    <a href={href} style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.4)", textDecoration: "none", transition: "color 0.2s" }}
+                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#F7F5EF")}
+                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.4)")}>
                       {p}
                     </a>
                   </li>
@@ -668,13 +668,13 @@ export default function Home() {
             </div>
 
             <div>
-              <h4 style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(244,242,234,0.3)", fontWeight: 600, marginBottom: 24 }}>Food Planning</h4>
+              <h4 style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(247,245,239,0.3)", fontWeight: 600, marginBottom: 24 }}>Food Planning</h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
                 {[["Grovli app", GROVLI_HOME], ["The Grove", GROVLI_HOME], ["Grocery sync", GROVLI_HOME], ["Pantry", GROVLI_HOME], ["iPhone app", APP_STORE_URL]].map(([s, href]) => (
                   <li key={s}>
-                    <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: "rgba(244,242,234,0.4)", textDecoration: "none", transition: "color 0.2s" }}
-                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#F4F2EA")}
-                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(244,242,234,0.4)")}>
+                    <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.4)", textDecoration: "none", transition: "color 0.2s" }}
+                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#F7F5EF")}
+                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.4)")}>
                       {s}
                     </a>
                   </li>
@@ -683,14 +683,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(244,242,234,0.06)", paddingTop: 28, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-            <p style={{ fontSize: "0.75rem", color: "rgba(244,242,234,0.2)" }}>© 2026 CitiGrove. All rights reserved.</p>
+          <div style={{ borderTop: "1px solid rgba(247,245,239,0.06)", paddingTop: 28, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+            <p style={{ fontSize: "0.75rem", color: "rgba(247,245,239,0.2)" }}>© 2026 CitiGrove. All rights reserved.</p>
             <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
               {[["Instagram", "https://instagram.com/grovli"], ["Facebook", "https://facebook.com"], ["Twitter", "https://twitter.com"]].map(([label, href]) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: "0.75rem", color: "rgba(244,242,234,0.2)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "rgba(244,242,234,0.6)")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(244,242,234,0.2)")}>
+                  style={{ fontSize: "0.75rem", color: "rgba(247,245,239,0.2)", textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.6)")}
+                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.2)")}>
                   {label}
                 </a>
               ))}

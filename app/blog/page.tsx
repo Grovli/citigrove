@@ -50,25 +50,25 @@ export default async function BlogIndexPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F4F2EA] text-[#211F1A]">
+    <main className="min-h-screen bg-[#F7F5EF] text-[#16140F]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }}
       />
 
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <header className="border-b border-[#211F1A]/[0.08]">
+      <header className="border-b border-[#16140F]/[0.08]">
         <div className="max-w-[1100px] mx-auto px-8 py-8 flex items-center justify-between">
           <Link
             href="/"
             className="text-[20px] tracking-[-0.01em]"
             style={{ fontFamily: "var(--font-playfair), serif" }}
           >
-            Citi<span style={{ color: "#577260" }}>Grove</span>
+            Citi<span style={{ color: "#9A4A26" }}>Grove</span>
           </Link>
           <Link
             href="/"
-            className="text-[12px] tracking-[0.18em] uppercase text-[#577260] font-semibold"
+            className="text-[12px] tracking-[0.18em] uppercase text-[#9A4A26] font-semibold"
           >
             ← Back home
           </Link>
@@ -77,7 +77,7 @@ export default async function BlogIndexPage() {
 
       {/* ── Hero ───────────────────────────────────────────────────── */}
       <section className="max-w-[1100px] mx-auto px-8 pt-20 pb-12">
-        <div className="text-[11px] tracking-[0.22em] uppercase text-[#577260] font-semibold mb-5">
+        <div className="text-[11px] tracking-[0.22em] uppercase text-[#9A4A26] font-semibold mb-5">
           The Journal · Food Planning
         </div>
         <h1
@@ -88,14 +88,14 @@ export default async function BlogIndexPage() {
           <br />
           and how we plan to eat it.
         </h1>
-        <p className="max-w-[640px] text-[17px] text-[#211F1A]/70 leading-[1.65] mt-6">
+        <p className="max-w-[640px] text-[17px] text-[#16140F]/70 leading-[1.65] mt-6">
           Food planning is bigger than meal planning — it&apos;s how you grow,
           buy, stock, and cook. These are essays on all of it: gardening and
           hydroponics, grocery costs, seasonal eating, and the everyday habits
           that make eating well feel easy. The thinking behind{" "}
           <a
             href="https://grovli.citigrove.com/?utm_source=citigrove_blog&utm_medium=journal_intro&utm_campaign=blog_index"
-            className="text-[#577260] underline underline-offset-2"
+            className="text-[#9A4A26] underline underline-offset-2"
           >
             Grovli
           </a>
@@ -106,34 +106,34 @@ export default async function BlogIndexPage() {
       {/* ── Post list ──────────────────────────────────────────────── */}
       <section className="max-w-[1100px] mx-auto px-8 pb-32">
         {items.length === 0 ? (
-          <div className="border-t border-[#211F1A]/[0.08] pt-12 text-[15px] text-[#211F1A]/60">
+          <div className="border-t border-[#16140F]/[0.08] pt-12 text-[15px] text-[#16140F]/60">
             We&apos;re writing — posts are coming soon. Subscribe from any essay
             to be the first to hear when the journal opens.
           </div>
         ) : (
-          <ul className="border-t border-[#211F1A]/[0.08]">
+          <ul className="border-t border-[#16140F]/[0.08]">
             {items.map((post) => (
               <li
                 key={post.slug}
-                className="border-b border-[#211F1A]/[0.08] py-10"
+                className="border-b border-[#16140F]/[0.08] py-10"
               >
                 <Link href={`/blog/${post.slug}`} className="group block">
-                  <div className="text-[11px] tracking-[0.18em] uppercase text-[#577260] font-semibold mb-3">
+                  <div className="text-[11px] tracking-[0.18em] uppercase text-[#9A4A26] font-semibold mb-3">
                     {formatDate(post.published_at)}
                     {post.tags && post.tags.length > 0 && (
                       <> {" · "}{post.tags.slice(0, 3).join(" · ")}</>
                     )}
                   </div>
                   <h2
-                    className="text-[clamp(1.5rem,2.5vw,2.25rem)] leading-[1.15] tracking-[-0.015em] group-hover:text-[#577260] transition-colors"
+                    className="text-[clamp(1.5rem,2.5vw,2.25rem)] leading-[1.15] tracking-[-0.015em] group-hover:text-[#9A4A26] transition-colors"
                     style={{ fontFamily: "var(--font-playfair), serif" }}
                   >
                     {post.title}
                   </h2>
-                  <p className="text-[16px] text-[#211F1A]/70 leading-[1.65] mt-3 max-w-[760px]">
+                  <p className="text-[16px] text-[#16140F]/70 leading-[1.65] mt-3 max-w-[760px]">
                     {post.summary}
                   </p>
-                  <span className="inline-block mt-4 text-[12px] tracking-[0.18em] uppercase text-[#577260] font-semibold">
+                  <span className="inline-block mt-4 text-[12px] tracking-[0.18em] uppercase text-[#9A4A26] font-semibold">
                     Read essay →
                   </span>
                 </Link>

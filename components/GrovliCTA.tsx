@@ -26,8 +26,8 @@ export function GrovliCTA({ campaign, variant = "band" }: GrovliCTAProps) {
 
   if (variant === "compact") {
     return (
-      <div className="my-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl px-6 py-5 border border-[#211F1A]/[0.10] bg-[#ECE9DE]">
-        <p className="text-[15px] leading-[1.5] text-[#211F1A]/80 m-0">
+      <div className="my-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-2xl px-6 py-5 border border-[#16140F]/[0.10] bg-[#EFEDE4]">
+        <p className="text-[15px] leading-[1.5] text-[#16140F]/80 m-0">
           Grovli turns this into a plan you can actually cook — food planning,
           not just meal planning.
         </p>
@@ -36,7 +36,7 @@ export function GrovliCTA({ campaign, variant = "band" }: GrovliCTAProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-[13px] font-bold tracking-[0.03em] uppercase whitespace-nowrap"
-          style={{ backgroundColor: "#28332C", color: "#F4F2EA" }}
+          style={{ backgroundColor: "#16140F", color: "#F7F5EF" }}
         >
           Start food planning <span aria-hidden>→</span>
         </a>
@@ -47,11 +47,11 @@ export function GrovliCTA({ campaign, variant = "band" }: GrovliCTAProps) {
   return (
     <div
       className="my-12 rounded-3xl px-7 py-10 sm:px-10 text-center"
-      style={{ backgroundColor: "#28332C", color: "#F4F2EA" }}
+      style={{ backgroundColor: "#16140F", color: "#F7F5EF" }}
     >
       <div
         className="text-[11px] tracking-[0.22em] uppercase font-semibold mb-4"
-        style={{ color: "rgba(244,242,234,0.55)" }}
+        style={{ color: "rgba(247,245,239,0.55)" }}
       >
         Food planning, handled
       </div>
@@ -63,7 +63,7 @@ export function GrovliCTA({ campaign, variant = "band" }: GrovliCTAProps) {
       </h3>
       <p
         className="max-w-[460px] mx-auto text-[15px] leading-[1.65] mb-7"
-        style={{ color: "rgba(244,242,234,0.72)" }}
+        style={{ color: "rgba(247,245,239,0.72)" }}
       >
         A personalized food plan in under 30 seconds — from what you grow to
         what lands on the table, with the grocery list already done.
@@ -74,7 +74,7 @@ export function GrovliCTA({ campaign, variant = "band" }: GrovliCTAProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] font-bold tracking-[0.03em] uppercase"
-          style={{ backgroundColor: "#F4F2EA", color: "#211F1A" }}
+          style={{ backgroundColor: "#F7F5EF", color: "#16140F" }}
         >
           Start food planning <span aria-hidden>→</span>
         </a>
@@ -83,7 +83,7 @@ export function GrovliCTA({ campaign, variant = "band" }: GrovliCTAProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-[13px] font-semibold tracking-[0.02em]"
-          style={{ border: "1px solid rgba(244,242,234,0.30)", color: "#F4F2EA" }}
+          style={{ border: "1px solid rgba(247,245,239,0.30)", color: "#F7F5EF" }}
         >
           Get the iPhone app
         </a>
