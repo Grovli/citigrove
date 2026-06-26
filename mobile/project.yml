@@ -37,6 +37,18 @@ targets:
         CFBundleDisplayName: CitiGrove
         UILaunchScreen: {}
         ITSAppUsesNonExemptEncryption: false
+        UIAppFonts:
+          - Newsreader-Light.ttf
+          - Newsreader-Regular.ttf
+          - Newsreader-Medium.ttf
+          - Newsreader-SemiBold.ttf
+          - Newsreader-Italic.ttf
+          - Newsreader-MediumItalic.ttf
+          - Inter_18pt-Light.ttf
+          - Inter_18pt-Regular.ttf
+          - Inter_18pt-Medium.ttf
+          - Inter_18pt-SemiBold.ttf
+          - Inter_18pt-Bold.ttf
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UISupportedInterfaceOrientations~ipad:

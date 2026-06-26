@@ -2,6 +2,9 @@
 /* Run: npm run tokens */
 
 :root {
+  --color-citigrove-peach: #E2B79E;
+  --color-citigrove-sage: #C2C6B2;
+  --color-citigrove-clay: #D8B79E;
   --color-citigrove-chrome: #3B362D;
   --color-citigrove-on-chrome: #F1ECE1;
   --color-citigrove-primary: #3B362D;
@@ -14,12 +17,26 @@
   --color-citigrove-surface: #F8F4EC;
   --color-citigrove-surface-sunken: #E9E2D3;
   --color-citigrove-line: #DAD3C4;
+  --radius-citigrove-sm: 2px;
+  --radius-citigrove-md: 3px;
+  --radius-citigrove-lg: 4px;
+  --radius-citigrove-xl: 6px;
+  --radius-citigrove-pill: 9999px;
+  --font-citigrove-family-display: Newsreader;
+  --font-citigrove-family-text: Inter;
+  --font-citigrove-weight-light: 300;
+  --font-citigrove-weight-regular: 400;
+  --font-citigrove-weight-medium: 500;
+  --font-citigrove-weight-semibold: 600;
 }
 
 
 /* Dark theme overrides — opt-in via [data-theme="dark"]. */
 /* Inert until that attribute is set; web locks light today. */
 [data-theme="dark"] {
+  --color-citigrove-peach: #4A382C;
+  --color-citigrove-sage: #353A2E;
+  --color-citigrove-clay: #45382B;
   --color-citigrove-chrome: #EDE6D8;
   --color-citigrove-on-chrome: #2A2620;
   --color-citigrove-primary: #EDE6D8;

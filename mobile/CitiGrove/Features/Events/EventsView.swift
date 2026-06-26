@@ -42,10 +42,10 @@ struct EventsView: View {
             VStack(alignment: .leading, spacing: CGSpace.xl) {
                 header
                 content
-                Color.clear.frame(height: CGSpace.tabBarInset)
             }
             .padding(.horizontal, CGSpace.lg)
             .padding(.top, CGSpace.sm)
+            .padding(.bottom, CGSpace.xxl)
         }
         .background(CGColors.page)
         .scrollIndicators(.hidden)
@@ -58,7 +58,7 @@ struct EventsView: View {
     @ViewBuilder private var content: some View {
         switch model.state {
         case .loading:
-            VStack(spacing: CGSpace.md) {
+            VStack(spacing: 0) {
                 ForEach(0..<3, id: \.self) { _ in CGEventSkeleton() }
             }
         case .loaded(let events, _):
@@ -66,8 +66,8 @@ struct EventsView: View {
                 CGEmptyState(icon: "calendar", title: "No events nearby", message: "Check back soon — new gatherings are added often.")
                     .frame(maxWidth: .infinity)
             } else {
-                VStack(spacing: CGSpace.md) {
-                    ForEach(events) { CGEventCard(event: $0) }
+                VStack(spacing: 0) {
+                    ForEach(events) { CGEventRow(event: $0) }
                 }
             }
         }
@@ -80,45 +80,48 @@ struct EventsView: View {
                 .font(CGType.title)
                 .foregroundStyle(CGColors.ink)
                 .fixedSize(horizontal: false, vertical: true)
-                .lineSpacing(2)
+                .lineSpacing(3)
             Text("Small local gatherings around food, wellness, and fun.")
-                .font(CGType.body)
+                .font(CGType.callout)
                 .foregroundStyle(CGColors.inkSoft)
         }
         .padding(.top, CGSpace.sm)
     }
 }
 
-private struct CGEventCard: View {
+private struct CGEventRow: View {
     let event: CGEvent
     var body: some View {
-        HStack(spacing: CGSpace.md) {
-            RoundedRectangle(cornerRadius: CGRadius.md, style: .continuous)
-                .fill(CGColors.primary.opacity(0.16))
-                .frame(width: 56, height: 56)
-                .overlay(
-                    Image(systemName: event.kind.glyph)
-                        .font(.system(size: 20, weight: .regular))
-                        .foregroundStyle(CGColors.primaryDeep)
-                )
-            VStack(alignment: .leading, spacing: 3) {
-                CGEyebrow(text: event.kind.rawValue)
-                Text(event.title)
-                    .font(CGType.display(17, .medium))
-                    .foregroundStyle(CGColors.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(eventSubtitle)
-                    .font(CGType.caption)
-                    .foregroundStyle(CGColors.inkSoft)
+        VStack(spacing: 0) {
+            CGHairline()
+            HStack(spacing: CGSpace.md) {
+                RoundedRectangle(cornerRadius: CGRadius.sm, style: .continuous)
+                    .fill(CGColors.primary.opacity(0.12))
+                    .frame(width: 54, height: 54)
+                    .overlay(
+                        Image(systemName: event.kind.glyph)
+                            .font(.system(size: 20, weight: .regular))
+                            .foregroundStyle(CGColors.primaryDeep)
+                    )
+                VStack(alignment: .leading, spacing: 4) {
+                    CGEyebrow(text: event.kind.rawValue)
+                    Text(event.title)
+                        .font(CGType.display(18, .medium))
+                        .foregroundStyle(CGColors.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(eventSubtitle)
+                        .font(CGType.caption)
+                        .foregroundStyle(CGColors.inkSoft)
+                }
+                Spacer(minLength: CGSpace.sm)
+                if !event.distanceLabel.isEmpty {
+                    Text(event.distanceLabel)
+                        .font(CGType.caption)
+                        .foregroundStyle(CGColors.inkFaint)
+                }
             }
-            Spacer(minLength: CGSpace.sm)
-            if !event.distanceLabel.isEmpty {
-                Text(event.distanceLabel)
-                    .font(CGType.text(11, .medium))
-                    .foregroundStyle(CGColors.inkFaint)
-            }
+            .padding(.vertical, CGSpace.lg)
         }
-        .cgCard()
     }
 
     private var eventSubtitle: String {
@@ -128,15 +131,18 @@ private struct CGEventCard: View {
 
 private struct CGEventSkeleton: View {
     var body: some View {
-        HStack(spacing: CGSpace.md) {
-            RoundedRectangle(cornerRadius: CGRadius.md).fill(CGColors.line).frame(width: 56, height: 56)
-            VStack(alignment: .leading, spacing: CGSpace.sm) {
-                RoundedRectangle(cornerRadius: 4).fill(CGColors.line).frame(width: 60, height: 9)
-                RoundedRectangle(cornerRadius: 4).fill(CGColors.line).frame(height: 16).padding(.trailing, 40)
+        VStack(spacing: 0) {
+            CGHairline()
+            HStack(spacing: CGSpace.md) {
+                RoundedRectangle(cornerRadius: CGRadius.sm).fill(CGColors.line).frame(width: 54, height: 54)
+                VStack(alignment: .leading, spacing: CGSpace.sm) {
+                    RoundedRectangle(cornerRadius: 2).fill(CGColors.line).frame(width: 60, height: 9)
+                    RoundedRectangle(cornerRadius: 2).fill(CGColors.line).frame(height: 16).padding(.trailing, 40)
+                }
+                Spacer()
             }
-            Spacer()
+            .padding(.vertical, CGSpace.lg)
         }
-        .cgCard()
         .opacity(0.5)
     }
 }

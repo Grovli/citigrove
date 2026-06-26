@@ -13,13 +13,16 @@ enum CGSpace {
     static let tabBarInset: CGFloat = 96
 }
 
-/// Corner radii (points).
+/// Corner radii (points) — the site's near-square "Ffern register", single-sourced
+/// from `design-tokens/tokens/radius.citigrove.json` via `CitiGroveRadiusTokens`.
+/// Buttons/inputs square to 2, cards/cells to 3 — matching citigrove.com exactly.
+/// `pill` stays a true circle for badges + accent dots only.
 enum CGRadius {
-    static let sm: CGFloat = 8
-    static let md: CGFloat = 12
-    static let lg: CGFloat = 16
-    static let xl: CGFloat = 22
-    static let pill: CGFloat = 999
+    static let sm   = CitiGroveRadiusTokens.sm    // 2  — buttons, inputs, chips
+    static let md   = CitiGroveRadiusTokens.md    // 3  — cards, product cells, image tiles
+    static let lg   = CitiGroveRadiusTokens.lg    // 4  — larger raised surfaces / sheets
+    static let xl   = CitiGroveRadiusTokens.xl    // 6  — hero / feature panels
+    static let pill = CitiGroveRadiusTokens.pill  // circles / pills only
 }
 
 /// Money formatting — server amounts are integer cents; clients render.

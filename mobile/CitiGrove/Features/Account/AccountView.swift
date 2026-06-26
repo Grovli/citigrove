@@ -11,14 +11,14 @@ struct AccountView: View {
                 if let user = auth.user {
                     profileHeader(user)
                 } else {
-                    signInCard
+                    signInBlock
                 }
                 rows
                 footer
-                Color.clear.frame(height: CGSpace.tabBarInset)
             }
             .padding(.horizontal, CGSpace.lg)
             .padding(.top, CGSpace.sm)
+            .padding(.bottom, CGSpace.xxl)
         }
         .background(CGColors.page)
         .scrollIndicators(.hidden)
@@ -39,14 +39,14 @@ struct AccountView: View {
         .padding(.top, CGSpace.sm)
     }
 
-    private var signInCard: some View {
+    private var signInBlock: some View {
         VStack(alignment: .leading, spacing: CGSpace.md) {
             CGEyebrow(text: "Welcome")
             Text("Sign in to check out,\nsave addresses, and RSVP.")
                 .font(CGType.title)
                 .foregroundStyle(CGColors.ink)
                 .fixedSize(horizontal: false, vertical: true)
-                .lineSpacing(2)
+                .lineSpacing(3)
             Button {
                 auth.signIn()
             } label: {
@@ -56,23 +56,23 @@ struct AccountView: View {
             .disabled(auth.isAuthenticating)
             .padding(.top, CGSpace.xs)
         }
-        .cgCard(padding: CGSpace.lg)
         .padding(.top, CGSpace.sm)
     }
 
     private var rows: some View {
         VStack(spacing: 0) {
+            CGHairline()
             AccountRow(icon: "shippingbox", title: "Orders")
-            Divider().overlay(CGColors.line)
+            CGHairline()
             AccountRow(icon: "mappin.and.ellipse", title: "Shipping addresses")
-            Divider().overlay(CGColors.line)
+            CGHairline()
             AccountRow(icon: "calendar", title: "My events")
-            Divider().overlay(CGColors.line)
+            CGHairline()
             AccountRow(icon: "book.closed", title: "The Journal")
-            Divider().overlay(CGColors.line)
+            CGHairline()
             AccountRow(icon: "leaf", title: "About CitiGrove")
+            CGHairline()
         }
-        .cgCard(padding: 0)
     }
 
     @ViewBuilder private var footer: some View {
@@ -95,10 +95,9 @@ private struct AccountRow: View {
             Text(title).font(CGType.body).foregroundStyle(CGColors.ink)
             Spacer()
             Image(systemName: "chevron.right")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(CGColors.inkFaint)
         }
-        .padding(.horizontal, CGSpace.lg)
         .padding(.vertical, CGSpace.md + 2)
         .contentShape(Rectangle())
     }

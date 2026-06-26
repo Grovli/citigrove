@@ -1,26 +1,20 @@
 import SwiftUI
 
-/// The store. Slow, editorial pacing: a breathing hero, then one merchandised
-/// section per category. Live catalog from citigrove-store-api with a graceful
-/// fallback to the curated placeholder. Browse without an account; checkout gates auth.
+/// The store. Slow, editorial pacing that mirrors citigrove.com: a warm tonal
+/// hero band, then one hairline-divided section per category — single-column
+/// product cells (the site collapses its grid to one column on mobile). Live
+/// catalog from citigrove-store-api with a graceful fallback to the curated
+/// placeholder. Browse without an account; checkout gates auth.
 struct ShopView: View {
     @EnvironmentObject private var bag: BagStore
     @State private var model = ShopViewModel()
 
-    private let columns = [
-        GridItem(.flexible(), spacing: CGSpace.md),
-        GridItem(.flexible(), spacing: CGSpace.md),
-    ]
-
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: CGSpace.xxl) {
+            VStack(alignment: .leading, spacing: 0) {
                 hero
                 content
-                Color.clear.frame(height: CGSpace.tabBarInset)
             }
-            .padding(.horizontal, CGSpace.lg)
-            .padding(.top, CGSpace.sm)
         }
         .background(CGColors.page)
         .scrollIndicators(.hidden)
@@ -30,57 +24,54 @@ struct ShopView: View {
         .refreshable { await model.load() }
     }
 
+    // Warm peach feature band — the site's hero composition.
+    private var hero: some View {
+        CGTonalBand(tone: CGColors.peach, hairlineTop: false) {
+            VStack(alignment: .leading, spacing: CGSpace.md) {
+                CGEyebrow(text: "In season", color: CGColors.ink.opacity(0.55))
+                Text("Small-batch goods\nfor a slower table.")
+                    .font(CGType.hero)
+                    .foregroundStyle(CGColors.ink)
+                    .lineSpacing(3)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("Sparkling drinks, everyday objects, and skincare — made to match how you eat, grow, and live.")
+                    .font(CGType.callout)
+                    .foregroundStyle(CGColors.ink.opacity(0.8))
+                    .padding(.top, 2)
+            }
+        }
+    }
+
     @ViewBuilder private var content: some View {
         switch model.state {
         case .loading:
-            LazyVGrid(columns: columns, spacing: CGSpace.md) {
-                ForEach(0..<4, id: \.self) { _ in CGProductSkeleton() }
+            VStack(alignment: .leading, spacing: CGSpace.lg) {
+                CGSectionHeader(eyebrow: "In season", title: "Sparkling")
+                VStack(spacing: 0) {
+                    ForEach(0..<4, id: \.self) { _ in CGProductSkeleton() }
+                }
             }
+            .padding(.horizontal, CGSpace.xl)
+            .padding(.top, CGSpace.xxl)
+
         case .loaded(let products, _):
             ForEach(CGProductCategory.allCases) { category in
                 let items = products.filter { $0.category == category }
                 if !items.isEmpty {
                     VStack(alignment: .leading, spacing: CGSpace.lg) {
                         CGSectionHeader(eyebrow: category.rawValue, title: category.sectionTitle)
-                        LazyVGrid(columns: columns, spacing: CGSpace.md) {
+                        VStack(spacing: 0) {
                             ForEach(items) { product in
                                 CGProductCard(product: product) { bag.add(product) }
                             }
                         }
                     }
+                    .padding(.horizontal, CGSpace.xl)
+                    .padding(.top, CGSpace.xxl)
+                    .padding(.bottom, CGSpace.xl)
+                    .overlay(alignment: .bottom) { CGHairline() }
                 }
             }
         }
-    }
-
-    private var hero: some View {
-        VStack(alignment: .leading, spacing: CGSpace.sm) {
-            CGEyebrow(text: "In season")
-            Text("Small-batch goods\nfor a slower table.")
-                .font(CGType.hero)
-                .foregroundStyle(CGColors.ink)
-                .fixedSize(horizontal: false, vertical: true)
-                .lineSpacing(2)
-            Text("Sparkling drinks, everyday objects, and skincare — made to match how you eat, grow, and live.")
-                .font(CGType.body)
-                .foregroundStyle(CGColors.inkSoft)
-                .padding(.top, 2)
-        }
-        .padding(.top, CGSpace.sm)
-    }
-}
-
-struct CGProductSkeleton: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: CGSpace.sm) {
-            RoundedRectangle(cornerRadius: CGRadius.md).fill(CGColors.line).frame(height: 148)
-            RoundedRectangle(cornerRadius: 4).fill(CGColors.line).frame(width: 60, height: 9).padding(.top, 4)
-            RoundedRectangle(cornerRadius: 4).fill(CGColors.line).frame(height: 16)
-            RoundedRectangle(cornerRadius: 4).fill(CGColors.line).frame(width: 50, height: 14)
-        }
-        .padding(CGSpace.md)
-        .background(CGColors.surface)
-        .clipShape(RoundedRectangle(cornerRadius: CGRadius.lg, style: .continuous))
-        .opacity(0.5)
     }
 }
