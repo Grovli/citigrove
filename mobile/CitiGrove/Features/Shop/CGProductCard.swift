@@ -14,7 +14,7 @@ struct CGProductCard: View {
             CGHairline()
             VStack(alignment: .leading, spacing: 6) {
                 HStack(spacing: 9) {
-                    CGDot(color: CGColors.accent, size: 8)
+                    CGDot(color: product.toneDot, size: 8)
                     CGEyebrow(text: product.category.rawValue)
                 }
                 Text(product.name)

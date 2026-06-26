@@ -84,18 +84,23 @@ const STORE_JSONLD = {
 };
 
 /* ── Ffern register: warm, muted, cream/peach/sage + soft ink + coral ──────── */
+// Single-sourced from the generated CitiGrove tokens (app/citigrove-tokens.generated.css,
+// built from the Grovli design-tokens pipeline) so the site can't drift from the app.
+// stone/soft/faint stay literal on purpose — they're page-local decoratives with no
+// exact brand token (soft is a SOLID grey, not the semi-transparent --ink-soft; faint
+// is 0.45 alpha vs the token's 0.40).
 const C = {
-  cream: "#F1ECE1",
-  panel: "#E9E2D3",
-  peach: "#E2B79E",
-  sage: "#C2C6B2",
-  clay: "#D8B79E",
+  cream: "var(--color-citigrove-page)",
+  panel: "var(--color-citigrove-surface-sunken)",
+  peach: "var(--color-citigrove-peach)",
+  sage: "var(--color-citigrove-sage)",
+  clay: "var(--color-citigrove-clay)",
   stone: "#CFC6B4",
-  ink: "#3B362D",
+  ink: "var(--color-citigrove-ink)",
   soft: "#7A7263",
   faint: "rgba(59,54,45,0.45)",
-  coral: "#C2703E",
-  line: "#DAD3C4",
+  coral: "var(--color-citigrove-accent)",
+  line: "var(--color-citigrove-line)",
 };
 const serif: CSSProperties = { fontFamily: "var(--font-newsreader), Georgia, serif" };
 const SIDEBAR = 268;
@@ -104,7 +109,7 @@ function label(dark = false): CSSProperties {
   return { fontSize: 10.5, letterSpacing: "0.2em", textTransform: "uppercase", color: dark ? "rgba(59,54,45,0.5)" : C.soft };
 }
 function Dot({ color = C.coral, size = 6 }: { color?: string; size?: number }) {
-  return <span style={{ display: "inline-block", width: size, height: size, borderRadius: 999, background: color, verticalAlign: "middle", marginLeft: 9 }} />;
+  return <span style={{ display: "inline-block", width: size, height: size, borderRadius: "var(--radius-citigrove-pill)", background: color, verticalAlign: "middle", marginLeft: 9 }} />;
 }
 /* Full-bleed photo background (only when IMAGES); otherwise the warm tone. */
 function cover(slot: string, tone: string): CSSProperties {
@@ -207,7 +212,7 @@ export default function Home() {
             <p style={{ marginTop: 26, maxWidth: 480, fontSize: 16, lineHeight: 1.72, color: "rgba(59,54,45,0.8)" }}>
               It begins with Grovli, our food planning app, and grows into sparkling drinks, skincare, wear and the garden. A few small good things, in season, all year.
             </p>
-            <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: 34, fontSize: 11.5, letterSpacing: "0.16em", textTransform: "uppercase", color: C.cream, background: C.ink, padding: "16px 32px", borderRadius: 2, textDecoration: "none" }}>
+            <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: 34, fontSize: 11.5, letterSpacing: "0.16em", textTransform: "uppercase", color: C.cream, background: C.ink, padding: "16px 32px", borderRadius: "var(--radius-citigrove-sm)", textDecoration: "none" }}>
               Start with Grovli<Dot color={C.cream} />
             </a>
           </div>
@@ -258,8 +263,8 @@ export default function Home() {
             <div ref={tableRef} className="cg-scroll" style={{ display: "flex", gap: "clamp(14px,1.5vw,22px)", overflowX: "auto", scrollSnapType: "x mandatory", padding: "0 clamp(28px,5vw,76px)", scrollbarWidth: "none" }}>
               {TABLE.map((t) => (
                 <div key={t.slot} style={{ flex: "0 0 auto", width: "clamp(252px,28vw,344px)", scrollSnapAlign: "start" }}>
-                  <div role="img" aria-label={t.name} style={{ aspectRatio: "4 / 5", borderRadius: 3, ...cover(t.slot, C.panel), position: "relative", display: "flex", alignItems: "flex-end", padding: 18 }}>
-                    <div style={{ position: "absolute", inset: 0, borderRadius: 3, background: "linear-gradient(to top, rgba(28,25,20,0.5), rgba(28,25,20,0) 52%)" }} />
+                  <div role="img" aria-label={t.name} style={{ aspectRatio: "4 / 5", borderRadius: "var(--radius-citigrove-md)", ...cover(t.slot, C.panel), position: "relative", display: "flex", alignItems: "flex-end", padding: 18 }}>
+                    <div style={{ position: "absolute", inset: 0, borderRadius: "var(--radius-citigrove-md)", background: "linear-gradient(to top, rgba(28,25,20,0.5), rgba(28,25,20,0) 52%)" }} />
                     <span style={{ position: "relative", ...label(), color: "rgba(255,255,255,0.82)" }}>{t.season}</span>
                   </div>
                   <div style={{ ...serif, fontSize: 18, marginTop: 14 }}>{t.name}</div>
@@ -282,12 +287,12 @@ export default function Home() {
             {DRINKS.map((d) => (
               <a key={d.slot} href="#sparkling" style={{ textDecoration: "none", color: "inherit", display: "block", borderTop: IMAGES ? "none" : `1px solid ${C.line}`, paddingTop: IMAGES ? 0 : 22 }}>
                 {IMAGES ? (
-                  <div role="img" aria-label={d.name} style={{ aspectRatio: "4 / 5", borderRadius: 3, ...cover(d.slot, d.tone), display: "flex", alignItems: "flex-end", padding: 18 }}>
+                  <div role="img" aria-label={d.name} style={{ aspectRatio: "4 / 5", borderRadius: "var(--radius-citigrove-md)", ...cover(d.slot, d.tone), display: "flex", alignItems: "flex-end", padding: 18 }}>
                     <span style={{ ...label(), color: "rgba(59,54,45,0.5)" }}>Sparkling</span>
                   </div>
                 ) : (
                   <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                    <span style={{ width: 9, height: 9, borderRadius: 999, background: d.tone, display: "inline-block" }} />
+                    <span style={{ width: 9, height: 9, borderRadius: "var(--radius-citigrove-pill)", background: d.tone, display: "inline-block" }} />
                     <span style={label()}>Sparkling</span>
                   </div>
                 )}
@@ -309,7 +314,7 @@ export default function Home() {
             {HOUSE.map((h) => (
               <div key={h.slot} style={{ borderTop: IMAGES ? "none" : `1px solid ${C.line}`, paddingTop: IMAGES ? 0 : 22 }}>
                 {IMAGES ? (
-                  <div role="img" aria-label={h.name} style={{ aspectRatio: "3 / 4", borderRadius: 3, ...cover(h.slot, C.panel), position: "relative", display: "flex", alignItems: "flex-end", padding: 22 }}>
+                  <div role="img" aria-label={h.name} style={{ aspectRatio: "3 / 4", borderRadius: "var(--radius-citigrove-md)", ...cover(h.slot, C.panel), position: "relative", display: "flex", alignItems: "flex-end", padding: 22 }}>
                     <span style={{ ...label(), color: "rgba(59,54,45,0.5)" }}>Joining the list</span>
                   </div>
                 ) : (
@@ -335,14 +340,14 @@ export default function Home() {
             {(posts.length ? posts : ([null, null, null] as null[])).map((p, i) =>
               p ? (
                 <a key={p.slug} href={`/blog/${p.slug}`} style={{ textDecoration: "none", color: "inherit", borderTop: IMAGES ? "none" : `1px solid ${C.line}`, paddingTop: IMAGES ? 0 : 22, display: "block" }}>
-                  {IMAGES && <div role="img" aria-label={p.title} style={{ aspectRatio: "3 / 2", borderRadius: 3, marginBottom: 18, ...cover(`journal-${(i % 3) + 1}`, i % 2 ? C.sage : C.peach) }} />}
+                  {IMAGES && <div role="img" aria-label={p.title} style={{ aspectRatio: "3 / 2", borderRadius: "var(--radius-citigrove-md)", marginBottom: 18, ...cover(`journal-${(i % 3) + 1}`, i % 2 ? C.sage : C.peach) }} />}
                   <div style={{ ...label(), color: C.faint }}>{fmtDate(p.published_at)}</div>
                   <div style={{ ...serif, fontSize: IMAGES ? 21 : 23, lineHeight: 1.24, margin: "12px 0 10px" }}>{p.title}</div>
                   <div style={{ fontSize: 14, color: C.soft, lineHeight: 1.62 }}>{p.summary}</div>
                 </a>
               ) : (
                 <div key={i} style={{ opacity: 0.5, borderTop: IMAGES ? "none" : `1px solid ${C.line}`, paddingTop: IMAGES ? 0 : 22 }}>
-                  {IMAGES && <div style={{ aspectRatio: "3 / 2", background: C.panel, borderRadius: 3, marginBottom: 18 }} />}
+                  {IMAGES && <div style={{ aspectRatio: "3 / 2", background: C.panel, borderRadius: "var(--radius-citigrove-md)", marginBottom: 18 }} />}
                   <div style={{ height: 10, width: 90, background: C.line, marginBottom: 12 }} />
                   <div style={{ height: 18, background: C.line, width: "80%" }} />
                 </div>
@@ -363,9 +368,9 @@ export default function Home() {
           ) : (
             <form onSubmit={handleSubscribe} style={{ display: "flex", gap: 10, maxWidth: 460, margin: "0 auto", flexWrap: "wrap", justifyContent: "center" }}>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Email address" aria-label="Email"
-                style={{ flex: "1 1 230px", background: "rgba(255,255,255,0.5)", border: `1px solid rgba(59,54,45,0.2)`, borderRadius: 2, padding: "15px 18px", fontSize: 14.5, color: C.ink, outline: "none" }} />
+                style={{ flex: "1 1 230px", background: "rgba(255,255,255,0.5)", border: `1px solid rgba(59,54,45,0.2)`, borderRadius: "var(--radius-citigrove-sm)", padding: "15px 18px", fontSize: 14.5, color: C.ink, outline: "none" }} />
               <button type="submit" disabled={subState === "loading"}
-                style={{ fontSize: 11.5, letterSpacing: "0.14em", textTransform: "uppercase", color: C.cream, background: C.ink, border: "none", borderRadius: 2, padding: "15px 30px", cursor: "pointer" }}>
+                style={{ fontSize: 11.5, letterSpacing: "0.14em", textTransform: "uppercase", color: C.cream, background: C.ink, border: "none", borderRadius: "var(--radius-citigrove-sm)", padding: "15px 30px", cursor: "pointer" }}>
                 {subState === "loading" ? "Sending…" : "Join"}
               </button>
             </form>
@@ -480,7 +485,7 @@ function PhotoChapter({
 function CarouselBtn({ dir, onClick }: { dir: number; onClick: () => void }) {
   return (
     <button aria-label={dir < 0 ? "Previous" : "Next"} onClick={onClick}
-      style={{ width: 42, height: 42, borderRadius: 999, border: `1px solid ${C.line}`, background: C.cream, color: C.ink, cursor: "pointer", fontSize: 16, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      style={{ width: 42, height: 42, borderRadius: "var(--radius-citigrove-pill)", border: `1px solid ${C.line}`, background: C.cream, color: C.ink, cursor: "pointer", fontSize: 16, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
       {dir < 0 ? "‹" : "›"}
     </button>
   );
