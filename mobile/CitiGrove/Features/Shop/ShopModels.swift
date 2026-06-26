@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 
 /// A purchasable physical good. Money is integer cents (server-authoritative on
 /// real prices — this catalog is a v1 placeholder until citigrove-store-api
@@ -9,6 +9,22 @@ struct CGProduct: Identifiable, Equatable {
     let tagline: String
     let priceCents: Int
     let category: CGProductCategory
+}
+
+extension CGProduct {
+    /// Decorative flavor-dot tone for the Shop cell — mirrors citigrove.com's
+    /// varied per-product dots. Deterministic per SKU (stable across launches and
+    /// for live catalog items) via a small djb2 hash over the id, picked from the
+    /// on-brand tonal palette. Purely decorative; never carries meaning.
+    var toneDot: Color {
+        let palette: [Color] = [
+            CGColors.peach, CGColors.sage, CGColors.clay,
+            CGColors.accent, CGColors.primaryDeep,
+        ]
+        var hash = 5381
+        for byte in id.utf8 { hash = (hash &* 33) &+ Int(byte) }
+        return palette[((hash % palette.count) + palette.count) % palette.count]
+    }
 }
 
 enum CGProductCategory: String, CaseIterable, Identifiable {
