@@ -9,7 +9,7 @@
  *
  * Mirrors the visual register of the homepage Grovli sticky CTA on
  * grovli.citigrove.com but uses CitiGrove's brand colors (sage green
- * #9A4A26 rather than terracotta).
+ * #8A4A28 rather than terracotta).
  */
 
 import { useEffect, useState } from "react";
@@ -43,14 +43,14 @@ export function StickyTryGrovli({ campaign }: StickyTryGrovliProps) {
       target="_blank"
       rel="noreferrer noopener"
       aria-label="Try Grovli"
-      className={`fixed bottom-6 right-6 z-40 inline-flex items-center gap-2.5 rounded-full px-5 py-3.5 text-[13px] font-bold tracking-[0.04em] uppercase text-[#F7F5EF] shadow-lg transition-all duration-300 ${
+      className={`fixed bottom-6 right-6 z-40 inline-flex items-center gap-2.5 rounded-full px-5 py-3.5 text-[13px] font-bold tracking-[0.04em] uppercase text-[#F1ECE1] shadow-lg transition-all duration-300 ${
         visible
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-3 pointer-events-none"
       }`}
       style={{
-        backgroundColor: "#16140F",
-        boxShadow: "0 20px 50px rgba(22,20,15,0.35)",
+        backgroundColor: "#3B362D",
+        boxShadow: "0 20px 50px rgba(59,54,45,0.35)",
       }}
     >
       <span>Try Grovli</span>
