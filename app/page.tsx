@@ -1,49 +1,72 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import type { CSSProperties } from "react";
 
-/* ─────────────────────────────── data ────────────────────────────────────── */
+/* ───────────────────────────── data ─────────────────────────────────────── */
 const NAV_LINKS = [
-  { label: "About", href: "#about" },
   { label: "Food Planning", href: "#food-planning" },
   { label: "Beverages", href: "#beverages" },
   { label: "Skincare", href: "#skincare" },
   { label: "Journal", href: "/blog" },
 ];
 
-/* Grovli — the food planning app. Every primary CTA funnels here. */
 const GROVLI_HOME =
   "https://grovli.citigrove.com/?utm_source=citigrove&utm_medium=web&utm_campaign=homepage";
 const APP_STORE_URL = "https://apps.apple.com/us/app/grovli/id6760633541";
-/* The onboarding "how to use" explainer — a portrait phone recording (443:960,
-   ~26s), transcoded from the master .mov in GCS to Mux (public playback). The
-   hero plays it as an ambient, blurred-fill background. */
-const MUX_PLAYBACK_ID = "3Vt3C02UTX6sUC7Mlt9wsEZ4vRdZ6oYmmHsg01WAoGey8";
-const HERO_VIDEO_MP4 = `https://stream.mux.com/${MUX_PLAYBACK_ID}/highest.mp4`;
-const HERO_VIDEO_POSTER = `https://image.mux.com/${MUX_PLAYBACK_ID}/thumbnail.jpg`;
 
-const DIET_TYPES = [
-  { label: "Balanced", desc: "Complete nutrition across all food groups." },
-  { label: "Vegan", desc: "100% plant-based, whole food approach." },
-  { label: "Vegetarian", desc: "Plant-forward with flexibility." },
-  { label: "Mediterranean", desc: "Heart-healthy, rich in omega-3s." },
-  { label: "Keto", desc: "Low-carb, high-fat, steady energy." },
-  { label: "Paleo", desc: "Whole foods, the way we used to eat." },
-];
+const GCS_BUCKET = process.env.NEXT_PUBLIC_GCS_BUCKET_URL ?? "";
+const HERO_IMG = GCS_BUCKET ? `${GCS_BUCKET}/hero/hero-bg.jpg` : "/hero-bg.jpg";
+/* A still frame of the app (no video) — the onboarding explainer's poster. */
+const APP_IMG =
+  "https://image.mux.com/3Vt3C02UTX6sUC7Mlt9wsEZ4vRdZ6oYmmHsg01WAoGey8/thumbnail.jpg?width=900&fit_mode=preserve";
 
 const DRINKS = [
-  { name: "Cranberry Lemongrass Apple", price: "$25" },
-  { name: "Lime Rosemary Grapefruit", price: "$25" },
-  { name: "Mint Blueberry Lime", price: "$25" },
-  { name: "Fennel Apple Spritz", price: "$18" },
-  { name: "Peach Ginger Sparkler", price: "$25" },
-  { name: "Cherry Basil Refresher", price: "$18" },
-  { name: "Kiwi Lime Mint Refresher", price: "$25" },
+  { name: "Cranberry Lemongrass Apple", note: "Crisp · tart · barely sweet", price: "$25" },
+  { name: "Lime Rosemary Grapefruit", note: "Bittersweet · herbal", price: "$25" },
+  { name: "Mint Blueberry Lime", note: "Cool · bright · clean", price: "$25" },
+  { name: "Fennel Apple Spritz", note: "Anise · orchard", price: "$18" },
+  { name: "Peach Ginger Sparkler", note: "Warm · golden", price: "$25" },
+  { name: "Cherry Basil Refresher", note: "Dark fruit · garden", price: "$18" },
+  { name: "Kiwi Lime Mint Refresher", note: "Sharp · green", price: "$25" },
 ];
 
-/* Product + ItemList structured data for the merchandised sparkling line.
-   Real prices only — NO fabricated reviews/ratings (brand integrity + Google
-   policy). Drives Product rich results + ties the catalog to the brand. */
+const CHAPTERS = [
+  {
+    n: "01",
+    kicker: "Food Planning",
+    title: "Grovli",
+    body:
+      "Our food planning app. A personalized plan in under thirty seconds — across forty cuisines and a dozen ways of eating — with the grocery list already written and a garden you can plan from. Food planning, not just meal planning.",
+    cta: "Start food planning",
+    href: GROVLI_HOME,
+    external: true,
+    dark: true,
+  },
+  {
+    n: "02",
+    kicker: "Beverages",
+    title: "Two ingredients,\nnothing to hide.",
+    body:
+      "Sparkling water and natural extracts. No sugar, no additives — seven flavours made to taste clean and feel good. Poured slowly, in small batches.",
+    cta: "See the flavours",
+    href: "#beverages",
+    external: false,
+    dark: false,
+  },
+  {
+    n: "03",
+    kicker: "Skincare",
+    title: "Made for skin,\nand for the season.",
+    body:
+      "Thoughtfully formulated with quality botanicals for your natural radiance. Wellness inside and out — the same care we bring to the table, brought to your skin.",
+    cta: "Explore skincare",
+    href: "#skincare",
+    external: false,
+    dark: false,
+  },
+];
+
 const STORE_JSONLD = {
   "@context": "https://schema.org",
   "@type": "ItemList",
@@ -66,68 +89,48 @@ const STORE_JSONLD = {
   })),
 };
 
-/* Grovli's app flow — what happens after you tap "Start food planning". */
-const PROCESS = [
-  { n: "1", title: "Tell Grovli about you.", body: "A 60-second profile — your goals, your diet, your kitchen, and the food you actually like to eat." },
-  { n: "2", title: "Your food plan, in seconds.", body: "Grovli's AI builds a personalized plan across 40+ cuisines and 12+ dietary modes, usually in under 30 seconds." },
-  { n: "3", title: "Shop without thinking.", body: "Your grocery list builds itself, dedupes against your Pantry, and syncs straight to Instacart." },
-  { n: "4", title: "Grow it, cook it, repeat.", body: "Track your garden in The Grove and feed your harvest back into next week's plan. Food planning, full circle." },
-];
+/* ─────────────────────────── design tokens ──────────────────────────────── */
+const C = {
+  page: "#F7F5EF",
+  surface: "#FCFBF7",
+  ink: "#16140F",
+  soft: "#6F6A60",
+  faint: "rgba(22,20,15,0.40)",
+  clay: "#9A4A26",
+  clayFill: "#B5582F",
+  line: "#E4E1D6",
+  dark: "#16140F",
+  onDark: "#F7F5EF",
+  onDarkSoft: "rgba(247,245,239,0.62)",
+  onDarkLine: "rgba(247,245,239,0.18)",
+};
+const serif: CSSProperties = { fontFamily: "var(--font-playfair), serif" };
 
-/* Reflects what grovli.citigrove.com is — the real feature set. */
-const FEATURES = [
-  { name: "Plan", body: "AI food plans in under 30 seconds — 40+ cuisines, 12+ dietary modes." },
-  { name: "The Grove", body: "Garden-to-plate planning: grow it, track the harvest, cook it." },
-  { name: "Pantry", body: "Know what you already have — scan a barcode or add it by hand." },
-  { name: "Grocery", body: "A smart list that dedupes against your pantry and syncs to Instacart." },
-  { name: "Nutrition Advisor", body: "An AI chat that refines your plan and answers the food questions." },
-  { name: "Saved Meals", body: "Your library of the recipes you love, ready to drop into any week." },
-  { name: "Macros", body: "Calorie and macro targets — automatic, or dialed in by hand." },
-  { name: "Integrations", body: "Sync with Withings, WHOOP, and Garmin so your plan reads your body." },
-];
+function eyebrowStyle(dark = false): CSSProperties {
+  return {
+    fontSize: 11,
+    letterSpacing: "0.26em",
+    textTransform: "uppercase",
+    fontWeight: 600,
+    color: dark ? C.onDarkSoft : C.clay,
+  };
+}
 
-const BELIEFS = [
-  { label: "Built by people.", body: "Every plan, every flavor, every formula is shaped by real humans who care about how you feel." },
-  { label: "For people.", body: "We exist for the person who wants to feel good — not just look healthy on a feed." },
-  { label: "Powered by science.", body: "Food planning and AI working together, so the system gets smarter with every person it serves." },
-];
+const pageWrap: CSSProperties = { maxWidth: 1320, margin: "0 auto", padding: "0 clamp(22px,5vw,56px)" };
 
-const SERVICES = [
-  { tag: "01 · Food Planning", title: "The Grovli\nApp", body: "AI food planning — personalized plans in seconds, a smart grocery list, a pantry, and The Grove for garden-to-plate. Food planning, not just meal planning.", accent: "#16140F", textColor: "#F7F5EF", link: GROVLI_HOME, external: true },
-  { tag: "02 · Beverages", title: "Sparkling\nBeverages", body: "Two ingredients. Sparkling water + natural extracts. No sugar. No additives. Seven flavors crafted to taste clean and feel good.", accent: "#F7F5EF", textColor: "#16140F", link: "#beverages", external: false },
-  { tag: "03 · Skincare", title: "Natural\nSkincare", body: "Thoughtfully formulated with quality ingredients for your natural radiance. Holistic wellness, inside and out.", accent: "#F7F5EF", textColor: "#16140F", link: "#skincare", external: false },
-  { tag: "04 · The Journal", title: "Stories &\nFood Planning", body: "Essays on gardening, hydroponics, grocery costs, and eating well in 2026 — the thinking behind everything we make.", accent: "#F7F5EF", textColor: "#16140F", link: "/blog", external: false },
-];
-
-const GCS_BUCKET = process.env.NEXT_PUBLIC_GCS_BUCKET_URL ?? "";
-
-/* hero image: use GCS URL in production, local fallback for dev */
-const HERO_IMG = GCS_BUCKET ? `${GCS_BUCKET}/hero/hero-bg.jpg` : "/hero-bg.jpg";
-
-/* ─────────────────────────── component ───────────────────────────────────── */
+/* ─────────────────────────────── page ───────────────────────────────────── */
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Hero ambient video: muted autoplay (browser policy) by default; the sound
-  // toggle unmutes the sharp center copy on a user gesture.
-  const [soundOn, setSoundOn] = useState(false);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
-  // Recent Journal posts for the homepage teaser, fetched client-side from the
-  // public document-api (which CORS-allows citigrove.com). The section header +
-  // "Read the Journal" button always render statically, so the blog is visible
-  // even before/without this fetch.
-  const [journalPosts, setJournalPosts] = useState<
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [posts, setPosts] = useState<
     { title: string; summary: string; slug: string; published_at: string }[]
   >([]);
-
-  // Homepage newsletter capture → /api/subscribe (Firebase Function proxy to
-  // grovli-email-api). source="citigrove_homepage" fires the welcome email.
   const [email, setEmail] = useState("");
   const [subState, setSubState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [subMsg, setSubMsg] = useState("");
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 50);
+    const fn = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
@@ -138,7 +141,7 @@ export default function Home() {
       "https://grovli-document-api-public-uyply7jkca-uc.a.run.app";
     fetch(`${base}/public/categories/blog?limit=3`)
       .then((r) => (r.ok ? r.json() : { items: [] }))
-      .then((d) => setJournalPosts((d.items || []).slice(0, 3)))
+      .then((d) => setPosts((d.items || []).slice(0, 3)))
       .catch(() => {});
   }, []);
 
@@ -173,71 +176,54 @@ export default function Home() {
     }
   }
 
-  const S = {
-    label: { fontSize: "0.6875rem", letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "#9A4A26", fontWeight: 600 },
-    labelDark: { fontSize: "0.6875rem", letterSpacing: "0.22em", textTransform: "uppercase" as const, color: "rgba(247,245,239,0.4)", fontWeight: 600 },
-    serif: { fontFamily: "var(--font-playfair), serif" },
-  };
-
   return (
-    <div style={{ background: "#F7F5EF", color: "#16140F", fontFamily: "var(--font-inter), system-ui, sans-serif" }}>
-
+    <div id="top" style={{ background: C.page, color: C.ink, fontFamily: "var(--font-inter), system-ui, sans-serif", overflowX: "hidden" }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(STORE_JSONLD).replace(/</g, "\\u003c") }}
       />
 
-      {/* ══ NAV ═══════════════════════════════════════════════════════════════ */}
-      <header style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-        transition: "all 0.4s ease",
-        background: scrolled ? "rgba(247,245,239,0.93)" : "transparent",
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-        borderBottom: scrolled ? "1px solid #E4E1D6" : "1px solid transparent",
-      }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(20px,5vw,40px)", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-
-          <span style={{ ...S.serif, fontSize: "1.25rem", fontWeight: 500, letterSpacing: "0.02em", color: "#16140F" }}>
-            Citi<span style={{ color: "#9A4A26" }}>Grove</span>
-          </span>
-
-          <nav className="hidden md:flex" style={{ gap: 36 }}>
+      {/* ── Nav ─────────────────────────────────────────────────────────────── */}
+      <header
+        style={{
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
+          transition: "background .4s ease, border-color .4s ease",
+          background: scrolled ? "rgba(247,245,239,0.88)" : "transparent",
+          backdropFilter: scrolled ? "blur(14px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
+          borderBottom: `1px solid ${scrolled ? C.line : "transparent"}`,
+        }}
+      >
+        <div style={{ ...pageWrap, height: 78, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <a href="#top" style={{ ...serif, fontSize: 21, fontWeight: 500, letterSpacing: "0.14em", color: C.ink, textDecoration: "none" }}>
+            CITIGROVE
+          </a>
+          <nav className="hidden md:flex" style={{ gap: 42 }}>
             {NAV_LINKS.map((l) => (
               <a key={l.label} href={l.href}
-                style={{ fontSize: "0.8125rem", color: "#6F6A60", letterSpacing: "0.01em", textDecoration: "none", transition: "color 0.2s" }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#16140F")}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "#6F6A60")}>
+                style={{ fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: C.soft, textDecoration: "none", transition: "color .2s" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = C.ink)}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = C.soft)}>
                 {l.label}
               </a>
             ))}
           </nav>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: "0.8125rem", padding: "10px 22px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", letterSpacing: "0.02em", transition: "background 0.2s", whiteSpace: "nowrap" }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#2E2B22")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#16140F")}>
-              Start food planning
-            </a>
-
-            <button
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", display: "flex", flexDirection: "column", gap: 5 }}>
-              <span style={{ display: "block", width: 22, height: 1.5, background: "#16140F", transition: "all 0.3s", transform: mobileMenuOpen ? "rotate(45deg) translate(5px, 5px)" : "none" }} />
-              <span style={{ display: "block", width: 22, height: 1.5, background: "#16140F", transition: "all 0.3s", opacity: mobileMenuOpen ? 0 : 1 }} />
-              <span style={{ display: "block", width: 22, height: 1.5, background: "#16140F", transition: "all 0.3s", transform: mobileMenuOpen ? "rotate(-45deg) translate(5px, -5px)" : "none" }} />
-            </button>
-          </div>
+          <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer" className="hidden md:inline-block"
+            style={{ fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: C.ink, textDecoration: "none", borderBottom: `1px solid ${C.ink}`, paddingBottom: 3 }}>
+            The App
+          </a>
+          <button className="md:hidden" aria-label="Menu" onClick={() => setMenuOpen(!menuOpen)}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: 8, display: "flex", flexDirection: "column", gap: 5 }}>
+            <span style={{ width: 22, height: 1, background: C.ink, transition: "all .3s", transform: menuOpen ? "rotate(45deg) translate(4px,4px)" : "none" }} />
+            <span style={{ width: 22, height: 1, background: C.ink, transition: "all .3s", opacity: menuOpen ? 0 : 1 }} />
+            <span style={{ width: 22, height: 1, background: C.ink, transition: "all .3s", transform: menuOpen ? "rotate(-45deg) translate(4px,-4px)" : "none" }} />
+          </button>
         </div>
-
-        {mobileMenuOpen && (
-          <div style={{ background: "rgba(247,245,239,0.97)", backdropFilter: "blur(16px)", borderTop: "1px solid #E4E1D6", padding: "24px clamp(20px,5vw,40px)" }}>
+        {menuOpen && (
+          <div style={{ background: "rgba(247,245,239,0.97)", backdropFilter: "blur(14px)", borderTop: `1px solid ${C.line}`, padding: "20px clamp(22px,5vw,56px)" }}>
             {NAV_LINKS.map((l) => (
-              <a key={l.label} href={l.href}
-                onClick={() => setMobileMenuOpen(false)}
-                style={{ display: "block", padding: "12px 0", fontSize: "1rem", color: "#16140F", textDecoration: "none", borderBottom: "1px solid #E4E1D6" }}>
+              <a key={l.label} href={l.href} onClick={() => setMenuOpen(false)}
+                style={{ display: "block", padding: "14px 0", fontSize: 14, letterSpacing: "0.06em", color: C.ink, textDecoration: "none", borderBottom: `1px solid ${C.line}` }}>
                 {l.label}
               </a>
             ))}
@@ -245,459 +231,243 @@ export default function Home() {
         )}
       </header>
 
-      {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
-      <section style={{ minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: `0 clamp(20px,5vw,40px) clamp(60px,8vw,100px)`, position: "relative", overflow: "hidden", backgroundColor: "#F7F5EF", backgroundImage: `url(${HERO_IMG})`, backgroundSize: "cover", backgroundPosition: "center" }}>
-
-        {/* Ambient backdrop: a heavily blurred, scaled copy of the app demo
-            fills the whole hero behind the headline. The sharp, fully-visible
-            copy lives in the right column below. Muted autoplay + loop; on
-            reduced-motion this hides (CSS) and the section's HERO_IMG bg shows. */}
-        <video aria-hidden className="hero-ambient-video" autoPlay muted loop playsInline preload="metadata" poster={HERO_VIDEO_POSTER}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.18)", filter: "blur(40px) saturate(1.15)", zIndex: 0 }}>
-          <source src={HERO_VIDEO_MP4} type="video/mp4" />
-        </video>
-
-        <div style={{
-          position: "absolute", inset: 0, zIndex: 1,
-          background: "linear-gradient(160deg, rgba(247,245,239,0.30) 0%, rgba(247,245,239,0.54) 26%, rgba(247,245,239,0.88) 62%, #F7F5EF 100%)",
-        }} />
-
-        <div style={{ position: "absolute", top: "clamp(84px,12vh,108px)", left: "clamp(20px,5vw,40px)", zIndex: 3 }}>
-          <span style={{ ...S.label, textShadow: "0 1px 12px rgba(247,245,239,0.6)" }}>Food Planning · Wellness · Community</span>
+      {/* ── Hero (no video) ─────────────────────────────────────────────────── */}
+      <section style={{ ...pageWrap, minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "center", paddingTop: "clamp(130px,20vh,210px)", paddingBottom: "clamp(56px,8vw,96px)" }}>
+        <div style={{ marginBottom: 30 }}><span style={eyebrowStyle()}>Food · Wellness · Community</span></div>
+        <h1 style={{ ...serif, fontWeight: 400, fontSize: "clamp(2.6rem,8.4vw,6.75rem)", lineHeight: 1.0, letterSpacing: "-0.02em", margin: 0 }}>
+          Eat good.<br />Look good.<br /><span style={{ color: C.clay }}>Feel good.</span>
+        </h1>
+        <p style={{ marginTop: 40, maxWidth: 540, fontSize: "clamp(1rem,1.45vw,1.1875rem)", lineHeight: 1.75, color: C.soft }}>
+          A food-first wellness house. It begins with Grovli — our food planning app — and grows into
+          small-batch sparkling drinks and natural skincare. Considered, connected, made by people.
+        </p>
+        <div style={{ marginTop: 46, display: "flex", gap: 22, flexWrap: "wrap", alignItems: "center" }}>
+          <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", color: C.onDark, background: C.ink, padding: "16px 34px", borderRadius: 999, textDecoration: "none" }}>
+            Start food planning
+          </a>
+          <a href="#food-planning" style={{ fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: C.ink, textDecoration: "none", borderBottom: `1px solid ${C.line}`, paddingBottom: 4 }}>
+            Explore the house
+          </a>
         </div>
-
-        <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%", position: "relative", zIndex: 3, display: "flex", alignItems: "flex-end", gap: "clamp(28px,4vw,72px)", flexWrap: "wrap" }}>
-          {/* Left column — headline, copy, CTAs */}
-          <div style={{ flex: "1 1 440px", minWidth: 0 }}>
-          <div style={{ marginBottom: "clamp(20px,3vw,28px)" }}>
-            <span style={{ display: "inline-block", fontSize: "0.75rem", letterSpacing: "0.14em", border: "1px solid #CBC6BB", borderRadius: 100, padding: "7px 16px", color: "#6F6A60" }}>
-              Est. 2026 · Food Planning · AI‑Powered
-            </span>
-          </div>
-
-          <h1 style={{ ...S.serif, fontSize: "clamp(2.75rem,8vw,7.5rem)", fontWeight: 400, lineHeight: 0.98, letterSpacing: "-0.015em", color: "#16140F", marginBottom: "clamp(32px,5vw,56px)" }}>
-            <span style={{ display: "block" }}>Eat Good.</span>
-            <span style={{ display: "block", color: "#9A4A26" }}>Look Good.</span>
-            <span style={{ display: "block", WebkitTextStroke: "1px #CBC6BB", color: "transparent" }}>Feel Good.</span>
-          </h1>
-
-          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "clamp(20px,4vw,32px)" }}>
-            <p style={{ maxWidth: 440, fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6F6A60", lineHeight: 1.75, flex: "1 1 280px" }}>
-              A food-first wellness ecosystem built by humans, for humans. It starts with{" "}
-              <strong style={{ color: "#16140F", fontWeight: 600 }}>Grovli</strong>, our AI food planning
-              app — then clean sparkling beverages and skincare. All connected, all yours.
-            </p>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", flexShrink: 0 }}>
-              <a href="#about"
-                style={{ fontSize: "0.875rem", padding: "13px 28px", borderRadius: 100, border: "1px solid #CBC6BB", color: "#16140F", textDecoration: "none", transition: "all 0.2s", whiteSpace: "nowrap" }}>
-                Explore the ecosystem
-              </a>
-              <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-                style={{ fontSize: "0.875rem", padding: "13px 28px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", transition: "background 0.2s", whiteSpace: "nowrap" }}>
-                Start food planning
-              </a>
-            </div>
-          </div>
-          </div>
-          {/* Right column — the app screen: neat + fully visible, above the
-              gradient so it isn't dimmed. On reduced-motion the video hides
-              (CSS) and the frame's poster background shows. */}
-          <div style={{ flex: "1 1 300px", display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-            <div style={{ aspectRatio: "443 / 960", height: "clamp(320px, 52vh, 520px)", width: "auto", maxWidth: "100%", borderRadius: 32, overflow: "hidden", boxShadow: "0 30px 80px rgba(22,20,15,0.24)", border: "1px solid rgba(255,255,255,0.5)", background: `#16140F url(${HERO_VIDEO_POSTER}) center / cover` }}>
-              <video ref={heroVideoRef} className="hero-ambient-video" autoPlay muted loop playsInline preload="auto" poster={HERO_VIDEO_POSTER}
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}>
-                <source src={HERO_VIDEO_MP4} type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </div>
-
-        {/* Sound toggle — unmutes the sharp center video on a user gesture
-            (autoplay must start muted). Top-right, mirroring the eyebrow label. */}
-        <button type="button"
-          onClick={() => { const v = heroVideoRef.current; if (!v) return; const next = !soundOn; v.muted = !next; if (next) v.play?.().catch(() => {}); setSoundOn(next); }}
-          aria-pressed={soundOn}
-          aria-label={soundOn ? "Mute the hero video" : "Play the hero video with sound"}
-          style={{ position: "absolute", top: "clamp(92px,12vh,108px)", right: "clamp(20px,5vw,40px)", zIndex: 3, display: "inline-flex", alignItems: "center", gap: 8, padding: "9px 16px", borderRadius: 100, cursor: "pointer", background: "rgba(22,20,15,0.5)", color: "#F7F5EF", border: "1px solid rgba(247,245,239,0.25)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", fontSize: "0.6875rem", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 600 }}>
-          {soundOn ? "🔊 Sound on" : "🔈 Watch with sound"}
-        </button>
       </section>
 
-      {/* ══ TICKER ════════════════════════════════════════════════════════════ */}
-      <div style={{ background: "#16140F", padding: "14px 0", overflow: "hidden" }}>
-        <div className="animate-marquee" style={{ display: "flex", whiteSpace: "nowrap" }}>
-          {Array.from({ length: 3 }, (_, bloc) =>
-            ["FOOD PLANNING", "THE GROVE", "SPARKLING BEVERAGES", "SKINCARE", "AI POWERED",
-             "GROCERY SYNC", "GROW YOUR OWN", "HOLISTIC WELLNESS"].map((t, i) => (
-              <span key={`${bloc}-${i}`}
-                style={{ display: "inline-flex", alignItems: "center", gap: 24, padding: "0 24px",
-                  fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(247,245,239,0.5)", fontWeight: 600 }}>
-                {t}
-                <span style={{ width: 3, height: 3, borderRadius: "50%", background: "rgba(22,20,15,0.6)", flexShrink: 0 }} />
-              </span>
-            ))
-          )}
-        </div>
+      {/* ── Full-bleed lifestyle band ───────────────────────────────────────── */}
+      <div role="img" aria-label="CitiGrove" style={{ height: "clamp(300px,52vh,580px)", background: `${C.line} url(${HERO_IMG}) center / cover no-repeat` }} />
+
+      {/* ── Manifesto ───────────────────────────────────────────────────────── */}
+      <section style={{ ...pageWrap, maxWidth: 1040, paddingTop: "clamp(110px,16vw,200px)", paddingBottom: "clamp(110px,16vw,200px)", textAlign: "center" }}>
+        <div style={{ marginBottom: 30 }}><span style={eyebrowStyle()}>Our belief</span></div>
+        <p style={{ ...serif, fontWeight: 400, fontSize: "clamp(1.65rem,3.6vw,2.85rem)", lineHeight: 1.34, letterSpacing: "-0.01em", margin: 0 }}>
+          Eating well shouldn&apos;t be a project. It should be the most natural thing — accessible,
+          personal, and deeply human. So we make the tools, the rituals, and the small good things
+          that let it feel that way.
+        </p>
+      </section>
+
+      {/* ── Chapters ────────────────────────────────────────────────────────── */}
+      <div id="food-planning">
+        <Chapter chapter={CHAPTERS[0]} image={APP_IMG} flip={false} />
+      </div>
+      <div id="beverages-intro">
+        <Chapter chapter={CHAPTERS[1]} flip />
       </div>
 
-      {/* ══ BELIEFS ═══════════════════════════════════════════════════════════ */}
-      <section id="about" style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <p style={{ ...S.label, marginBottom: "clamp(36px,6vw,56px)" }}>Our Beliefs</p>
-
-          <p style={{ ...S.serif, fontSize: "clamp(1.6rem,4vw,3.25rem)", fontWeight: 500, lineHeight: 1.35, color: "#16140F", maxWidth: 800, borderTop: "1px solid #E4E1D6", paddingTop: 40, marginBottom: "clamp(56px,8vw,100px)" }}>
-            &quot;We believe eating well shouldn&apos;t be a project. It&apos;s a practice — one that
-            should be <em style={{ fontStyle: "italic", color: "#9A4A26" }}>accessible, personal,</em> and
-            deeply human.&quot;
-          </p>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 1, background: "#E4E1D6" }}>
-            {BELIEFS.map((b, i) => (
-              <div key={i}
-                style={{ background: "#F7F5EF", padding: "clamp(32px,4vw,48px) clamp(24px,3vw,36px)", transition: "background 0.25s" }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#EFEDE4")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#F7F5EF")}>
-                <span style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", color: "#B5582F", fontWeight: 600, display: "block", marginBottom: 20 }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 style={{ ...S.serif, fontSize: "clamp(1.25rem,2vw,1.5rem)", fontWeight: 600, marginBottom: 14, color: "#16140F" }}>{b.label}</h3>
-                <p style={{ fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.7 }}>{b.body}</p>
+      {/* ── Beverages gallery ───────────────────────────────────────────────── */}
+      <section id="beverages" style={{ ...pageWrap, paddingTop: "clamp(40px,5vw,64px)", paddingBottom: "clamp(110px,16vw,200px)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(228px, 1fr))", gap: "clamp(14px,1.4vw,22px)" }}>
+          {DRINKS.map((d) => (
+            <div key={d.name} style={{ background: C.surface, border: `1px solid ${C.line}`, borderRadius: 6, padding: "clamp(22px,2.4vw,30px)", display: "flex", flexDirection: "column", minHeight: 292 }}>
+              <div style={{ height: 110, borderRadius: 4, background: "rgba(154,74,38,0.07)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 24 }}>
+                <span style={{ ...serif, fontSize: 30, color: "rgba(154,74,38,0.5)" }}>◦</span>
               </div>
-            ))}
-          </div>
+              <div style={{ ...eyebrowStyle(), color: C.faint, marginBottom: 10 }}>Sparkling</div>
+              <div style={{ ...serif, fontWeight: 400, fontSize: 19, lineHeight: 1.2, color: C.ink, marginBottom: 6 }}>{d.name}</div>
+              <div style={{ fontSize: 13, color: C.soft, lineHeight: 1.5 }}>{d.note}</div>
+              <div style={{ marginTop: "auto", paddingTop: 18, fontSize: 14, color: C.ink }}>{d.price}</div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ══ ECOSYSTEM ═════════════════════════════════════════════════════════ */}
-      <section id="skincare" style={{ background: "#EFEDE4", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(48px,7vw,72px)" }}>
-            <div>
-              <p style={{ ...S.label, marginBottom: 16 }}>The Ecosystem</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5.5vw,4.25rem)", fontWeight: 400, lineHeight: 1.05, color: "#16140F" }}>
-                Everything you need,<br />
-                <span style={{ color: "#9A4A26" }}>in one place.</span>
-              </h2>
-            </div>
-            <p style={{ maxWidth: 320, fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.7 }}>
-              CitiGrove isn&apos;t a single product — it&apos;s a connected wellness system, anchored by the Grovli food planning app.
-            </p>
-          </div>
+      {/* ── Skincare chapter ────────────────────────────────────────────────── */}
+      <div id="skincare">
+        <Chapter chapter={CHAPTERS[2]} flip={false} />
+      </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 14 }}>
-            {SERVICES.map((card, i) => (
-              <a key={i} href={card.link}
-                target={card.external ? "_blank" : undefined}
-                rel={card.external ? "noopener noreferrer" : undefined}
-                style={{
-                  display: "flex", flexDirection: "column", justifyContent: "space-between",
-                  background: card.accent, borderRadius: 20,
-                  padding: "clamp(28px,3.5vw,40px) clamp(24px,3vw,36px)",
-                  minHeight: "clamp(260px,30vw,320px)", textDecoration: "none",
-                  border: card.accent === "#F7F5EF" ? "1px solid #E4E1D6" : "none",
-                  transition: "transform 0.25s, box-shadow 0.25s",
-                }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 48px rgba(22,20,15,0.09)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
-                <span style={{ fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", color: card.textColor, opacity: 0.45, fontWeight: 600 }}>{card.tag}</span>
-                <div>
-                  <h3 style={{ ...S.serif, fontSize: "clamp(1.5rem,2.5vw,1.75rem)", fontWeight: 400, lineHeight: 1.15, color: card.textColor, marginBottom: 14, whiteSpace: "pre-line" }}>{card.title}</h3>
-                  <p style={{ fontSize: "0.875rem", color: card.textColor, opacity: 0.65, lineHeight: 1.7 }}>{card.body}</p>
-                </div>
-                <span style={{ fontSize: "1.25rem", color: card.textColor, opacity: 0.4, alignSelf: "flex-end" }}>→</span>
+      {/* ── Journal ─────────────────────────────────────────────────────────── */}
+      <section style={{ ...pageWrap, paddingTop: "clamp(40px,6vw,80px)", paddingBottom: "clamp(110px,16vw,200px)", borderTop: `1px solid ${C.line}` }}>
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 20, marginBottom: "clamp(40px,5vw,64px)", marginTop: "clamp(40px,5vw,64px)" }}>
+          <div>
+            <div style={{ marginBottom: 18 }}><span style={eyebrowStyle()}>The Journal</span></div>
+            <h2 style={{ ...serif, fontWeight: 400, fontSize: "clamp(1.9rem,4vw,3rem)", lineHeight: 1.08, letterSpacing: "-0.015em", margin: 0 }}>
+              Notes from the table.
+            </h2>
+          </div>
+          <a href="/blog" style={{ fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: C.ink, textDecoration: "none", borderBottom: `1px solid ${C.ink}`, paddingBottom: 4, whiteSpace: "nowrap" }}>
+            Read the Journal
+          </a>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "clamp(28px,3vw,48px)" }}>
+          {(posts.length ? posts : [0, 1, 2].map(() => null)).map((p, i) =>
+            p ? (
+              <a key={p.slug} href={`/blog/${p.slug}`} style={{ textDecoration: "none", color: "inherit", display: "block" }}>
+                <div style={{ ...eyebrowStyle(), color: C.faint, marginBottom: 14 }}>{fmtDate(p.published_at)}</div>
+                <div style={{ ...serif, fontWeight: 400, fontSize: 22, lineHeight: 1.22, color: C.ink, marginBottom: 12 }}>{p.title}</div>
+                <div style={{ fontSize: 14.5, color: C.soft, lineHeight: 1.65 }}>{p.summary}</div>
+                <div style={{ marginTop: 16, fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: C.clay }}>Read essay →</div>
               </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ FOOD PLANNING (GROVLI) ════════════════════════════════════════════ */}
-      <section id="food-planning" style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: "clamp(48px,7vw,80px)", alignItems: "start" }}>
-
-            <div>
-              <p style={{ ...S.label, marginBottom: 24 }}>Meet Grovli · Food Planning</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 400, lineHeight: 1.08, color: "#16140F", marginBottom: 24 }}>
-                Food planning,<br />not just meal planning.
-              </h2>
-              <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6F6A60", lineHeight: 1.75, marginBottom: 16 }}>
-                <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer" style={{ color: "#16140F", fontWeight: 600, textDecoration: "none", borderBottom: "1px solid #CBC6BB" }}>Grovli</a> is the
-                app at the center of CitiGrove. Meal planning picks recipes. Food planning is the
-                whole arc — what you grow, what you buy, what&apos;s in the pantry, and what
-                lands on the table tonight.
-              </p>
-              <p style={{ fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.75, marginBottom: 40, opacity: 0.85 }}>
-                A licensed approach to nutrition, an AI that builds your plan in seconds, and a
-                grocery list that&apos;s already done. The more you use it, the more it sounds like you.
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 40 }}>
-                {DIET_TYPES.map((d) => (
-                  <button key={d.label} title={d.desc}
-                    style={{ padding: "9px 20px", borderRadius: 100, fontSize: "0.8125rem", border: "1px solid #CBC6BB", background: "transparent", color: "#6F6A60", cursor: "pointer", transition: "all 0.2s" }}
-                    onMouseEnter={(e) => { const el = e.currentTarget; el.style.background = "#16140F"; el.style.color = "#F7F5EF"; el.style.borderColor = "#16140F"; }}
-                    onMouseLeave={(e) => { const el = e.currentTarget; el.style.background = "transparent"; el.style.color = "#6F6A60"; el.style.borderColor = "#CBC6BB"; }}>
-                    {d.label}
-                  </button>
-                ))}
+            ) : (
+              <div key={i} style={{ opacity: 0.4 }}>
+                <div style={{ height: 9, width: 90, background: C.line, marginBottom: 16 }} />
+                <div style={{ height: 22, background: C.line, marginBottom: 12 }} />
+                <div style={{ height: 12, background: C.line, width: "85%" }} />
               </div>
-              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 32px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", fontSize: "0.875rem", letterSpacing: "0.02em" }}>
-                  Start my plan →
-                </a>
-                <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "15px 28px", borderRadius: 100, border: "1px solid #CBC6BB", color: "#16140F", textDecoration: "none", fontSize: "0.875rem" }}>
-                  Get the iPhone app
-                </a>
-              </div>
-            </div>
-
-            {/* App preview — a still from the walkthrough that now headlines the
-                hero, so the section keeps its two-column balance without
-                re-embedding the video. */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 4 }}>
-              <img
-                src={`${HERO_VIDEO_POSTER}?width=560`}
-                alt="The Grovli app — a personalized food plan in seconds"
-                loading="lazy"
-                style={{ width: "min(280px, 80%)", height: "auto", display: "block", borderRadius: 30, border: "1px solid #E4E1D6", boxShadow: "0 26px 70px rgba(22,20,15,0.18)", background: "#16140F" }}
-              />
-              <p style={{ fontSize: "0.8125rem", color: "#6F6A60", lineHeight: 1.6, marginTop: 16, textAlign: "center", maxWidth: 300 }}>
-                Food planning in your pocket — the full walkthrough plays up top.
-              </p>
-            </div>
-          </div>
-
-          {/* Steps */}
-          <div style={{ marginTop: "clamp(56px,8vw,88px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: 1, background: "#E4E1D6" }}>
-            {PROCESS.map((step, i) => (
-              <div key={i} style={{ background: "#F7F5EF", padding: "clamp(28px,3vw,36px) clamp(22px,2.5vw,30px)" }}>
-                <span style={{ ...S.serif, fontSize: "1rem", fontWeight: 500, color: "#CBC6BB", display: "block", marginBottom: 14 }}>0{step.n}</span>
-                <h4 style={{ fontSize: "1rem", fontWeight: 600, color: "#16140F", marginBottom: 8 }}>{step.title}</h4>
-                <p style={{ fontSize: "0.875rem", color: "#6F6A60", lineHeight: 1.7 }}>{step.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ GROVLI FEATURE GRID ═══════════════════════════════════════════════ */}
-      <section style={{ background: "#16140F", padding: "clamp(72px,10vw,110px) clamp(20px,5vw,40px)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: "clamp(40px,6vw,64px)" }}>
-            <div>
-              <p style={{ ...S.labelDark, marginBottom: 16 }}>Inside the App</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,3.75rem)", fontWeight: 400, lineHeight: 1.08, color: "#F7F5EF" }}>
-                One app for the<br /><span style={{ color: "#16140F" }}>whole food journey.</span>
-              </h2>
-            </div>
-            <a href={GROVLI_HOME} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: "0.875rem", padding: "14px 30px", borderRadius: 100, background: "#F7F5EF", color: "#16140F", textDecoration: "none", fontWeight: 600, whiteSpace: "nowrap" }}>
-              Open Grovli →
-            </a>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 250px), 1fr))", gap: 1, background: "rgba(247,245,239,0.08)" }}>
-            {FEATURES.map((f) => (
-              <div key={f.name} style={{ background: "#16140F", padding: "clamp(26px,3vw,34px) clamp(22px,2.5vw,28px)" }}>
-                <h3 style={{ fontSize: "1.0625rem", fontWeight: 600, color: "#F7F5EF", marginBottom: 10 }}>{f.name}</h3>
-                <p style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.6)", lineHeight: 1.65 }}>{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ FROM THE JOURNAL ══════════════════════════════════════════════════ */}
-      <section id="journal" style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(40px,6vw,64px)" }}>
-            <div>
-              <p style={{ ...S.label, marginBottom: 16 }}>The Journal</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 400, lineHeight: 1.08, color: "#16140F" }}>
-                Stories from<br />the table.
-              </h2>
-            </div>
-            <a href="/blog"
-              style={{ fontSize: "0.875rem", padding: "14px 30px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", textDecoration: "none", fontWeight: 500, whiteSpace: "nowrap" }}>
-              Read the Journal →
-            </a>
-          </div>
-
-          {journalPosts.length > 0 ? (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: 14 }}>
-              {journalPosts.map((post) => (
-                <a key={post.slug} href={`/blog/${post.slug}`}
-                  style={{ display: "flex", flexDirection: "column", gap: 12, background: "#EFEDE4", borderRadius: 20, padding: "clamp(28px,3.5vw,36px) clamp(24px,3vw,32px)", textDecoration: "none", border: "1px solid #E4E1D6", transition: "transform 0.25s, box-shadow 0.25s" }}
-                  onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 12px 48px rgba(22,20,15,0.09)"; }}
-                  onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; }}>
-                  <span style={{ fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#9A4A26", fontWeight: 600 }}>
-                    {new Date(post.published_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-                  </span>
-                  <h3 style={{ ...S.serif, fontSize: "clamp(1.25rem,2vw,1.5rem)", fontWeight: 600, lineHeight: 1.2, color: "#16140F" }}>{post.title}</h3>
-                  <p style={{ fontSize: "0.875rem", color: "#6F6A60", lineHeight: 1.65, flex: 1 }}>{post.summary}</p>
-                  <span style={{ fontSize: "0.75rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#9A4A26", fontWeight: 600 }}>Read essay →</span>
-                </a>
-              ))}
-            </div>
-          ) : (
-            <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1.0625rem)", color: "#6F6A60", lineHeight: 1.75, maxWidth: 560 }}>
-              Essays on food planning, gardening, hydroponics, grocery costs, and eating
-              well in 2026 — the thinking behind everything we make.{" "}
-              <a href="/blog" style={{ color: "#9A4A26", textDecoration: "underline" }}>Read the Journal →</a>
-            </p>
+            )
           )}
         </div>
       </section>
 
-      {/* ══ BEVERAGES ═════════════════════════════════════════════════════════ */}
-      <section id="beverages" style={{ background: "#EFEDE4", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "clamp(16px,3vw,24px)", marginBottom: "clamp(48px,7vw,72px)" }}>
-            <div>
-              <p style={{ ...S.label, marginBottom: 16 }}>Sparkling Beverages</p>
-              <h2 style={{ ...S.serif, fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 400, lineHeight: 1.08, color: "#16140F" }}>
-                Two ingredients.<br />Nothing to hide.
-              </h2>
-            </div>
-            <p style={{ maxWidth: 340, fontSize: "0.9375rem", color: "#6F6A60", lineHeight: 1.7 }}>
-              Sparkling water and natural flavor extracts. No sugar, no artificial additives —
-              just clean, honest refreshment.
-            </p>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 220px), 1fr))", gap: 12 }}>
-            {DRINKS.map((d, i) => (
-              <div key={i}
-                style={{ background: "#F7F5EF", borderRadius: 16, padding: "clamp(20px,2.5vw,28px) clamp(16px,2vw,24px)", border: "1px solid transparent", display: "flex", flexDirection: "column", gap: 12, transition: "all 0.2s", cursor: "pointer" }}
-                onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = "#CBC6BB"; el.style.boxShadow = "0 4px 24px rgba(22,20,15,0.05)"; }}
-                onMouseLeave={(e) => { const el = e.currentTarget; el.style.borderColor = "transparent"; el.style.boxShadow = "none"; }}>
-                <div style={{ height: 64, borderRadius: 10, background: `hsl(${(i * 37 + 100) % 360}, 28%, 88%)` }} />
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 500, color: "#16140F", lineHeight: 1.4 }}>{d.name}</span>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#9A4A26", flexShrink: 0 }}>{d.price}</span>
-                </div>
-                <button
-                  style={{ marginTop: 4, padding: "9px 0", borderRadius: 100, border: "1px solid #CBC6BB", background: "transparent", fontSize: "0.8rem", color: "#6F6A60", cursor: "pointer", transition: "all 0.2s" }}
-                  onMouseEnter={(e) => { const el = e.currentTarget; el.style.background = "#16140F"; el.style.color = "#F7F5EF"; el.style.borderColor = "#16140F"; }}
-                  onMouseLeave={(e) => { const el = e.currentTarget; el.style.background = "transparent"; el.style.color = "#6F6A60"; el.style.borderColor = "#CBC6BB"; }}>
-                  Add to cart
-                </button>
-              </div>
-            ))}
-            <div
-              style={{ borderRadius: 16, padding: "clamp(20px,2.5vw,28px)", border: "1px dashed #CBC6BB", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer", transition: "background 0.2s", minHeight: 160 }}
-              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#F7F5EF")}
-              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}>
-              <span style={{ fontSize: "1.5rem", color: "#CBC6BB" }}>+</span>
-              <span style={{ fontSize: "0.8125rem", color: "#6F6A60", textAlign: "center" }}>View all<br />flavors</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ NEWSLETTER ════════════════════════════════════════════════════════ */}
-      <section style={{ background: "#F7F5EF", padding: "clamp(72px,10vw,120px) clamp(20px,5vw,40px)", textAlign: "center" }}>
-        <div style={{ maxWidth: 640, margin: "0 auto" }}>
-          <p style={{ ...S.label, marginBottom: 24 }}>Join the Community</p>
-          <h2 style={{ ...S.serif, fontSize: "clamp(2rem,6vw,4.5rem)", fontWeight: 400, lineHeight: 1.1, color: "#16140F", marginBottom: 16 }}>
-            10% off your<br />first order.
+      {/* ── Newsletter / first order ────────────────────────────────────────── */}
+      <section style={{ background: C.dark, color: C.onDark }}>
+        <div style={{ ...pageWrap, maxWidth: 760, paddingTop: "clamp(110px,16vw,180px)", paddingBottom: "clamp(110px,16vw,180px)", textAlign: "center" }}>
+          <div style={{ marginBottom: 24 }}><span style={eyebrowStyle(true)}>Pull up a chair</span></div>
+          <h2 style={{ ...serif, fontWeight: 400, fontSize: "clamp(1.9rem,4.4vw,3.1rem)", lineHeight: 1.12, letterSpacing: "-0.015em", margin: "0 0 18px" }}>
+            10% off your first order.
           </h2>
-          <p style={{ fontSize: "clamp(0.9375rem,1.5vw,1rem)", color: "#6F6A60", lineHeight: 1.75, marginBottom: 40 }}>
-            Join the CitiGrove community for new flavors, food planning tips, and
-            early access to everything we&apos;re building.
+          <p style={{ fontSize: "clamp(0.95rem,1.4vw,1.05rem)", lineHeight: 1.7, color: C.onDarkSoft, maxWidth: 460, margin: "0 auto clamp(32px,4vw,44px)" }}>
+            One short, useful note every few weeks — the food thinking we&apos;d send a friend. Join and
+            we&apos;ll send your code.
           </p>
           {subState === "done" ? (
-            <p style={{ fontSize: "1.0625rem", color: "#16140F", fontWeight: 500 }}>{subMsg}</p>
+            <p style={{ ...serif, fontSize: "1.25rem", color: C.onDark }}>{subMsg}</p>
           ) : (
-            <form onSubmit={handleSubscribe}
-              style={{ display: "flex", gap: 10, maxWidth: 420, margin: "0 auto 16px", flexWrap: "wrap" }}>
-              <input type="email" required placeholder="your@email.com"
-                value={email} onChange={(e) => setEmail(e.target.value)}
-                style={{ flex: "1 1 200px", padding: "14px 20px", borderRadius: 100, border: "1px solid #CBC6BB", background: "#F7F5EF", fontSize: "0.875rem", color: "#16140F", outline: "none", minWidth: 0 }} />
+            <form onSubmit={handleSubscribe} style={{ display: "flex", gap: 12, maxWidth: 480, margin: "0 auto", flexWrap: "wrap", justifyContent: "center" }}>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" aria-label="Email"
+                style={{ flex: "1 1 240px", background: "transparent", border: `1px solid ${C.onDarkLine}`, borderRadius: 999, padding: "15px 24px", fontSize: 15, color: C.onDark, outline: "none" }} />
               <button type="submit" disabled={subState === "loading"}
-                style={{ padding: "14px 24px", borderRadius: 100, background: "#16140F", color: "#F7F5EF", border: "none", fontSize: "0.875rem", fontWeight: 500, cursor: "pointer", flexShrink: 0, opacity: subState === "loading" ? 0.6 : 1 }}>
-                {subState === "loading" ? "…" : "Subscribe"}
+                style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase", color: C.ink, background: C.onDark, border: "none", borderRadius: 999, padding: "15px 32px", cursor: "pointer" }}>
+                {subState === "loading" ? "Sending…" : "Join"}
               </button>
             </form>
           )}
-          {subState === "error" && (
-            <p style={{ fontSize: "0.8125rem", color: "#B0563B", marginBottom: 8 }}>{subMsg}</p>
-          )}
-          <p style={{ fontSize: "0.75rem", color: "#CBC6BB" }}>No spam. Unsubscribe any time.</p>
+          {subState === "error" && <p style={{ marginTop: 16, fontSize: 13, color: "#E0A07E" }}>{subMsg}</p>}
         </div>
       </section>
 
-      {/* ══ FOOTER ════════════════════════════════════════════════════════════ */}
-      <footer id="contact" style={{ background: "#16140F", padding: "clamp(56px,8vw,80px) clamp(20px,5vw,40px) 36px" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "clamp(36px,5vw,48px)", marginBottom: "clamp(48px,7vw,80px)" }}>
-            <div style={{ gridColumn: "span 1" }}>
-              <div style={{ ...S.serif, fontSize: "1.5rem", fontWeight: 500, color: "#F7F5EF", marginBottom: 20, letterSpacing: "0.02em" }}>
-                Citi<span style={{ color: "#9A4A26" }}>Grove</span>
-              </div>
-              <p style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.38)", lineHeight: 1.75, maxWidth: 280, marginBottom: 20 }}>
-                A food-first wellness ecosystem built by humans, for humans. Every product and
-                service is designed to help you live vibrantly.
-              </p>
-              <p style={{ fontSize: "0.8125rem", color: "rgba(247,245,239,0.3)", lineHeight: 1.8 }}>
-                123 Bang Street Leviko, CA 8034<br />
-                <a href="mailto:info@citigrove.com"
-                  style={{ color: "rgba(247,245,239,0.3)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#9A4A26")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.3)")}>
-                  info@citigrove.com
-                </a>
+      {/* ── Footer ──────────────────────────────────────────────────────────── */}
+      <footer style={{ background: C.page, borderTop: `1px solid ${C.line}` }}>
+        <div style={{ ...pageWrap, paddingTop: "clamp(56px,7vw,88px)", paddingBottom: 40 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 40 }}>
+            <div style={{ maxWidth: 320 }}>
+              <div style={{ ...serif, fontSize: 22, fontWeight: 500, letterSpacing: "0.14em", marginBottom: 16 }}>CITIGROVE</div>
+              <p style={{ fontSize: 14, color: C.soft, lineHeight: 1.65 }}>
+                A food-first wellness house. Eat good, look good, feel good.
               </p>
             </div>
-
-            <div>
-              <h4 style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(247,245,239,0.3)", fontWeight: 600, marginBottom: 24 }}>Pages</h4>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-                {[["Home", "/"], ["About", "#about"], ["Food Planning", "#food-planning"], ["The Journal", "/blog"], ["Beverages", "#beverages"], ["Contact", "#contact"]].map(([p, href]) => (
-                  <li key={p}>
-                    <a href={href} style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.4)", textDecoration: "none", transition: "color 0.2s" }}
-                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#F7F5EF")}
-                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.4)")}>
-                      {p}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 style={{ fontSize: "0.6875rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(247,245,239,0.3)", fontWeight: 600, marginBottom: 24 }}>Food Planning</h4>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
-                {[["Grovli app", GROVLI_HOME], ["The Grove", GROVLI_HOME], ["Grocery sync", GROVLI_HOME], ["Pantry", GROVLI_HOME], ["iPhone app", APP_STORE_URL]].map(([s, href]) => (
-                  <li key={s}>
-                    <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: "0.875rem", color: "rgba(247,245,239,0.4)", textDecoration: "none", transition: "color 0.2s" }}
-                      onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#F7F5EF")}
-                      onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.4)")}>
-                      {s}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <div style={{ display: "flex", gap: "clamp(40px,6vw,90px)", flexWrap: "wrap" }}>
+              <FooterCol title="The House" links={[
+                { label: "Food Planning", href: GROVLI_HOME, ext: true },
+                { label: "Beverages", href: "#beverages", ext: false },
+                { label: "Skincare", href: "#skincare", ext: false },
+                { label: "Journal", href: "/blog", ext: false },
+              ]} />
+              <FooterCol title="Grovli" links={[
+                { label: "Open the app", href: GROVLI_HOME, ext: true },
+                { label: "Get it on iPhone", href: APP_STORE_URL, ext: true },
+              ]} />
+              <FooterCol title="More" links={[
+                { label: "Instagram", href: "https://instagram.com/grovli", ext: true },
+                { label: "Privacy", href: "/privacy", ext: false },
+                { label: "Terms", href: "/terms", ext: false },
+              ]} />
             </div>
           </div>
-
-          <div style={{ borderTop: "1px solid rgba(247,245,239,0.06)", paddingTop: 28, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-            <p style={{ fontSize: "0.75rem", color: "rgba(247,245,239,0.2)" }}>© 2026 CitiGrove. All rights reserved.</p>
-            <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-              {[["Instagram", "https://instagram.com/grovli"], ["Facebook", "https://facebook.com"], ["Twitter", "https://twitter.com"]].map(([label, href]) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: "0.75rem", color: "rgba(247,245,239,0.2)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.6)")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(247,245,239,0.2)")}>
-                  {label}
-                </a>
-              ))}
-            </div>
+          <div style={{ marginTop: "clamp(48px,6vw,72px)", paddingTop: 24, borderTop: `1px solid ${C.line}`, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+            <span style={{ fontSize: 12, color: C.faint }}>© {new Date().getFullYear()} CitiGrove</span>
+            <span style={{ fontSize: 12, color: C.faint }}>Built by people, for people.</span>
           </div>
         </div>
       </footer>
     </div>
   );
+}
+
+/* ─────────────────────────── components ──────────────────────────────────── */
+function Chapter({
+  chapter,
+  image,
+  flip,
+}: {
+  chapter: (typeof CHAPTERS)[number];
+  image?: string;
+  flip: boolean;
+}) {
+  const dark = chapter.dark;
+  const text = (
+    <div style={{ flex: "1 1 420px", minWidth: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 26 }}>
+        <span style={{ ...serif, fontSize: 15, color: dark ? C.onDarkSoft : C.clay }}>{chapter.n}</span>
+        <span style={{ width: 28, height: 1, background: dark ? C.onDarkLine : C.line }} />
+        <span style={eyebrowStyle(dark)}>{chapter.kicker}</span>
+      </div>
+      <h2 style={{ ...serif, fontWeight: 400, fontSize: "clamp(2.1rem,4.6vw,3.6rem)", lineHeight: 1.05, letterSpacing: "-0.015em", margin: "0 0 26px", color: dark ? C.onDark : C.ink, whiteSpace: "pre-line" }}>
+        {chapter.title}
+      </h2>
+      <p style={{ fontSize: "clamp(1rem,1.4vw,1.125rem)", lineHeight: 1.75, color: dark ? C.onDarkSoft : C.soft, maxWidth: 480, margin: 0 }}>
+        {chapter.body}
+      </p>
+      <a href={chapter.href} target={chapter.external ? "_blank" : undefined} rel={chapter.external ? "noopener noreferrer" : undefined}
+        style={{ display: "inline-block", marginTop: 34, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: dark ? C.onDark : C.ink, textDecoration: "none", borderBottom: `1px solid ${dark ? C.onDark : C.ink}`, paddingBottom: 5 }}>
+        {chapter.cta} →
+      </a>
+    </div>
+  );
+
+  const visual = (
+    <div style={{ flex: "1 1 360px", display: "flex", alignItems: "center", justifyContent: "center", minWidth: 0 }}>
+      {image ? (
+        <div style={{ aspectRatio: "443 / 960", height: "clamp(360px,56vh,560px)", maxWidth: "100%", borderRadius: 26, overflow: "hidden", background: `${C.dark} url(${image}) center / cover no-repeat`, boxShadow: dark ? "none" : "0 40px 90px rgba(22,20,15,0.18)" }} />
+      ) : (
+        <div style={{ width: "100%", aspectRatio: "4 / 5", maxHeight: 540, borderRadius: 8, background: dark ? "rgba(247,245,239,0.06)" : "rgba(154,74,38,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ ...serif, fontSize: 56, color: dark ? "rgba(247,245,239,0.18)" : "rgba(154,74,38,0.32)" }}>{chapter.n}</span>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <section style={{ background: dark ? C.dark : C.page }}>
+      <div style={{ ...pageWrap, paddingTop: "clamp(96px,13vw,168px)", paddingBottom: "clamp(96px,13vw,168px)", display: "flex", gap: "clamp(40px,6vw,96px)", alignItems: "center", flexWrap: "wrap", flexDirection: flip ? "row-reverse" : "row" }}>
+        {text}
+        {visual}
+      </div>
+    </section>
+  );
+}
+
+function FooterCol({ title, links }: { title: string; links: { label: string; href: string; ext: boolean }[] }) {
+  return (
+    <div>
+      <div style={{ ...eyebrowStyle(), color: C.faint, marginBottom: 16 }}>{title}</div>
+      <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: 12 }}>
+        {links.map((l) => (
+          <li key={l.label}>
+            <a href={l.href} target={l.ext ? "_blank" : undefined} rel={l.ext ? "noopener noreferrer" : undefined}
+              style={{ fontSize: 14, color: C.soft, textDecoration: "none" }}>
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function fmtDate(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  } catch {
+    return "";
+  }
 }
