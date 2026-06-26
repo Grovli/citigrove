@@ -30,7 +30,7 @@ env:
   ARCHIVE_PATH: mobile/build/CitiGrove.xcarchive
   EXPORT_PATH: mobile/build/export
   EXPORT_OPTIONS: mobile/ExportOptions.plist
-  ASC_KEY_ID: CZJ5N7FU2R
+  ASC_KEY_ID: 9TSUUZ83Y7
   DEVELOPMENT_TEAM: 3U53SJ48WZ
 
 jobs:
