@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "3U53SJ48WZ.com.citigrove.app",
+        "paths": ["*"]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["3U53SJ48WZ.com.citigrove.app"]
+  }
+}

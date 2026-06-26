@@ -20,6 +20,27 @@ export const GROVLI_URL = "https://grovli.citigrove.com";
 export const APP_STORE_URL = "https://apps.apple.com/us/app/grovli/id6760633541";
 export const INSTAGRAM_URL = "https://instagram.com/grovli";
 
+/** Grovli iOS app (live). */
+export const GROVLI_APP_ID = "6760633541";
+
+/**
+ * CitiGrove iOS app. The App Store id is provisioned at submission; until then
+ * `CITIGROVE_APP_ID` is empty, which gates the Smart App Banner, download links,
+ * and the CitiGrove app's structured-data node OFF — we never advertise an
+ * unpublished app. Set NEXT_PUBLIC_CITIGROVE_APP_ID once it's live.
+ */
+export const CITIGROVE_APP_ID = process.env.NEXT_PUBLIC_CITIGROVE_APP_ID || "";
+export const CITIGROVE_APP_STORE_URL = CITIGROVE_APP_ID
+  ? `https://apps.apple.com/us/app/citigrove/id${CITIGROVE_APP_ID}`
+  : "";
+
+/** Apple Developer team + bundle id — drive the AASA app-id prefix (TEAMID.bundleid). */
+export const APPLE_TEAM_ID = "3U53SJ48WZ";
+export const CITIGROVE_BUNDLE_ID = "com.citigrove.app";
+
+/** Brand logo (the CG mark) — Organization JSON-LD + brand imagery. */
+export const LOGO_URL = "/citigrove-logo.png";
+
 /**
  * Headless CMS base — document-api's PUBLIC Cloud Run service. Overridable via
  * env. NOTE: api.grovli.citigrove.com is grovli-backend and 404s on /public/*;

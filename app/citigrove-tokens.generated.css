@@ -1,0 +1,39 @@
+/* Auto-generated from design-tokens. Do not edit by hand. */
+/* Run: npm run tokens */
+
+:root {
+  --color-citigrove-chrome: #28332C;
+  --color-citigrove-on-chrome: #F4F2EA;
+  --color-citigrove-primary: #6E8B73;
+  --color-citigrove-primary-deep: #577260;
+  --color-citigrove-accent: #C28A66;
+  --color-citigrove-ink: #211F1A;
+  --color-citigrove-ink-soft: rgba(33,31,26,0.58);
+  --color-citigrove-ink-faint: rgba(33,31,26,0.36);
+  --color-citigrove-page: #F4F2EA;
+  --color-citigrove-surface: #FCFBF6;
+  --color-citigrove-surface-sunken: #ECE9DE;
+  --color-citigrove-line: #E6E2D7;
+}
+
+
+/* Dark theme overrides — opt-in via [data-theme="dark"]. */
+/* Inert until that attribute is set; web locks light today. */
+[data-theme="dark"] {
+  --color-citigrove-chrome: #0F1512;
+  --color-citigrove-on-chrome: #ECEAE2;
+  --color-citigrove-primary: #88A58E;
+  --color-citigrove-primary-deep: #6E8B73;
+  --color-citigrove-accent: #D2A07E;
+  --color-citigrove-ink: #ECEAE2;
+  --color-citigrove-ink-soft: rgba(236,234,226,0.62);
+  --color-citigrove-ink-faint: rgba(236,234,226,0.40);
+  --color-citigrove-page: #141613;
+  --color-citigrove-surface: #1C1F1B;
+  --color-citigrove-surface-sunken: #0E100D;
+  --color-citigrove-line: #2C302B;
+}
+
+
+/* Typography role classes — convenience for new code; */
+/* hand-written `.ds-*` classes in globals.css remain unchanged. */

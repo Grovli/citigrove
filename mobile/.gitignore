@@ -1,0 +1,12 @@
+# xcodegen generates the project from project.yml — don't commit it.
+*.xcodeproj/
+# Build output + derived data
+build/
+DerivedData/
+*.xcarchive
+*.ipa
+# Generated app icon (regenerate via scripts/generate_app_icon.swift)
+CitiGrove/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png
+.DS_Store
+xcuserdata/
+*.xcuserstate
