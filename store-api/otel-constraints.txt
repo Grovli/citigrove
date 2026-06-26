@@ -1,0 +1,17 @@
+# OTel bootstrap-installed instrumentation pins (PIP_CONSTRAINT).
+#
+# `opentelemetry-bootstrap -a install` (run in the Dockerfile) selects
+# instrumentation packages by scanning installed deps and shells out to
+# pip — those subprocesses do NOT see requirements.lock, so the versions
+# they resolve must be constrained here. Keep the minor lines aligned
+# with the opentelemetry-* floors in requirements.in.
+#
+# Mirror Grovli: if an auto-instrumentor conflicts at runtime, disable it
+# via OTEL_PYTHON_DISABLED_INSTRUMENTATIONS rather than unpinning.
+
+opentelemetry-instrumentation-fastapi>=0.48b0
+opentelemetry-instrumentation-asgi>=0.48b0
+opentelemetry-instrumentation-httpx>=0.48b0
+opentelemetry-instrumentation-pymongo>=0.48b0
+opentelemetry-instrumentation-redis>=0.48b0
+opentelemetry-instrumentation-logging>=0.48b0

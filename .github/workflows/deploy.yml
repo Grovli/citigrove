@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+    # The store-api lives in this monorepo but deploys to Cloud Run via
+    # store-api-deploy.yml — don't rebuild/redeploy the website for API-only changes.
+    paths-ignore:
+      - "store-api/**"
+      - ".github/workflows/store-api-*.yml"
   # Manual trigger — republish the static export after a document-api content
   # change (re-seed) without needing a code change. `gh workflow run deploy.yml`.
   workflow_dispatch:

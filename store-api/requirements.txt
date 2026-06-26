@@ -1,0 +1,11 @@
+# NOTE: this is a convenience pointer, NOT the authoritative lock.
+#
+# The image and CI install from requirements.lock, which the lead
+# regenerates with uv:
+#
+#   uv pip compile requirements.in -o requirements.lock \
+#       --python-version 3.13 --python-platform linux --no-strip-extras
+#
+# Edit requirements.in (floors/caps + rationale), then recompile the lock.
+# Do not hand-edit pinned versions here.
+-r requirements.in
