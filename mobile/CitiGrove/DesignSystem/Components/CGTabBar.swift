@@ -26,32 +26,39 @@ enum CGTab: Int, CaseIterable, Identifiable {
     }
 }
 
-/// Floating capsule tab bar — ultraThin material + hairline, the brand's quiet
-/// chrome. Selected tab reads in `primaryDeep`; the rest in `inkFaint`. Soft
-/// haptic on change (restrained, per the luxury motion language).
+/// Flat hairline tab bar — a full-width bottom bar split from the content by a
+/// single top hairline, on the warm page canvas. The site has no bottom nav (it
+/// uses a sidebar/top bar), so this mirrors its flat, bordered chrome rather than
+/// inventing a floating pill. Selected tab reads in `primaryDeep`; the rest in
+/// `inkFaint`. Soft haptic on change (restrained, per the editorial motion language).
+///
+/// Hosted via `.safeAreaInset(edge: .bottom)`, so it sits above the home
+/// indicator and auto-insets scroll content (screens no longer reserve their own
+/// tab-bar gap). The page canvas behind the home indicator comes from the root.
 struct CGTabBar: View {
     @Binding var selection: CGTab
     /// Per-tab badge counts (e.g. items in the bag). 0 = hidden.
     var badges: [CGTab: Int] = [:]
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(CGTab.allCases) { tab in
-                CGTabButton(
-                    tab: tab,
-                    isSelected: selection == tab,
-                    badge: badges[tab] ?? 0
-                ) {
-                    selection = tab
+        VStack(spacing: 0) {
+            CGHairline()
+            HStack(spacing: 0) {
+                ForEach(CGTab.allCases) { tab in
+                    CGTabButton(
+                        tab: tab,
+                        isSelected: selection == tab,
+                        badge: badges[tab] ?? 0
+                    ) {
+                        selection = tab
+                    }
                 }
             }
+            .padding(.top, 9)
+            .padding(.bottom, 2)
+            .padding(.horizontal, CGSpace.sm)
         }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
-        .background(.ultraThinMaterial, in: Capsule())
-        .overlay(Capsule().strokeBorder(CGColors.line, lineWidth: 0.5))
-        .padding(.horizontal, 24)
-        .shadow(color: CGColors.chrome.opacity(0.10), radius: 18, x: 0, y: 10)
+        .background(CGColors.page)
         .sensoryFeedback(.impact(weight: .light), trigger: selection)
     }
 }

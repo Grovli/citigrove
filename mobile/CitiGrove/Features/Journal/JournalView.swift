@@ -10,10 +10,10 @@ struct JournalView: View {
             VStack(alignment: .leading, spacing: CGSpace.xl) {
                 header
                 content
-                Color.clear.frame(height: CGSpace.tabBarInset)
             }
             .padding(.horizontal, CGSpace.lg)
             .padding(.top, CGSpace.sm)
+            .padding(.bottom, CGSpace.xxl)
         }
         .background(CGColors.page)
         .scrollIndicators(.hidden)

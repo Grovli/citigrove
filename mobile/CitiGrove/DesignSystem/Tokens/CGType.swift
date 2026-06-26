@@ -1,29 +1,52 @@
 import SwiftUI
 
-/// CitiGrove type system — serif display + sans text, the luxury-editorial
-/// pairing citigrove.com uses (Playfair Display + Inter).
+/// CitiGrove type system — Newsreader editorial serif + Inter, the exact pairing
+/// citigrove.com uses (the "Ffern register"). Display headlines are LIGHT serif
+/// (regular/medium, never bold); body + dense UI are Inter.
 ///
-/// The two `provider` functions are the ONLY place the families are chosen.
-/// They currently use the system serif (New York) + sans (SF Pro) as the
-/// bundled-font placeholder; when Playfair Display + Inter `.ttf`s are added to
-/// Resources/Fonts and registered, swap these two functions to `.custom(...)`
-/// and the whole app re-skins. (No call site hardcodes a font.)
+/// Every call site routes through this semantic layer. The generated
+/// `CitiGroveTypeTokens` — built from `design-tokens/tokens/typography.citigrove.json`
+/// and synced into this repo — is the single source of truth, so the app and the
+/// site can no longer drift on type, weight, or tracking (mirrors how `CGColors`
+/// rests on `CitiGroveColorTokens`). To retune, edit the token JSON and re-run
+/// `npm run tokens`; never hardcode a font or size here.
 enum CGType {
-    static func display(_ size: CGFloat, _ weight: Font.Weight = .semibold) -> Font {
-        .system(size: size, weight: weight, design: .serif)
-    }
-    static func text(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
-        .system(size: size, weight: weight, design: .default)
+
+    // MARK: - Family composers (arbitrary size/weight)
+
+    /// Newsreader editorial serif. Default weight is REGULAR — the light
+    /// editorial register, not the old system-serif semibold.
+    static func display(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
+        CitiGroveTypeTokens.displayFont(size, weight)
     }
 
-    // Roles (sizes mirror citigrove.com's scale).
-    static var hero: Font     { display(40, .semibold) }
-    static var title: Font    { display(28, .semibold) }
-    static var section: Font  { display(22, .medium) }
-    static var serifBody: Font { display(18, .regular) }
-    static var heading: Font  { text(17, .semibold) }
-    static var body: Font     { text(16, .regular) }
-    static var callout: Font  { text(15, .regular) }
-    static var caption: Font  { text(13, .regular) }
-    static var eyebrow: Font  { text(11, .semibold) }
+    /// Inter sans — body + dense numeric UI.
+    static func text(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
+        CitiGroveTypeTokens.textFont(size, weight)
+    }
+
+    /// Newsreader italic — pull-quotes and editorial emphasis (site blockquote).
+    static func serifItalic(_ size: CGFloat, _ weight: Font.Weight = .regular) -> Font {
+        CitiGroveTypeTokens.serifItalic(size, weight)
+    }
+
+    // MARK: - Semantic roles (the type scale — single-sourced)
+
+    static var hero: Font        { CitiGroveTypeTokens.hero }
+    static var title: Font       { CitiGroveTypeTokens.title }
+    static var section: Font     { CitiGroveTypeTokens.section }
+    static var serifBody: Font   { CitiGroveTypeTokens.serifBody }
+    static var heading: Font     { CitiGroveTypeTokens.heading }
+    static var body: Font        { CitiGroveTypeTokens.body }
+    static var callout: Font     { CitiGroveTypeTokens.callout }
+    static var caption: Font     { CitiGroveTypeTokens.caption }
+    static var eyebrow: Font     { CitiGroveTypeTokens.eyebrow }
+    static var actionLabel: Font { CitiGroveTypeTokens.actionLabel }
+
+    // MARK: - Per-role metrics a Font can't carry
+
+    /// Letter-spacing in points per role. Apply via `.tracking(CGType.Tracking.eyebrow)`.
+    typealias Tracking = CitiGroveTypeTokens.Tracking
+    /// Line-height multiplier per role (for `.lineSpacing` math).
+    typealias LineHeight = CitiGroveTypeTokens.LineHeight
 }

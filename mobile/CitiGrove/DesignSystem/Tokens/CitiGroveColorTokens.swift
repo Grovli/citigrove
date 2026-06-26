@@ -10,9 +10,15 @@ private func cgAdaptive(_ light: Color, _ dark: Color) -> Color {
     Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(dark) : UIColor(light) })
 }
 
-/// CitiGrove "Sea Glass" brand palette — adaptive light/dark, single-sourced
-/// from design-tokens/tokens/color.json (color.citigrove.*).
+/// CitiGrove warm editorial 'Ffern' palette — adaptive light/dark, single-sourced
+/// from design-tokens/tokens/color.json + color.citigrove-tonal.json (color.citigrove.*).
 enum CitiGroveColorTokens {
+    /// Warm tonal band — site hero + membership CTA. Ink text rides on top (cream in dark). Large fills only.
+    static let peach = cgAdaptive(Color(red: 0.886, green: 0.718, blue: 0.620), Color(red: 0.290, green: 0.220, blue: 0.173))
+    /// Cool tonal band — site Grovli chapter. Large fills only.
+    static let sage = cgAdaptive(Color(red: 0.761, green: 0.776, blue: 0.698), Color(red: 0.208, green: 0.227, blue: 0.180))
+    /// Warm neutral tonal band — alternate feature band. Large fills only.
+    static let clay = cgAdaptive(Color(red: 0.847, green: 0.718, blue: 0.620), Color(red: 0.271, green: 0.220, blue: 0.169))
     /// warm dark ink — nav/footer/CTA fills; inverts in dark
     static let chrome = cgAdaptive(Color(red: 0.231, green: 0.212, blue: 0.176), Color(red: 0.929, green: 0.902, blue: 0.847))
     /// warm cream — text/icons on chrome (and on primary fills)

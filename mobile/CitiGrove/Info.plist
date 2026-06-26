@@ -37,6 +37,20 @@
 	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>CitiGrove uses your location to show events happening near you.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Newsreader-Light.ttf</string>
+		<string>Newsreader-Regular.ttf</string>
+		<string>Newsreader-Medium.ttf</string>
+		<string>Newsreader-SemiBold.ttf</string>
+		<string>Newsreader-Italic.ttf</string>
+		<string>Newsreader-MediumItalic.ttf</string>
+		<string>Inter_18pt-Light.ttf</string>
+		<string>Inter_18pt-Regular.ttf</string>
+		<string>Inter_18pt-Medium.ttf</string>
+		<string>Inter_18pt-SemiBold.ttf</string>
+		<string>Inter_18pt-Bold.ttf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

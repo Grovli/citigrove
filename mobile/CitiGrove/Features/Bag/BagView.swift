@@ -83,10 +83,10 @@ struct BagView: View {
                     BagLineRow(line: line)
                 }
                 summary
-                Color.clear.frame(height: CGSpace.tabBarInset)
             }
             .padding(.horizontal, CGSpace.lg)
             .padding(.top, CGSpace.sm)
+            .padding(.bottom, CGSpace.xxl)
         }
         .scrollIndicators(.hidden)
     }
@@ -159,6 +159,9 @@ private struct BagLineRow: View {
         .foregroundStyle(CGColors.primaryDeep)
         .padding(.horizontal, CGSpace.md)
         .padding(.vertical, CGSpace.sm)
-        .overlay(Capsule().strokeBorder(CGColors.line, lineWidth: 1))
+        .overlay(
+            RoundedRectangle(cornerRadius: CGRadius.sm, style: .continuous)
+                .strokeBorder(CGColors.line, lineWidth: 1)
+        )
     }
 }

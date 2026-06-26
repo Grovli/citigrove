@@ -9,9 +9,11 @@ struct MainTabView: View {
     @State private var selection: CGTab = .shop
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack {
             CGColors.page.ignoresSafeArea()
             content
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             CGTabBar(selection: $selection, badges: [.bag: bag.itemCount])
         }
     }

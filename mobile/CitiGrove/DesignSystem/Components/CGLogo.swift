@@ -1,20 +1,25 @@
 import SwiftUI
 
-/// Placeholder CitiGrove wordmark — "CG" in the serif display face. Swapped for
-/// the real logo when it's designed; every surface references this view so the
-/// swap is one place.
+/// CitiGrove wordmark — the full name in the Newsreader editorial serif, exactly
+/// as it reads in the site's sidebar / top bar. Every surface references this
+/// view so the brand mark stays one place.
 struct CGLogo: View {
     var size: CGFloat = 22
     var color: Color = CGColors.ink
     var body: some View {
-        Text("CG")
-            .font(CGType.display(size, .semibold))
-            .tracking(1.5)
+        Text("CitiGrove")
+            .font(CGType.display(size, .medium))
+            .tracking(0.1)
             .foregroundStyle(color)
             .accessibilityLabel("CitiGrove")
     }
 }
 
 #Preview {
-    CGLogo(size: 40)
+    VStack(spacing: 24) {
+        CGLogo(size: 29)
+        CGLogo(size: 20)
+    }
+    .padding()
+    .background(CGColors.page)
 }

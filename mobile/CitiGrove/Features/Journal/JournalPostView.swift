@@ -81,8 +81,7 @@ struct JournalPostView: View {
                 .padding(.top, CGSpace.xs)
         case .quote(let text):
             Text(text)
-                .font(CGType.display(20, .regular))
-                .italic()
+                .font(CGType.serifItalic(21))
                 .foregroundStyle(CGColors.primaryDeep)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.leading, CGSpace.md)
@@ -109,14 +108,19 @@ struct JournalPostView: View {
                 .foregroundStyle(CGColors.onChrome)
                 .fixedSize(horizontal: false, vertical: true)
             Link(destination: grovliURL) {
-                Text("Start food planning →")
-                    .font(CGType.text(13, .semibold))
+                Text("Start food planning")
+                    .font(CGType.actionLabel)
+                    .textCase(.uppercase)
+                    .tracking(CGType.Tracking.actionLabel)
                     .foregroundStyle(CGColors.chrome)
-                    .padding(.vertical, 12)
-                    .padding(.horizontal, 20)
-                    .background(CGColors.onChrome, in: Capsule())
+                    .padding(.vertical, 13)
+                    .padding(.horizontal, 22)
+                    .background(
+                        CGColors.onChrome,
+                        in: RoundedRectangle(cornerRadius: CGRadius.sm, style: .continuous)
+                    )
             }
-            .padding(.top, CGSpace.xs)
+            .padding(.top, CGSpace.sm)
         }
         .padding(CGSpace.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
