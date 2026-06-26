@@ -1,0 +1,106 @@
+name: store-api deploy
+
+# Self-contained Cloud Run deploy for the store-api, living in the citigrove
+# monorepo. Path-scoped to store-api/ so it doesn't fire on website-only changes.
+# Sets ALL env vars every deploy so a deploy never wipes config. Needs a
+# GCP_SA_KEY repo secret (SA with Cloud Run deploy + the referenced Secret
+# Manager secrets provisioned).
+on:
+  push:
+    branches: [main]
+    paths: ["store-api/**", ".github/workflows/store-api-deploy.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: store-api-deploy
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: organic-spirit-488116-e2
+  REGION: us-central1
+  SERVICE: citigrove-store-api
+  VPC_CONNECTOR: grovli-vpc-cx
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      # Secrets can't be referenced in `if:`, so env-map GCP_SA_KEY and gate every
+      # step on it — turns "creds not provisioned yet" into a warning + clean exit
+      # instead of a permanent red run on main.
+      - name: Pre-flight — confirm GCP_SA_KEY is provisioned
+        id: preflight
+        env:
+          SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          if [ -z "${SA_KEY}" ]; then
+            echo "::warning title=GCP_SA_KEY missing::Provision the Cloud Run deploy SA key + the citigrove-store-* Secret Manager secrets + a regenerated requirements.lock, then re-run via workflow_dispatch."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.preflight.outputs.skip != 'true'
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        if: steps.preflight.outputs.skip != 'true'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud
+        if: steps.preflight.outputs.skip != 'true'
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Deploy to Cloud Run (Buildpacks from store-api/)
+        if: steps.preflight.outputs.skip != 'true'
+        run: |
+          gcloud run deploy "${SERVICE}" \
+            --source store-api \
+            --project "${PROJECT_ID}" \
+            --region "${REGION}" \
+            --platform managed \
+            --vpc-connector "${VPC_CONNECTOR}" \
+            --vpc-egress all-traffic \
+            --allow-unauthenticated \
+            --port 8000 \
+            --cpu 1 \
+            --memory 512Mi \
+            --min-instances 0 \
+            --max-instances 10 \
+            --set-env-vars "APP_ENV=production" \
+            --set-env-vars "SERVICE_NAME=${SERVICE}" \
+            --set-env-vars "MONGO_DB=citigrove" \
+            --set-env-vars "AUTH0_DOMAIN=dev-rw8ff6vxgb7t0i4c.us.auth0.com" \
+            --set-env-vars "AUTH0_AUDIENCE=https://grovli.citigrove.com/audience" \
+            --set-env-vars "ALLOWED_ADMIN_DOMAIN=citigrove.com" \
+            --set-env-vars "PAYMENTS_BASE_URL=https://grovli-payments-uyply7jkca-uc.a.run.app" \
+            --set-env-vars "PAYMENTS_USE_OIDC=true" \
+            --set-env-vars "STRIPE_TAX_ENABLED=true" \
+            --set-env-vars "SHIP_FROM_NAME=CitiGrove" \
+            --set-env-vars "SHIP_FROM_COUNTRY=US" \
+            --set-env-vars "APNS_BUNDLE_ID=com.citigrove.app" \
+            --set-env-vars "APNS_USE_SANDBOX=false" \
+            --set-env-vars "GCP_PROJECT_ID=${PROJECT_ID}" \
+            --set-env-vars "CLOUD_TASKS_LOCATION=${REGION}" \
+            --set-env-vars "RSVP_REMINDER_QUEUE=citigrove-tasks-rsvp-reminders" \
+            --set-env-vars "OTEL_SERVICE_NAME=${SERVICE}" \
+            --set-env-vars "GOOGLE_CLOUD_PROJECT=${PROJECT_ID}" \
+            --set-env-vars "GCP_REGION=${REGION}" \
+            --set-secrets "MONGO_URI=citigrove-store-mongo-uri:latest" \
+            --set-secrets "REDIS_URL=citigrove-store-redis-url:latest" \
+            --set-secrets "PAYMENTS_INTERNAL_KEY=citigrove-store-payments-internal-key:latest" \
+            --set-secrets "STRIPE_SECRET_KEY=citigrove-store-stripe-secret-key:latest" \
+            --set-secrets "STRIPE_WEBHOOK_SECRET=citigrove-store-stripe-webhook-secret:latest" \
+            --set-secrets "SHIPPO_API_TOKEN=citigrove-store-shippo-api-token:latest" \
+            --set-secrets "SHIPPO_WEBHOOK_SECRET=citigrove-store-shippo-webhook-secret:latest" \
+            --set-secrets "APNS_AUTH_KEY_BASE64=citigrove-store-apns-auth-key:latest" \
+            --set-secrets "TASK_INVOKER_SA_EMAIL=citigrove-store-task-invoker-sa:latest"

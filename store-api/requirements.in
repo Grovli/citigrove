@@ -1,0 +1,63 @@
+# citigrove-store-api — direct dependencies (human-edited).
+#
+# Floors guard against known-bad/older releases; caps guard against the
+# next major's breaking changes. Compile to requirements.lock with:
+#
+#   uv pip compile requirements.in -o requirements.lock \
+#       --python-version 3.13 --python-platform linux --no-strip-extras
+#
+# The Docker image and CI install from requirements.lock, never from this
+# file directly. OTel bootstrap-installed instrumentation is pinned
+# separately in otel-constraints.txt (PIP_CONSTRAINT).
+
+# ── Web framework / ASGI ────────────────────────────────────────────
+# FastAPI 0.115 line: stable Annotated-deps + lifespan API used in main.py.
+fastapi>=0.115,<0.117
+# Pydantic v2 (BaseModel + model_dump). v3 not validated.
+pydantic>=2.9,<3
+# Settings split out of pydantic core since v2.
+pydantic-settings>=2.5,<3
+# granian — Rust ASGI server (runtime); 1.x line.
+granian>=1.6,<2
+# orjson — ORJSONResponse default + _logfmt-free fast serialization.
+orjson>=3.10,<4
+
+# ── Data store ──────────────────────────────────────────────────────
+# AsyncMongoClient lives in pymongo>=4.13; floor 4.17 per spec (async GA).
+pymongo>=4.17,<5
+
+# ── Auth ────────────────────────────────────────────────────────────
+# PyJWKClient(timeout=...) + RS256 verify; [crypto] pulls cryptography.
+pyjwt[crypto]>=2.9,<3
+
+# ── HTTP client (payments / stripe-tax / shippo / OIDC) ─────────────
+httpx>=0.27,<0.29
+
+# ── External services ───────────────────────────────────────────────
+# Stripe Tax calculation + webhook construct_event ONLY (no IAP, no SDK
+# PaymentIntents — those are minted by grovli-payments).
+stripe>=10,<13
+# Shippo live rates + label + tracking.
+shippo>=3.4,<4
+
+# ── GCP ─────────────────────────────────────────────────────────────
+# Cloud Tasks enqueue (RSVP reminder).
+google-cloud-tasks>=2.16,<3
+# OIDC identity tokens for internal-ingress payments calls.
+google-auth>=2.30,<3
+
+# ── Cache / idempotency (optional in v1) ────────────────────────────
+redis>=5.0,<6
+
+# ── Observability (OTel) ────────────────────────────────────────────
+# API/SDK + OTLP exporter; bootstrap wires auto-instrumentation at build.
+opentelemetry-api>=1.27,<2
+opentelemetry-sdk>=1.27,<2
+opentelemetry-exporter-otlp>=1.27,<2
+opentelemetry-instrumentation>=0.48b0
+opentelemetry-distro>=0.48b0
+
+# ── Test / lint (CI; not shipped in the runtime image layer that matters) ──
+pytest>=8.3,<9
+pytest-asyncio>=0.24,<0.25
+ruff>=0.6,<1
