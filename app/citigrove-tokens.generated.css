@@ -2,36 +2,36 @@
 /* Run: npm run tokens */
 
 :root {
-  --color-citigrove-chrome: #16140F;
-  --color-citigrove-on-chrome: #F7F5EF;
-  --color-citigrove-primary: #16140F;
-  --color-citigrove-primary-deep: #9A4A26;
-  --color-citigrove-accent: #B5582F;
-  --color-citigrove-ink: #16140F;
-  --color-citigrove-ink-soft: rgba(22,20,15,0.58);
-  --color-citigrove-ink-faint: rgba(22,20,15,0.34);
-  --color-citigrove-page: #F7F5EF;
-  --color-citigrove-surface: #FCFBF7;
-  --color-citigrove-surface-sunken: #EFEDE4;
-  --color-citigrove-line: #E4E1D6;
+  --color-citigrove-chrome: #3B362D;
+  --color-citigrove-on-chrome: #F1ECE1;
+  --color-citigrove-primary: #3B362D;
+  --color-citigrove-primary-deep: #8A4A28;
+  --color-citigrove-accent: #C2703E;
+  --color-citigrove-ink: #3B362D;
+  --color-citigrove-ink-soft: rgba(59,54,45,0.62);
+  --color-citigrove-ink-faint: rgba(59,54,45,0.40);
+  --color-citigrove-page: #F1ECE1;
+  --color-citigrove-surface: #F8F4EC;
+  --color-citigrove-surface-sunken: #E9E2D3;
+  --color-citigrove-line: #DAD3C4;
 }
 
 
 /* Dark theme overrides — opt-in via [data-theme="dark"]. */
 /* Inert until that attribute is set; web locks light today. */
 [data-theme="dark"] {
-  --color-citigrove-chrome: #EDE9DF;
-  --color-citigrove-on-chrome: #16140F;
-  --color-citigrove-primary: #EDE9DF;
-  --color-citigrove-primary-deep: #DB8C5F;
-  --color-citigrove-accent: #D2774A;
-  --color-citigrove-ink: #F2EFE7;
-  --color-citigrove-ink-soft: rgba(242,239,231,0.62);
-  --color-citigrove-ink-faint: rgba(242,239,231,0.40);
-  --color-citigrove-page: #14130F;
-  --color-citigrove-surface: #1C1B16;
-  --color-citigrove-surface-sunken: #0E0D0A;
-  --color-citigrove-line: #2C2A24;
+  --color-citigrove-chrome: #EDE6D8;
+  --color-citigrove-on-chrome: #2A2620;
+  --color-citigrove-primary: #EDE6D8;
+  --color-citigrove-primary-deep: #D49B7E;
+  --color-citigrove-accent: #D5895A;
+  --color-citigrove-ink: #EDE6D8;
+  --color-citigrove-ink-soft: rgba(237,230,216,0.62);
+  --color-citigrove-ink-faint: rgba(237,230,216,0.40);
+  --color-citigrove-page: #211E18;
+  --color-citigrove-surface: #2A2620;
+  --color-citigrove-surface-sunken: #18150F;
+  --color-citigrove-line: #39332A;
 }
 
 

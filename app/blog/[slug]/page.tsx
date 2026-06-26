@@ -93,13 +93,13 @@ export default async function BlogPostPage({
   // Graceful state for an unseeded/flaky KB — never hard-crash the export.
   if (!post) {
     return (
-      <main className="min-h-screen bg-[#F7F5EF] text-[#16140F]">
-        <header className="border-b border-[#16140F]/[0.08]">
+      <main className="min-h-screen bg-[#F1ECE1] text-[#3B362D]">
+        <header className="border-b border-[#3B362D]/[0.08]">
           <div className="max-w-[1100px] mx-auto px-8 py-8 flex items-center justify-between">
             <Link href="/" className="text-[20px] tracking-[-0.01em]" style={{ fontFamily: "var(--font-playfair), serif" }}>
-              Citi<span style={{ color: "#9A4A26" }}>Grove</span>
+              Citi<span style={{ color: "#8A4A28" }}>Grove</span>
             </Link>
-            <Link href="/blog" className="text-[12px] tracking-[0.18em] uppercase text-[#9A4A26] font-semibold">
+            <Link href="/blog" className="text-[12px] tracking-[0.18em] uppercase text-[#8A4A28] font-semibold">
               ← All essays
             </Link>
           </div>
@@ -108,7 +108,7 @@ export default async function BlogPostPage({
           <h1 className="text-[clamp(2rem,4vw,3rem)] leading-[1.1]" style={{ fontFamily: "var(--font-playfair), serif" }}>
             This essay is publishing soon.
           </h1>
-          <p className="text-[17px] text-[#16140F]/70 leading-[1.65] mt-5">
+          <p className="text-[17px] text-[#3B362D]/70 leading-[1.65] mt-5">
             The Journal is being seeded. In the meantime, start food planning with Grovli.
           </p>
           <div className="mt-8">
@@ -151,25 +151,25 @@ export default async function BlogPostPage({
   };
 
   return (
-    <main className="min-h-screen bg-[#F7F5EF] text-[#16140F]">
+    <main className="min-h-screen bg-[#F1ECE1] text-[#3B362D]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: ldJson(jsonLd) }}
       />
 
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <header className="border-b border-[#16140F]/[0.08]">
+      <header className="border-b border-[#3B362D]/[0.08]">
         <div className="max-w-[1100px] mx-auto px-8 py-8 flex items-center justify-between">
           <Link
             href="/"
             className="text-[20px] tracking-[-0.01em]"
             style={{ fontFamily: "var(--font-playfair), serif" }}
           >
-            Citi<span style={{ color: "#9A4A26" }}>Grove</span>
+            Citi<span style={{ color: "#8A4A28" }}>Grove</span>
           </Link>
           <Link
             href="/blog"
-            className="text-[12px] tracking-[0.18em] uppercase text-[#9A4A26] font-semibold"
+            className="text-[12px] tracking-[0.18em] uppercase text-[#8A4A28] font-semibold"
           >
             ← All essays
           </Link>
@@ -198,9 +198,9 @@ export default async function BlogPostPage({
             style={{ aspectRatio: "16 / 9" }}
           />
         )}
-        <div className="text-[11px] tracking-[0.22em] uppercase text-[#9A4A26] font-semibold mb-5">
+        <div className="text-[11px] tracking-[0.22em] uppercase text-[#8A4A28] font-semibold mb-5">
           {formatDate(post.published_at)}
-          <span className="text-[#16140F]/30"> · {minutes} min read</span>
+          <span className="text-[#3B362D]/30"> · {minutes} min read</span>
           {post.tags && post.tags.length > 0 && (
             <> {" · "}{post.tags.slice(0, 4).join(" · ")}</>
           )}
@@ -212,12 +212,12 @@ export default async function BlogPostPage({
           {post.title}
         </h1>
         {post.summary && (
-          <p className="text-[19px] text-[#16140F]/70 leading-[1.6] mt-6 italic">
+          <p className="text-[19px] text-[#3B362D]/70 leading-[1.6] mt-6 italic">
             {post.summary}
           </p>
         )}
-        <div className="text-[13px] text-[#16140F]/45 mt-6 pb-2">
-          By <span className="text-[#16140F]/70">The CitiGrove Journal</span>
+        <div className="text-[13px] text-[#3B362D]/45 mt-6 pb-2">
+          By <span className="text-[#3B362D]/70">The CitiGrove Journal</span>
         </div>
 
         {/* Body — Markdown chunks interleaved with live CTA components. */}
@@ -265,10 +265,10 @@ export default async function BlogPostPage({
         <GrovliCTA campaign={post.slug} />
 
         {/* Quiet cross-link back to the journal. */}
-        <div className="mt-12 pt-8 border-t border-[#16140F]/[0.08]">
+        <div className="mt-12 pt-8 border-t border-[#3B362D]/[0.08]">
           <Link
             href="/blog"
-            className="text-[12px] tracking-[0.18em] uppercase text-[#9A4A26] font-semibold"
+            className="text-[12px] tracking-[0.18em] uppercase text-[#8A4A28] font-semibold"
           >
             ← Read more from the Journal
           </Link>

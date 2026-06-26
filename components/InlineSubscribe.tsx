@@ -84,11 +84,11 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
     return (
       <div
         className="rounded-2xl px-7 py-8 text-center"
-        style={{ backgroundColor: "#16140F", color: "#F7F5EF" }}
+        style={{ backgroundColor: "#3B362D", color: "#F1ECE1" }}
       >
         <div
           className="text-[11px] tracking-[0.22em] uppercase font-semibold mb-3"
-          style={{ color: "rgba(247,245,239,0.55)" }}
+          style={{ color: "rgba(241,236,225,0.55)" }}
         >
           You&apos;re in
         </div>
@@ -101,11 +101,11 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
     <form
       onSubmit={handleSubmit}
       className="rounded-2xl px-7 py-8"
-      style={{ backgroundColor: "#16140F", color: "#F7F5EF" }}
+      style={{ backgroundColor: "#3B362D", color: "#F1ECE1" }}
     >
       <div
         className="text-[11px] tracking-[0.22em] uppercase font-semibold mb-3"
-        style={{ color: "rgba(247,245,239,0.55)" }}
+        style={{ color: "rgba(241,236,225,0.55)" }}
       >
         Pull up a chair
       </div>
@@ -117,7 +117,7 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
       </h3>
       <p
         className="text-[15px] leading-[1.6] mb-6"
-        style={{ color: "rgba(247,245,239,0.7)" }}
+        style={{ color: "rgba(241,236,225,0.7)" }}
       >
         One short, useful read every few weeks — the food thinking we&apos;d
         send a friend. No noise, no spam.
@@ -133,9 +133,9 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
           aria-label="Email"
           className="flex-1 rounded-full px-5 py-3 text-[15px] outline-none"
           style={{
-            backgroundColor: "rgba(247,245,239,0.10)",
-            color: "#F7F5EF",
-            border: "1px solid rgba(247,245,239,0.20)",
+            backgroundColor: "rgba(241,236,225,0.10)",
+            color: "#F1ECE1",
+            border: "1px solid rgba(241,236,225,0.20)",
           }}
         />
         <button
@@ -143,8 +143,8 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
           disabled={state === "submitting"}
           className="rounded-full px-7 py-3 text-[13px] font-bold tracking-[0.04em] uppercase disabled:opacity-50"
           style={{
-            backgroundColor: "#F7F5EF",
-            color: "#16140F",
+            backgroundColor: "#F1ECE1",
+            color: "#3B362D",
           }}
         >
           {state === "submitting" ? "Sending…" : "Subscribe"}
@@ -164,7 +164,7 @@ export function InlineSubscribe({ slug }: InlineSubscribeProps) {
 
       <p
         className="mt-5 text-[11px] tracking-[0.04em]"
-        style={{ color: "rgba(247,245,239,0.45)" }}
+        style={{ color: "rgba(241,236,225,0.45)" }}
       >
         Your address goes to info@citigrove.com. One-click unsubscribe in
         every email.

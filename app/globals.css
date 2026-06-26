@@ -72,7 +72,7 @@ body {
    ─────────────────────────────────────────────────────────────────────────── */
 .prose-citigrove {
   font-family: var(--font-inter), system-ui, sans-serif;
-  color: rgba(22, 20, 15, 0.9);
+  color: rgba(59, 54, 45, 0.9);
   /* >=18px body with a generous measure for comfortable long-form reading.
      ~34em (≈61–66 chars) caps line length so the eye tracks easily; centered
      because the body renders as several sibling .prose-citigrove blocks inside
