@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, GROVLI_URL, APP_STORE_URL, INSTAGRAM_URL, ldJson } from "@/lib/site";
+import {
+  SITE_URL,
+  GROVLI_URL,
+  APP_STORE_URL,
+  INSTAGRAM_URL,
+  CITIGROVE_APP_ID,
+  CITIGROVE_APP_STORE_URL,
+  LOGO_URL,
+  ldJson,
+} from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -58,19 +67,43 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   verification: { google: "u34uo9G9I3zCh9Ai7d8lVhPdXc04zqPSJFN6tjznvOs" },
+  // Smart App Banner — emits <meta name="apple-itunes-app"> so Safari/iOS offers
+  // the CitiGrove app install from citigrove.com. Gated on a published app id
+  // (empty -> omitted) so we never advertise an unpublished app.
+  itunes: CITIGROVE_APP_ID
+    ? { appId: CITIGROVE_APP_ID, appArgument: SITE_URL }
+    : undefined,
 };
 
-/** Site-wide structured data — Organization + WebSite, plus the Grovli app as
- *  a SoftwareApplication so search/AI engines connect CitiGrove → Grovli. */
+/** Site-wide structured data — the brand-entity graph. CitiGrove is the parent
+ *  Organization; Grovli is its subOrganization + a SoftwareApplication, with
+ *  reciprocal sameAs so search/AI engines consolidate citigrove.com and
+ *  grovli.citigrove.com as ONE brand across two domains (Grovli's own layout
+ *  already declares parentOrganization=CitiGrove, making the link bidirectional).
+ *  The CitiGrove app node appears only once the app is published (env-gated). */
+const ORG_ID = `${SITE_URL}/#organization`;
+
 const structuredData = [
   {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": ORG_ID,
     name: "CitiGrove",
     url: SITE_URL,
+    logo: `${SITE_URL}${LOGO_URL}`,
     description: DESCRIPTION,
-    sameAs: [INSTAGRAM_URL, GROVLI_URL],
+    sameAs: [
+      INSTAGRAM_URL,
+      GROVLI_URL,
+      APP_STORE_URL,
+      ...(CITIGROVE_APP_STORE_URL ? [CITIGROVE_APP_STORE_URL] : []),
+    ],
     brand: { "@type": "Brand", name: "Grovli" },
+    subOrganization: {
+      "@type": "Organization",
+      name: "Grovli",
+      url: GROVLI_URL,
+    },
   },
   {
     "@context": "https://schema.org",
@@ -78,6 +111,7 @@ const structuredData = [
     name: "CitiGrove",
     url: SITE_URL,
     inLanguage: "en-US",
+    publisher: { "@id": ORG_ID },
   },
   {
     "@context": "https://schema.org",
@@ -89,8 +123,26 @@ const structuredData = [
       "Grovli is an AI food planning app — personalized food plans in under 30 seconds, a smart grocery list, a pantry, an AI nutrition advisor, and The Grove for garden-to-plate planning.",
     url: GROVLI_URL,
     downloadUrl: APP_STORE_URL,
+    publisher: { "@id": ORG_ID },
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   },
+  // CitiGrove app — only when published (never advertise an unpublished app).
+  ...(CITIGROVE_APP_STORE_URL
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "MobileApplication",
+          name: "CitiGrove",
+          applicationCategory: "ShoppingApplication",
+          operatingSystem: "iOS",
+          description:
+            "The CitiGrove app — shop small-batch sparkling drinks, apparel, garden goods, and skincare, read the Journal, and find local food, wellness, and fun events near you.",
+          url: SITE_URL,
+          downloadUrl: CITIGROVE_APP_STORE_URL,
+          publisher: { "@id": ORG_ID },
+        },
+      ]
+    : []),
 ];
 
 export default function RootLayout({

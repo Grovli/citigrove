@@ -1,0 +1,62 @@
+name: CitiGrove
+
+options:
+  bundleIdPrefix: com.citigrove
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: "3U53SJ48WZ"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+
+targets:
+  CitiGrove:
+    type: application
+    platform: iOS
+    sources:
+      - path: CitiGrove
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.citigrove.app
+        PRODUCT_NAME: CitiGrove
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: CitiGrove/CitiGrove.entitlements
+        ENABLE_PREVIEWS: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+    info:
+      path: CitiGrove/Info.plist
+      properties:
+        CFBundleDisplayName: CitiGrove
+        UILaunchScreen: {}
+        ITSAppUsesNonExemptEncryption: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSLocationWhenInUseUsageDescription: "CitiGrove uses your location to show events happening near you."
+        CFBundleURLTypes:
+          - CFBundleTypeRole: Editor
+            CFBundleURLName: com.citigrove.app.auth
+            CFBundleURLSchemes:
+              - citigrove
+
+schemes:
+  CitiGrove:
+    build:
+      targets:
+        CitiGrove: all
+    run:
+      config: Debug
+    archive:
+      config: Release

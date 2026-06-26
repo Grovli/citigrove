@@ -24,9 +24,9 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
   return (
     <section
       aria-label="More from the Journal"
-      className="mt-16 pt-10 border-t border-[#1A1916]/[0.08]"
+      className="mt-16 pt-10 border-t border-[#211F1A]/[0.08]"
     >
-      <div className="text-[11px] tracking-[0.22em] uppercase text-[#5C7A5E] font-semibold mb-7">
+      <div className="text-[11px] tracking-[0.22em] uppercase text-[#577260] font-semibold mb-7">
         You may also like
       </div>
       <ul className="grid gap-8 sm:grid-cols-3">
@@ -34,26 +34,26 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
           <li key={post.slug}>
             <Link href={`/blog/${post.slug}`} className="group block">
               {post.tags && post.tags.length > 0 ? (
-                <div className="text-[10px] tracking-[0.18em] uppercase text-[#5C7A5E]/80 font-semibold mb-2">
+                <div className="text-[10px] tracking-[0.18em] uppercase text-[#577260]/80 font-semibold mb-2">
                   {post.tags[0]}
                 </div>
               ) : (
-                <div className="text-[10px] tracking-[0.18em] uppercase text-[#1A1916]/40 font-semibold mb-2">
+                <div className="text-[10px] tracking-[0.18em] uppercase text-[#211F1A]/40 font-semibold mb-2">
                   {formatDate(post.published_at)}
                 </div>
               )}
               <h3
-                className="text-[clamp(1.15rem,1.6vw,1.3rem)] leading-[1.25] tracking-[-0.01em] text-[#1A1916] group-hover:text-[#5C7A5E] transition-colors"
+                className="text-[clamp(1.15rem,1.6vw,1.3rem)] leading-[1.25] tracking-[-0.01em] text-[#211F1A] group-hover:text-[#577260] transition-colors"
                 style={{ fontFamily: "var(--font-playfair), serif" }}
               >
                 {post.title}
               </h3>
               {post.summary && (
-                <p className="text-[14px] text-[#1A1916]/65 leading-[1.55] mt-2 line-clamp-3">
+                <p className="text-[14px] text-[#211F1A]/65 leading-[1.55] mt-2 line-clamp-3">
                   {post.summary}
                 </p>
               )}
-              <span className="inline-block mt-3 text-[11px] tracking-[0.16em] uppercase text-[#5C7A5E] font-semibold">
+              <span className="inline-block mt-3 text-[11px] tracking-[0.16em] uppercase text-[#577260] font-semibold">
                 Read essay →
               </span>
             </Link>
